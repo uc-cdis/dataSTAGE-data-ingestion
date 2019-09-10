@@ -70,6 +70,6 @@ def get_error_list(genome_files, dbgap):
 
                 n = n + 1
         else:
-            n = n + sample_info
+            n = n + len(sample_info)
 
     return results
