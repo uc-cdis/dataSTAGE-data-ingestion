@@ -1,6 +1,7 @@
 import csv
 from collections import OrderedDict
 
+
 def get_sample_data_from_manifest(manifest_file, dem="\t"):
     """
     get sample metadata from the genome manifest

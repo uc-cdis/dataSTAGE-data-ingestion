@@ -3,7 +3,7 @@ import copy
 from utils import (
     read_mapping_file,
     get_sample_data_from_manifest,
-    get_sample_info_from_dbgap_manifest
+    get_sample_info_from_dbgap_manifest,
 )
 
 
@@ -27,12 +27,22 @@ def merge_manifest(genome_files, dbgap):
                     row["biosample_id"] = element.get("biosample_id", "None")
                     row["dbgap_sample_id"] = element.get("dbgap_sample_id", "None")
                     row["sra_sample_id"] = element.get("sra_sample_id", "None")
-                    row["submitted_subject_id"] = element.get("submitted_subject_id", "None")
+                    row["submitted_subject_id"] = element.get(
+                        "submitted_subject_id", "None"
+                    )
                     row["dbgap_subject_id"] = element.get("dbgap_subject_id", "None")
-                    row["consent_short_name"] = element.get("consent_short_name", "None")
-                    row["study_accession_with_consent"] = element.get("study_accession_with_consent", "None")
-                    row["datastage_acl"] = element.get("study_accession_with_consent") or "unreleased"
-                    row["g_access_group"] = mapping.get(element.get("study_accession_with_consent"), "None")
+                    row["consent_short_name"] = element.get(
+                        "consent_short_name", "None"
+                    )
+                    row["study_accession_with_consent"] = element.get(
+                        "study_accession_with_consent", "None"
+                    )
+                    row["datastage_acl"] = (
+                        element.get("study_accession_with_consent") or "unreleased"
+                    )
+                    row["g_access_group"] = mapping.get(
+                        element.get("study_accession_with_consent"), "None"
+                    )
                     results.append(row)
             else:
                 meta_data["biosample_id"] = "None"
@@ -55,11 +65,11 @@ def get_error_list(genome_files, dbgap):
     for sample_id, sample_info in dbgap.iteritems():
         if sample_id not in genome_files:
             for element in sample_info:
-                element{"row_num"} = n
+                element["row_num"] = n
                 results.append(element)
 
                 n = n + 1
         else:
             n = n + sample_info
-    
+
     return results
