@@ -28,17 +28,17 @@ def get_sample_data_from_manifest(manifest_file, dem="\t"):
 
 
 def get_sample_info_from_dbgap_manifest(manifest_file, dem="\t"):
-   """
-   get sample info from dbgap manifest
+    """
+    get sample info from dbgap manifest
 
-   :param manifest_file: the path of the input manifest
-   :param dem: 
-   :return: a dictionary
-   {
+    :param manifest_file: the path of the input manifest
+    :param dem: 
+    :return: a dictionary
+    {
         "sample_id1": ["biosample_id": "biosample_id1", "sra_sample_id": "sra_sample_id1", ...],
         ...
-   }
-   """
+    }
+    """
     files = OrderedDict()
     with open(manifest_file, "rt") as csvfile:
         csvReader = csv.DictReader(csvfile, delimiter=dem)
@@ -51,31 +51,21 @@ def get_sample_info_from_dbgap_manifest(manifest_file, dem="\t"):
     return files
 
 
-def write_file(filename, files, sorted_attr=None, fieldnames=None):
+def write_file(filename, rows, fieldnames=None):
     """
 
     :param filename:
-    :param files:
-    :param sorted_attr:
+    :param it:
     :param fieldnames:
     :return:
     """
-    def on_key(element):
-        return element[sorted_attr]
-    if sorted_attr:
-        sorted_files = sorted(files, key=on_key)
-    else:
-        sorted_files = files
-
-    if not files:
-        return
-    fieldnames = fieldnames or files[0].keys()
+    fieldnames = fieldnames or rows[0].keys()
     with open(filename, mode="w") as outfile:
         writer = csv.DictWriter(outfile, delimiter="\t", fieldnames=fieldnames)
         writer.writeheader()
 
-        for f in sorted_files:
-            writer.writerow(f)
+        for row in rows:
+            writer.writerow(row)
 
 
 def read_mapping_file(fname):
