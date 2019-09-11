@@ -1,4 +1,4 @@
-import settings
+import os
 import argparse
 import scripts
 import csv
@@ -22,7 +22,7 @@ def parse_arguments():
     return parser.parse_args()
 
 
-# python main.py merge --genome_manifest ../input/genome_files_manifest.csv --dbgap_manifest ../input/DataSTAGE_dbGaP_Consent_Extract.tsv --out ../output/merged.tsv
+# python main.py merge --genome_manifest ../input/genome_file_manifest.csv --dbgap_manifest ../input/DataSTAGE_dbGaP_Consent_Extract.tsv --out ../output/merged.tsv
 def main():
 
     args = parse_arguments()
@@ -47,12 +47,35 @@ def main():
             "gcp_uri",
             "g_access_group",
         ]
+        results = scripts.merge_manifest(genome_files, dbgap)
         utils.write_file(
-            args.output, scripts.merge_manifest(genome_files, dbgap), fieldnames=headers
+            args.output, results, fieldnames=headers
         )
 
     if args.action == "get_error_list":
-        utils.write_file(args.output, scripts.get_error_list(genome_files, dbgap))
+        headers = [
+            "sample_use",
+            "dbgap_status",
+            "sra_data_details",
+            "dbgap_subject_id",
+            "repository",
+            "submitted_sample_id",
+            "study_accession_with_consent",
+            "submitted_subject_id",
+            "consent_short_name",
+            "analyte_type",
+            "sra_sample_id",
+            "sex",
+            "biosample_id",
+            "dbgap_sample_id",
+            "consent_code",
+            "study_accession",
+            "body_site",
+            "row_num",
+        ]
+        utils.write_file(
+            args.output, scripts.get_error_list(genome_files, dbgap), fieldnames=headers
+        )
 
 
 if __name__ == "__main__":
