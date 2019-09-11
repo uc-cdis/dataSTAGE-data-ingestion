@@ -82,7 +82,7 @@ def test_merging(mock_read_mapping_file):
 @patch("scripts.scripts.read_mapping_file")
 def test_get_error_list(mock_read_mapping_file):
     mock_read_mapping_file.return_value = {}
-    L = scripts.get_error_list(genome_data, dbgap_data)
+    L = scripts.get_discrepancy_list(genome_data, dbgap_data)
     assert len(L) == 1
     assert L[0]["sample_id"] == "sample_id3"
     assert L[0]["biosample_id"] == "biosample_id3"

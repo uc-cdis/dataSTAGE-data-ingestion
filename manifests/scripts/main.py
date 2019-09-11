@@ -15,14 +15,14 @@ def parse_arguments():
     merge_cmd.add_argument("--dbgap_manifest", required=True)
     merge_cmd.add_argument("--output", required=True)
 
-    get_error_list_cmd = subparsers.add_parser("get_error_list")
+    get_error_list_cmd = subparsers.add_parser("get_discrepancy_list")
     get_error_list_cmd.add_argument("--genome_manifest", required=True)
     get_error_list_cmd.add_argument("--dbgap_manifest", required=True)
     get_error_list_cmd.add_argument("--output", required=True)
     return parser.parse_args()
 
 
-# python main.py merge --genome_manifest ../input/genome_file_manifest.csv --dbgap_manifest ../input/DataSTAGE_dbGaP_Consent_Extract.tsv --out ../output/merged.tsv
+# python main.py merge --genome_manifest ../input/genome_file_manifest.csv --dbgap_manifest ../input/DataSTAGE_dbGaP_Consent_Extract.tsv --out ../output
 def main():
 
     args = parse_arguments()
@@ -49,10 +49,14 @@ def main():
         ]
         results = scripts.merge_manifest(genome_files, dbgap)
         utils.write_file(
-            args.output, results, fieldnames=headers
+            os.path.join(args.output, "merged.tsv"), results, fieldnames=headers
+        )
+        valids = [element for element in results if element["g_access_group"]!="None"]
+        utils.write_file(
+            os.path.join(args.output, "DataSTAGE_indexable_data.tsv"), results, fieldnames=headers
         )
 
-    if args.action == "get_error_list":
+    if args.action == "get_discrepancy_list":
         headers = [
             "sample_use",
             "dbgap_status",
@@ -74,7 +78,11 @@ def main():
             "row_num",
         ]
         utils.write_file(
-            args.output, scripts.get_error_list(genome_files, dbgap), fieldnames=headers
+            os.path.join(args.output, "Data_not_part_of_DataSTAGE.tsv"), scripts.get_discrepancy_list(genome_files, dbgap), fieldnames=headers
+        )
+        headers = ["sample_id", "gcp_uri", "aws_uri", "file_size", "md5", "row_num"]
+        utils.write_file(
+            os.path.join(args.output, "DataSTAGE_data_requiring_additional_information.tsv"), scripts.get_discrepancy_list(dbgap, genome_files), fieldnames=headers
         )
 
 
