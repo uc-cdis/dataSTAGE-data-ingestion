@@ -45,15 +45,18 @@ def main():
             "md5",
             "aws_uri",
             "gcp_uri",
-            "g_access_group",
+            "permission",
+            "g_access_group",   
         ]
         results = scripts.merge_manifest(genome_files, dbgap)
+        indexable_data = []
+        for element in results:
+            if element["g_access_group"]!="None":
+                element["permission"] = "READ"
+                indexable_data.append(element)
+
         utils.write_file(
-            os.path.join(args.output, "merged.tsv"), results, fieldnames=headers
-        )
-        valids = [element for element in results if element["g_access_group"]!="None"]
-        utils.write_file(
-            os.path.join(args.output, "DataSTAGE_indexable_data.tsv"), results, fieldnames=headers
+            os.path.join(args.output, "DataSTAGE_indexable_data.tsv"), indexable_data, fieldnames=headers
         )
 
     if args.action == "get_discrepancy_list":
