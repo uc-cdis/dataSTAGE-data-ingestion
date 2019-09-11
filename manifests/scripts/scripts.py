@@ -23,7 +23,11 @@ def merge_manifest(genome_files, dbgap):
         for meta_data in metadata_collection:
             if sample_id in dbgap:
                 if len(dbgap[sample_id]) > 1:
-                    print("WARNING: {} has more than one instance in dbgap".format(sample_id))
+                    print(
+                        "WARNING: {} has more than one instance in dbgap".format(
+                            sample_id
+                        )
+                    )
                 for element in dbgap[sample_id]:
                     row = copy.deepcopy(meta_data)
                     row["biosample_id"] = element.get("biosample_id", "None")

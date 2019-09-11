@@ -46,17 +46,19 @@ def main():
             "aws_uri",
             "gcp_uri",
             "permission",
-            "g_access_group",   
+            "g_access_group",
         ]
         results = scripts.merge_manifest(genome_files, dbgap)
         indexable_data = []
         for element in results:
-            if element["g_access_group"]!="None":
+            if element["g_access_group"] != "None":
                 element["permission"] = "READ"
                 indexable_data.append(element)
 
         utils.write_file(
-            os.path.join(args.output, "DataSTAGE_indexable_data.tsv"), indexable_data, fieldnames=headers
+            os.path.join(args.output, "DataSTAGE_indexable_data.tsv"),
+            indexable_data,
+            fieldnames=headers,
         )
 
     if args.action == "get_discrepancy_list":
@@ -81,11 +83,17 @@ def main():
             "row_num",
         ]
         utils.write_file(
-            os.path.join(args.output, "Data_not_part_of_DataSTAGE.tsv"), scripts.get_discrepancy_list(genome_files, dbgap), fieldnames=headers
+            os.path.join(args.output, "Data_not_part_of_DataSTAGE.tsv"),
+            scripts.get_discrepancy_list(genome_files, dbgap),
+            fieldnames=headers,
         )
         headers = ["sample_id", "gcp_uri", "aws_uri", "file_size", "md5", "row_num"]
         utils.write_file(
-            os.path.join(args.output, "DataSTAGE_data_requiring_additional_information.tsv"), scripts.get_discrepancy_list(dbgap, genome_files), fieldnames=headers
+            os.path.join(
+                args.output, "DataSTAGE_data_requiring_additional_information.tsv"
+            ),
+            scripts.get_discrepancy_list(dbgap, genome_files),
+            fieldnames=headers,
         )
 
 
