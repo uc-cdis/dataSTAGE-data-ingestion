@@ -18,6 +18,7 @@ def merge_manifest(genome_files, dbgap):
     mapping = read_mapping_file("../config/mapping.txt")
 
     results = []
+    accession_missing_google_grp = set()
 
     for sample_id, metadata_collection in genome_files.iteritems():
         for meta_data in metadata_collection:
@@ -43,12 +44,18 @@ def merge_manifest(genome_files, dbgap):
                     row["study_accession_with_consent"] = element.get(
                         "study_accession_with_consent", "None"
                     )
-                    row["datastage_acl"] = (
-                        element.get("study_accession_with_consent") or "unreleased"
-                    )
-                    row["g_access_group"] = mapping.get(
-                        element.get("study_accession_with_consent"), "None"
-                    )
+                    accession_with_consent = element.get("study_accession_with_consent")
+
+                    if accession_with_consent is None:
+                        print("There is no accession with consent code for sample {}".format(sample_id))
+                        row["g_access_group"] = "None"
+                    else:
+                        if accession_with_consent in mapping:
+                            row["g_access_group"] = mapping[accession_with_consent]
+                        else:
+                            row["g_access_group"] = "None"
+                            accession_missing_google_grp.add(accession_with_consent)
+                    
                     results.append(row)
             else:
                 meta_data["biosample_id"] = "None"
@@ -58,10 +65,12 @@ def merge_manifest(genome_files, dbgap):
                 meta_data["dbgap_subject_id"] = "None"
                 meta_data["consent_short_name"] = "None"
                 meta_data["study_accession_with_consent"] = "None"
-                meta_data["datastage_acl"] = "unreleased"
                 meta_data["g_access_group"] = "None"
                 results.append(meta_data)
 
+    if accession_missing_google_grp:
+        print("ERROR: need to create google group for all study_accession_with_consent in {}".format(sorted(list(accession_missing_google_grp))))
+        return []
     return results
 
 

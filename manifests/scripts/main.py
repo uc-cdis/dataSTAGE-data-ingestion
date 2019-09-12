@@ -40,7 +40,6 @@ def main():
             "dbgap_subject_id",
             "consent_short_name",
             "study_accession_with_consent",
-            "datastage_acl",
             "file_size",
             "md5",
             "aws_uri",
