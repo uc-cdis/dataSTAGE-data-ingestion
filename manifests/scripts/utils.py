@@ -1,3 +1,4 @@
+import os
 import csv
 from collections import OrderedDict
 
@@ -55,10 +56,10 @@ def get_sample_info_from_dbgap_manifest(manifest_file, dem="\t"):
 def write_file(filename, rows, fieldnames=None):
     """
 
-    :param filename:
-    :param it:
-    :param fieldnames:
-    :return:
+    :param filename: the path to the file
+    :param rows: a list of data rows
+    :param fieldnames: a list of header
+    :return: None
     """
     fieldnames = fieldnames or rows[0].keys()
     with open(filename, mode="w") as outfile:
@@ -83,3 +84,45 @@ def read_mapping_file(fname):
             mapping[words[0].strip()] = words[1].strip()
 
     return mapping
+
+
+def _sync_2_dicts(dict1, dict2):
+    for key, new_row in dict1.iteritems():
+        if key not in dict2:
+            new_row["GUID"] = "None"
+            dict2[new_row["sample_id"] + "|" + new_row["md5"]] = new_row
+
+    return dict2
+
+
+def create_or_update_file_with_guid(fname, indexable_data, fieldnames=None):
+    """
+    if the file does not exit, create a file with indexable_data
+    if the file does exis, merge the the file with indexable_data
+
+    :param fname: output path
+    :param indexable_data: a list of dictionary
+    :param fieldnames: the file header
+    :return: None
+    """
+    if not os.path.exists(fname):
+        for data in indexable_data:
+            data["GUID"] = "None"
+        write_file(fname, indexable_data, fieldnames=fieldnames)
+    else:
+        dict1 = OrderedDict()
+        dict2 = OrderedDict()
+
+        for data in indexable_data:
+            dict1[data["sample_id"] + "|" + data["md5"]] = data
+
+        with open(fname, "rt") as csvfile:
+            csvReader = csv.DictReader(csvfile, delimiter="\t")
+            for row in csvReader:
+                row["file_size"] = int(row["file_size"])
+                dict2[row["sample_id"] + "|" + row["md5"]] = row
+
+        # merge dict1 to dict1
+        dict2 = _sync_2_dicts(dict1, dict2)
+        L = [v for _, v in dict2.iteritems()]
+        write_file(fname, L, fieldnames)

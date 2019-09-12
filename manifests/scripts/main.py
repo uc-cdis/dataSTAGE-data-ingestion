@@ -32,6 +32,7 @@ def main():
 
     if args.action == "merge":
         headers = [
+            "GUID",
             "sample_id",
             "dbgap_sample_id",
             "sra_sample_id",
@@ -54,7 +55,7 @@ def main():
                 element["permission"] = "READ"
                 indexable_data.append(element)
 
-        utils.write_file(
+        utils.create_or_update_file_with_guid(
             os.path.join(args.output, "DataSTAGE_indexable_data.tsv"),
             indexable_data,
             fieldnames=headers,

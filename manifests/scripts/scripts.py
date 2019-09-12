@@ -47,7 +47,11 @@ def merge_manifest(genome_files, dbgap):
                     accession_with_consent = element.get("study_accession_with_consent")
 
                     if accession_with_consent is None:
-                        print("There is no accession with consent code for sample {}".format(sample_id))
+                        print(
+                            "There is no accession with consent code for sample {}".format(
+                                sample_id
+                            )
+                        )
                         row["g_access_group"] = "None"
                     else:
                         if accession_with_consent in mapping:
@@ -55,7 +59,7 @@ def merge_manifest(genome_files, dbgap):
                         else:
                             row["g_access_group"] = "None"
                             accession_missing_google_grp.add(accession_with_consent)
-                    
+
                     results.append(row)
             else:
                 meta_data["biosample_id"] = "None"
@@ -69,7 +73,11 @@ def merge_manifest(genome_files, dbgap):
                 results.append(meta_data)
 
     if accession_missing_google_grp:
-        print("ERROR: need to create google group for all study_accession_with_consent in {}".format(sorted(list(accession_missing_google_grp))))
+        print(
+            "ERROR: need to create google group for all study_accession_with_consent in {}".format(
+                sorted(list(accession_missing_google_grp))
+            )
+        )
         return []
     return results
 
