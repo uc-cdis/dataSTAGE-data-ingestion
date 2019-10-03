@@ -1,1 +1,0 @@
--e git+https://git@github.com/uc-cdis/cdislogging.git@0.0.2#egg=cdislogging
