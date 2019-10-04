@@ -16,7 +16,8 @@ RUN git clone https://github.com/uc-cdis/dbgap-extract.git && cd dbgap-extract &
 WORKDIR /dbgap-extract
 # 
 # COPY ../test_phs_list.txt ./test_phs_list.txt
-RUN pipenv install --skip-lock --dev
+RUN pipenv
+RUN pipenv graph
 RUN python dbgap_extract.py --study_accession_list_filename phs_list.txt --output_filename generated_extract.tsv
 
 # validation not necessary right?
