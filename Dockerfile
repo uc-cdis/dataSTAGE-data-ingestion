@@ -15,7 +15,7 @@ RUN pip install --upgrade pip && pip install pipenv
 RUN git clone https://github.com/uc-cdis/dbgap-extract.git && git checkout feat/validate-extract && git pull origin feat/validate-extract
 WORKDIR /dbgap-extract
 # 
-COPY ../test_phs_list.txt ./test_phs_list.txt
+# COPY ../test_phs_list.txt ./test_phs_list.txt
 RUN pipenv install --skip-lock --dev
 RUN python dbgap_extract.py --study_accession_list_filename phs_list.txt --output_filename generated_extract.tsv
 
