@@ -12,7 +12,7 @@ RUN pip install --upgrade pip && pip install pipenv
 
 ###############################################################################
 # 2. Create extract file
-RUN git clone https://github.com/uc-cdis/dbgap-extract.git && git checkout feat/validate-extract && git pull origin feat/validate-extract
+RUN git clone https://github.com/uc-cdis/dbgap-extract.git && cd dbgap-extract && git checkout feat/validate-extract && git pull origin feat/validate-extract
 WORKDIR /dbgap-extract
 # 
 # COPY ../test_phs_list.txt ./test_phs_list.txt
@@ -26,7 +26,7 @@ RUN python dbgap_extract.py --study_accession_list_filename phs_list.txt --outpu
 # 3. Run joindure script
 RUN mkdir output
 WORKDIR ..
-RUN python3 main.py merge --genome_manifest genome_file_manifest.csv --dbgap_manifest dbga-extract/generated_extract.tsv --out output
+RUN python3 main.py merge --genome_manifest genome_file_manifest.csv --dbgap_manifest dbgap-extract/generated_extract.tsv --out output
 
 
 ###############################################################################
