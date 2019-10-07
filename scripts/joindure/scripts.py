@@ -20,7 +20,7 @@ def merge_manifest(genome_files, dbgap):
     :param dbgap_file: path to the dbgap manifest
     :return:
     """
-    mapping = read_mapping_file("../config/mapping.txt")
+    mapping = read_mapping_file("mapping.txt")
 
     results = []
     accession_missing_google_grp = set()

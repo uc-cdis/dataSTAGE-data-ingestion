@@ -94,7 +94,9 @@ def main():
     commands = generate_cmd_sets(study_accessions)
     write_list_of_strings_to_file_as_rows(commands, GOOGLE_GROUPS_OUTFILE)
     
-    logging.debug("Wrote commands to google_groups.sh. Wrote mapping file to mapping.txt.")
+    logging.debug("Wrote commands to {}. Wrote mapping file to {}.".format(
+        GOOGLE_GROUPS_OUTFILE, MAPPING_OUTFILE
+    ))
 
 if __name__ == '__main__':
     main()
