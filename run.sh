@@ -1,6 +1,12 @@
 ###############################################################################
 # 1. Create a manifest from a bucket
-# RUN ./generate-file-manifest.sh --out_file genome_file_manifest.csv
+ls ~
+ls ~/.aws/
+cat ~/.aws/config
+
+GCP_PROJECT_ID=zakir-test-project ./generate-file-manifest.sh > genome_file_manifest.csv
+
+exit
 
 ###############################################################################
 # 2. Create extract file
