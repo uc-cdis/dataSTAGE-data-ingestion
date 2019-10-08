@@ -20,8 +20,9 @@ head -n 10 generated_extract.tsv
 
 ###############################################################################
 # 3. Generate a list of commands to create Google Groups and a mapping file for the joindure script
-cd /dataSTAGE-data-ingestion/scripts
-python generate_google_group_cmds.py --extract_filename ../dbgap-extract/generated_extract.tsv
+cd /dataSTAGE-data-ingestion/scripts/
+ls
+python3 generate_google_group_cmds.py --extract_filename ../dbgap-extract/generated_extract.tsv
 mv mapping.txt /dataSTAGE-data-ingestion/scripts/joindure/mapping.txt
 
 
@@ -33,6 +34,3 @@ pipenv run python3 main.py merge --genome_manifest /dataSTAGE-data-ingestion/gen
 	--dbgap_manifest /dataSTAGE-data-ingestion/dbgap-extract/generated_extract.tsv --out output
 
 ls output
-
-###############################################################################
-# 5. Send these outputs somewhere so that Ed's indexing job can access them? https://github.com/uc-cdis/automated-indexing
