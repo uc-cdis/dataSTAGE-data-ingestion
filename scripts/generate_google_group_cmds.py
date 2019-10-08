@@ -50,7 +50,7 @@ def dedup_study_accessions(study_accessions):
         if 'phs' not in thing:
             continue
         dict_of_things[thing.strip()] = 1
-    rv = dict_of_things.keys()
+    rv = list(dict_of_things.keys())
     rv.sort()
     return rv
 
