@@ -4,6 +4,8 @@ set -o pipefail
 
 ###############################################################################
 # 1. Create a manifest from a bucket
+echo "creds_json env var: "
+echo $CREDS_JSON
 export AWS_ACCESS_KEY_ID=$(jq -r .aws_creds.aws_access_key_id <<< $CREDS_JSON)
 export AWS_SECRET_ACCESS_KEY=$(jq -r .aws_creds.aws_secret_access_key <<< $CREDS_JSON)
 AWS_SESSION_TOKEN=$(jq -r .aws_creds.aws_session_token <<< $CREDS_JSON)
