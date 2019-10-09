@@ -10,6 +10,7 @@ AWS_ACCESS_KEY_ID=$(jq -r .aws_access_key_id <<< $CREDS_JSON)
 AWS_SECRET_ACCESS_KEY=$(jq -r .aws_secret_access_key <<< $CREDS_JSON)
 echo "${AWS_ACCESS_KEY_ID}"
 echo "${AWS_SECRET_ACCESS_KEY}"
+cd scripts
 GCP_PROJECT_ID=zakir-test-project ./generate-file-manifest.sh > genome_file_manifest_generated.csv
 
 
