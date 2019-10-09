@@ -30,6 +30,9 @@ head -n 10 generated_extract.tsv
 cd /dataSTAGE-data-ingestion/scripts/
 ls
 python3 generate_google_group_cmds.py --extract_filename ../dbgap-extract/generated_extract.tsv
+if [ -f "scripts/google-groups.sh" ]; then
+	chmod +x scripts/google-groups.sh
+fi
 mv mapping.txt /dataSTAGE-data-ingestion/scripts/joindure/mapping.txt
 
 
