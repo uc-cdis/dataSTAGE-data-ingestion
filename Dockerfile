@@ -31,7 +31,7 @@ COPY . /dataSTAGE-data-ingestion
 WORKDIR /dataSTAGE-data-ingestion
 
 RUN pip3 install --upgrade pip && pip3 install pipenv
-RUN ls
+
 RUN chmod +x /dataSTAGE-data-ingestion/scripts/generate-file-manifest.sh && chmod +x run.sh
 
 CMD ["/bin/bash", "./run.sh"]

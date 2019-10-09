@@ -4,15 +4,19 @@ set -o pipefail
 
 ###############################################################################
 # 1. Create a manifest from a bucket
-echo "run.sh line 7"
-echo "${CREDS_JSON}"
-AWS_ACCESS_KEY_ID=$(jq -r .aws_access_key_id <<< $CREDS_JSON)
-AWS_SECRET_ACCESS_KEY=$(jq -r .aws_secret_access_key <<< $CREDS_JSON)
-echo "${AWS_ACCESS_KEY_ID}"
-echo "${AWS_SECRET_ACCESS_KEY}"
-cd scripts
-GCP_PROJECT_ID=zakir-test-project ./generate-file-manifest.sh > genome_file_manifest_generated.csv
+export AWS_ACCESS_KEY_ID=$(jq -r .aws_creds.aws_access_key_id <<< $CREDS_JSON)
+export AWS_SECRET_ACCESS_KEY=$(jq -r .aws_creds.aws_secret_access_key <<< $CREDS_JSON)
+export AWS_SESSION_TOKEN=$(jq -r .aws_creds.aws_session_token <<< $CREDS_JSON)
+export GS_CREDS_JSON=$(jq -r .gs_creds <<< $CREDS_JSON)
+export GCP_PROJECT_ID=$(jq -r .gcp_project_id <<< $CREDS_JSON)
+export GS_BUCKET_PATH=$(jq -r .gs_bucket_path <<< $CREDS_JSON)
+export AWS_BUCKET_PATH=$(jq -r .aws_bucket_path <<< $CREDS_JSON)
 
+cd scripts
+echo $GS_CREDS_JSON >> gs_cloud_key.json
+gcloud auth activate-service-account --key-file=gs_cloud_key.json  --project=$GCP_PROJECT_ID
+
+GCP_PROJECT_ID=$GCP_PROJECT_ID ./generate-file-manifest.sh > genome_file_manifest_generated.csv
 
 ###############################################################################
 # 2. Create extract file
