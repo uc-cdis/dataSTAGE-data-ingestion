@@ -2,6 +2,11 @@
 set -e
 set -o pipefail
 
+echo "got PHSs: "
+echo $PHS_ID_LIST
+echo '---'
+cat /phs-id-list
+
 ###############################################################################
 # 1. Create a manifest from a bucket
 echo $CREDS_JSON
@@ -34,8 +39,6 @@ git checkout feat/validate-extract
 git pull origin feat/validate-extract
 pipenv install
 pipenv run python3 dbgap_extract.py --study_accession_list_filename /dataSTAGE-data-ingestion/test_phs_list.txt --output_filename generated_extract.tsv
-ls
-pwd
 
 ###############################################################################
 # 3. Generate a list of commands to create Google Groups and a mapping file for the joindure script
