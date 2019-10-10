@@ -2,13 +2,6 @@
 set -e
 set -o pipefail
 
-echo "got PHSs: "
-echo $PHS_ID_LIST
-echo '---'
-ls /
-
-ls /phs-id-list/
-
 ###############################################################################
 # 1. Create a manifest from a bucket
 echo $CREDS_JSON
@@ -33,6 +26,8 @@ echo $GS_CREDS_JSON >> gs_cloud_key.json
 
 ###############################################################################
 # 2. Create extract file
+PHS_ID_LIST_PATH=`ls /phs-id-list/ | head -n 1`
+
 cd /
 git clone https://github.com/uc-cdis/dbgap-extract.git
 cd dbgap-extract
@@ -40,7 +35,7 @@ cd dbgap-extract
 git checkout feat/validate-extract
 git pull origin feat/validate-extract
 pipenv install
-pipenv run python3 dbgap_extract.py --study_accession_list_filename /dataSTAGE-data-ingestion/test_phs_list.txt --output_filename generated_extract.tsv
+pipenv run python3 dbgap_extract.py --study_accession_list_filename $PHS_ID_LIST_PATH --output_filename generated_extract.tsv
 
 ###############################################################################
 # 3. Generate a list of commands to create Google Groups and a mapping file for the joindure script
