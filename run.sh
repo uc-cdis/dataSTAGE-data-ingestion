@@ -26,7 +26,7 @@ echo $GS_CREDS_JSON >> gs_cloud_key.json
 
 ###############################################################################
 # 2. Create extract file
-PHS_ID_LIST_PATH=`ls /phs-id-list/ | head -n 1`
+PHS_ID_LIST_PATH=/phs-id-list/`ls /phs-id-list/ | head -n 1`
 
 cd /
 git clone https://github.com/uc-cdis/dbgap-extract.git
