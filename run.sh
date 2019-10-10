@@ -5,7 +5,9 @@ set -o pipefail
 echo "got PHSs: "
 echo $PHS_ID_LIST
 echo '---'
-cat /phs-id-list
+ls /
+
+ls /phs-id-list/
 
 ###############################################################################
 # 1. Create a manifest from a bucket
