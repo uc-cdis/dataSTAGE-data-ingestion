@@ -10,10 +10,12 @@ AWS_SESSION_TOKEN=$(jq -r .aws_creds.aws_session_token <<< $CREDS_JSON)
 if [[ -z "$AWS_SESSION_TOKEN" ]]; then
   export AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN
 fi
-export GS_CREDS_JSON=$(jq -r .gs_creds <<< $CREDS_JSON)
-export GCP_PROJECT_ID=$(jq -r .gcp_project_id <<< $CREDS_JSON)
-export GS_BUCKET_PATH=$(jq -r .gs_bucket_path <<< $CREDS_JSON)
-export AWS_BUCKET_PATH=$(jq -r .aws_bucket_path <<< $CREDS_JSON)
+GS_CREDS_JSON=$(jq -r .gs_creds <<< $CREDS_JSON)
+GCP_PROJECT_ID=$(jq -r .gcp_project_id <<< $CREDS_JSON)
+GS_BUCKET_PATH=$(jq -r .gs_bucket_path <<< $CREDS_JSON)
+AWS_BUCKET_PATH=$(jq -r .aws_bucket_path <<< $CREDS_JSON)
+GITHUB_USER_EMAIL=$(jq -r .github_user_email <<< $CREDS_JSON)
+GITHUB_PERSONAL_ACCESS_TOKEN=$(jq -r .github_personal_access_token <<< $CREDS_JSON)
 
 cd scripts
 echo $GS_CREDS_JSON >> gs_cloud_key.json
@@ -57,17 +59,21 @@ ls output
 ###############################################################################
 # 5. Make PR to repo with outputs
 cd /
-git clone http://github.com/uc-cdis/dataSTAGE-data-ingestion-private.git
+git config --global user.email $GITHUB_USER_EMAIL
+git clone "http://planxcyborg:$GITHUB_PERSONAL_ACCESS_TOKEN@github.com/uc-cdis/dataSTAGE-data-ingestion-private.git"
+
 cd dataSTAGE-data-ingestion-private/
 git pull origin master && git fetch --all
-BRANCH_NAME=$(python3 /dataSTAGE-data-ingestion/scripts/get_branch_name.py --current_branches "$(git branch -a)")
-echo "Creating branch ${BRANCH_NAME}"
-git checkout -b $BRANCH_NAME
+BRANCH_NAME_PREFIX='feat/release-'
+RELEASE_NUMBER=$(python3 /dataSTAGE-data-ingestion/scripts/get_release_number.py --current_branches "$(git branch -a)")
+echo "Creating branch $BRANCH_NAME_PREFIX$RELEASE_NUMBER"
+git checkout -b "$BRANCH_NAME_PREFIX$RELEASE_NUMBER"
 cp -R /dataSTAGE-data-ingestion/scripts/joindure/output/. .
-cp /dbgap-extract/generated_extract.tsv .
+cp /dbgap-extract/generated_extract.tsv ./
 # cp /dbgap-extract/generated_extract.log .
 
 git status
+git commit -m "feat: release manifest"
 
 # TODO: uncomment this line
 # git push origin $BRANCH_NAME

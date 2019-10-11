@@ -6,14 +6,14 @@ from datetime import datetime
 
 BRANCH_NAME_PREFIX = 'feat/release-'
 
-def get_branch_name(git_branch_a):
+def get_branch_number(git_branch_a):
 	branches = git_branch_a.split()
 	branches = list(filter(lambda x: BRANCH_NAME_PREFIX in x, branches))
 	releases = list(map(lambda x: int(x.strip()[-1]), branches))
 	if len(releases) == 0:
-		return BRANCH_NAME_PREFIX + str(1)
+		return 1
 	else:
-		return BRANCH_NAME_PREFIX + str(max(releases) + 1)
+		return max(releases) + 1
 
 def main():
     parser = argparse.ArgumentParser(description="Determine new branch name for release manifest output.")
@@ -35,8 +35,8 @@ def main():
         logging.debug("-------")
         exit(0)
    
-    branch_name = get_branch_name(args.current_branches)
-    print(branch_name)
+    branch_number = get_branch_number(args.current_branches)
+    print(branch_number)
 
 if __name__ == '__main__':
 	main()
