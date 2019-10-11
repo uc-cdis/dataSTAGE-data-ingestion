@@ -69,7 +69,8 @@ RELEASE_NUMBER=$(python3 /dataSTAGE-data-ingestion/scripts/get_release_number.py
 echo "Creating branch $BRANCH_NAME_PREFIX$RELEASE_NUMBER"
 git checkout -b "$BRANCH_NAME_PREFIX$RELEASE_NUMBER"
 cp -R /dataSTAGE-data-ingestion/scripts/joindure/output/. .
-cp /dbgap-extract/generated_extract.tsv ./
+mv ./release_manifest.tsv "./release_manifest_r$RELEASE_NUMBER.tsv"
+cp /dbgap-extract/generated_extract.tsv "./generated_extract_r$RELEASE_NUMBER.tsv"
 # cp /dbgap-extract/generated_extract.log .
 
 git status

@@ -58,7 +58,7 @@ def main():
                 indexable_data.append(element)
 
         utils.create_or_update_file_with_guid(
-            os.path.join(args.output, "DataSTAGE_indexable_data.tsv"),
+            os.path.join(args.output, "release_manifest.tsv"),
             indexable_data,
             fieldnames=headers,
         )
@@ -86,14 +86,14 @@ def main():
             "row_num",
         ]
         utils.write_file(
-            os.path.join(args.output, "Data_not_part_of_DataSTAGE.tsv"),
+            os.path.join(args.output, "extraneous_dbgap_metadata.tsv"),
             scripts.get_discrepancy_list(genome_files, dbgap),
             fieldnames=headers,
         )
         headers = ["sample_id", "gcp_uri", "aws_uri", "file_size", "md5", "row_num"]
         utils.write_file(
             os.path.join(
-                args.output, "DataSTAGE_data_requiring_additional_information.tsv"
+                args.output, "Data_requiring_manual_review.tsv"
             ),
             scripts.get_discrepancy_list(dbgap, genome_files),
             fieldnames=headers,
