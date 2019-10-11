@@ -68,10 +68,12 @@ BRANCH_NAME_PREFIX='feat/release-'
 RELEASE_NUMBER=$(python3 /dataSTAGE-data-ingestion/scripts/get_release_number.py --current_branches "$(git branch -a)")
 echo "Creating branch $BRANCH_NAME_PREFIX$RELEASE_NUMBER"
 git checkout -b "$BRANCH_NAME_PREFIX$RELEASE_NUMBER"
+mkdir "release_$RELEASE_NUMBER"
+cd "release_$RELEASE_NUMBER"
 cp -R /dataSTAGE-data-ingestion/scripts/joindure/output/. .
 mv ./release_manifest.tsv "./release_manifest_r$RELEASE_NUMBER.tsv"
 cp /dbgap-extract/generated_extract.tsv "./generated_extract_r$RELEASE_NUMBER.tsv"
-# cp /dbgap-extract/generated_extract.log .
+cp /dbgap-extract/generated_extract.log "./generated_extract_r$RELEASE_NUMBER.log"
 
 git status
 git commit -m "feat: release manifest"
