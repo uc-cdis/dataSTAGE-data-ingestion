@@ -39,7 +39,7 @@ def generate_cmd_sets(studies):
 def make_mapping_entries(study_accessions):
     entries = []
     for study in study_accessions:
-        entries.append("{}: stagedcp_ {}_read_gbag@dcp.bionimbus.org".format(
+        entries.append("{}: stagedcp_{}_read_gbag@dcp.bionimbus.org".format(
             study, study
         ))
     return entries
