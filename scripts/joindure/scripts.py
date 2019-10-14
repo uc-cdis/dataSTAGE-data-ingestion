@@ -105,6 +105,8 @@ def get_discrepancy_list(genome_files, dbgap):
         if sample_id not in genome_files:
             for element in sample_info:
                 element["row_num"] = n
+                element["study_accession"] = ""
+                element["ignore"] = ""
                 results.append(element)
 
                 n = n + 1

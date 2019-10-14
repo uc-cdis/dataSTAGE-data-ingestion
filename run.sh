@@ -2,6 +2,12 @@
 set -e
 set -o pipefail
 
+
+###############################################################################
+# 0. (Optional) Check for additional PHS ID inputs that should be included from the review process
+
+
+
 ###############################################################################
 # 1. Create a manifest from a bucket
 export AWS_ACCESS_KEY_ID=$(jq -r .aws_creds.aws_access_key_id <<< $CREDS_JSON)

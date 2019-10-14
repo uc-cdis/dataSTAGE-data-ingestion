@@ -90,7 +90,7 @@ def main():
             scripts.get_discrepancy_list(genome_files, dbgap),
             fieldnames=headers,
         )
-        headers = ["sample_id", "gcp_uri", "aws_uri", "file_size", "md5", "row_num"]
+        headers = ["sample_id", "gcp_uri", "aws_uri", "file_size", "md5", "row_num", "study_accession", "ignore"]
         utils.write_file(
             os.path.join(
                 args.output, "data_requiring_manual_review.tsv"
