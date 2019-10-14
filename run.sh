@@ -43,7 +43,7 @@ python3 generate_google_group_cmds.py --extract_filename /dbgap-extract/generate
 if [ -f "scripts/google-groups.sh" ]; then
   chmod +x scripts/google-groups.sh
 fi
-mv scripts/google-groups.sh scripts/joindure/output/google-groups.sh
+mv /dataSTAGE-data-ingestion/scripts/google-groups.sh /dataSTAGE-data-ingestion/scripts/joindure/output/google-groups.sh
 mv mapping.txt /dataSTAGE-data-ingestion/scripts/joindure/mapping.txt
 
 
