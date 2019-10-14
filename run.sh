@@ -39,20 +39,25 @@ pipenv run python3 dbgap_extract.py --study_accession_list_filename $PHS_ID_LIST
 ###############################################################################
 # 3. Generate a list of commands to create Google Groups and a mapping file for the joindure script
 cd /dataSTAGE-data-ingestion/scripts/
-python3 generate_google_group_cmds.py --extract_filename /dbgap-extract/generated_extract.tsv
-if [ -f "scripts/google-groups.sh" ]; then
-  chmod +x scripts/google-groups.sh
+if [ ! -d "joindure/output" ]; then
+	mkdir joindure/output
 fi
-mv /dataSTAGE-data-ingestion/scripts/google-groups.sh /dataSTAGE-data-ingestion/scripts/joindure/output/google-groups.sh
+python3 generate_google_group_cmds.py --extract_filename /dbgap-extract/generated_extract.tsv
+if [ -f "google-groups.sh" ]; then
+  chmod +x google-groups.sh
+  mv google-groups.sh /dataSTAGE-data-ingestion/scripts/joindure/output/google-groups.sh
+fi
+echo '47: --'
+ls
+echo '49: --'
+ls /dataSTAGE-data-ingestion/scripts/joindure/output/
 mv mapping.txt /dataSTAGE-data-ingestion/scripts/joindure/mapping.txt
 
 
 ###############################################################################
 # 4. Run joindure script
 cd /dataSTAGE-data-ingestion/scripts/joindure
-if [ ! -d "$DIRECTORY" ]; then
-	mkdir output
-fi
+
 pipenv run python3 main.py merge --genome_manifest /dataSTAGE-data-ingestion/genome_file_manifest.csv \
     --dbgap_manifest /dbgap-extract/generated_extract.tsv --out output
 
