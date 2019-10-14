@@ -2,11 +2,12 @@
 set -e
 set -o pipefail
 
-git config --global --unset http.proxy
-git config --global --unset https.proxy
-
 ###############################################################################
 # 0. (Optional) Check for additional PHS ID inputs that should be included from the review process
+PHS_ID_LIST_PATH=/phs-id-list/`ls /phs-id-list/ | head -n 1`
+# PHS_ID_LIST_PATH='/dataSTAGE-data-ingestion/test_phs_list.txt'
+
+# python3 include_new_phs_ids.py --phs_id_list_file <> --data_requiring_manual_review_file <>
 
  
 ###############################################################################
@@ -32,10 +33,6 @@ echo $GS_CREDS_JSON >> gs_cloud_key.json
 
 ###############################################################################
 # 2. Create extract file
-PHS_ID_LIST_PATH=/phs-id-list/`ls /phs-id-list/ | head -n 1`
-
-# PHS_ID_LIST_PATH='/dataSTAGE-data-ingestion/test_phs_list.txt'
-
 cd / && git clone https://github.com/uc-cdis/dbgap-extract.git
 cd dbgap-extract
 # TODO: alter these 2 lines to use master branch
