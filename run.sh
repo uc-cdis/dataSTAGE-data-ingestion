@@ -7,7 +7,7 @@ set -o pipefail
 # 0. (Optional) Check for additional PHS ID inputs that should be included from the review process
 
 
-
+ 
 ###############################################################################
 # 1. Create a manifest from a bucket
 export AWS_ACCESS_KEY_ID=$(jq -r .aws_creds.aws_access_key_id <<< $CREDS_JSON)
@@ -25,7 +25,7 @@ GITHUB_PERSONAL_ACCESS_TOKEN=$(jq -r .github_personal_access_token <<< $CREDS_JS
 
 cd scripts
 echo $GS_CREDS_JSON >> gs_cloud_key.json
-gcloud auth activate-service-account --key-file=gs_cloud_key.json  --project=$GCP_PROJECT_ID
+# gcloud auth activate-service-account --key-file=gs_cloud_key.json  --project=$GCP_PROJECT_ID
 
 # GCP_PROJECT_ID=$GCP_PROJECT_ID ./generate-file-manifest.sh > ../genome_file_manifest.csv
 
