@@ -2,6 +2,8 @@ import os
 import sys
 import copy
 import base64
+from datetime import datetime
+import logging
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 
@@ -11,6 +13,9 @@ from utils import (
     get_sample_info_from_dbgap_manifest,
 )
 
+LOG_FILE = "joindure-log-" + datetime.now().strftime("%m-%d-%Y-%H-%M-%S") + ".log"
+logging.basicConfig(filename=LOG_FILE, level=logging.DEBUG)
+logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
 
 def merge_manifest(genome_files, dbgap):
     """
@@ -107,3 +112,27 @@ def get_discrepancy_list(genome_files, dbgap):
             n = n + len(sample_info)
 
     return results
+
+def get_unique_id(record):
+    # Unique id format: '<sample_id><md5>'
+    return record['sample_id'] + record['md5']
+
+def check_for_duplicates(indexable_data):
+    # The concatenation of the sample_id with the filename is to be unique
+    unique_ids = list(map(get_unique_id, indexable_data))
+
+    # No duplicates
+    if len(unique_ids) == len(set(unique_ids)):
+        return
+
+    # Find the duplicate
+    duplicates = []
+    id_dict = {}
+    for uid in unique_ids:
+        if uid not in id_dict:
+            id_dict[uid] = 1
+        else:
+            duplicates.append(uid)
+    error_message = 'Error: Duplicate sample ids found in indexable data: {}.'.format([]) #str(duplicates))
+    logging.error(error_message)
+    raise ValueError(error_message)

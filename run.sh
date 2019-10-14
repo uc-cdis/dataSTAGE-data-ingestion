@@ -19,7 +19,7 @@ GITHUB_PERSONAL_ACCESS_TOKEN=$(jq -r .github_personal_access_token <<< $CREDS_JS
 
 cd scripts
 echo $GS_CREDS_JSON >> gs_cloud_key.json
-# gcloud auth activate-service-account --key-file=gs_cloud_key.json  --project=$GCP_PROJECT_ID
+gcloud auth activate-service-account --key-file=gs_cloud_key.json  --project=$GCP_PROJECT_ID
 
 # GCP_PROJECT_ID=$GCP_PROJECT_ID ./generate-file-manifest.sh > ../genome_file_manifest.csv
 
@@ -43,13 +43,16 @@ python3 generate_google_group_cmds.py --extract_filename /dbgap-extract/generate
 if [ -f "scripts/google-groups.sh" ]; then
   chmod +x scripts/google-groups.sh
 fi
+mv scripts/google-groups.sh scripts/joindure/output/google-groups.sh
 mv mapping.txt /dataSTAGE-data-ingestion/scripts/joindure/mapping.txt
 
 
 ###############################################################################
 # 4. Run joindure script
 cd /dataSTAGE-data-ingestion/scripts/joindure
-mkdir output
+if [ ! -d "$DIRECTORY" ]; then
+	mkdir output
+fi
 pipenv run python3 main.py merge --genome_manifest /dataSTAGE-data-ingestion/genome_file_manifest.csv \
     --dbgap_manifest /dbgap-extract/generated_extract.tsv --out output
 
@@ -76,7 +79,15 @@ cp /dbgap-extract/generated_extract.tsv "./generated_extract_r$RELEASE_NUMBER.ts
 cp /dbgap-extract/generated_extract.log "./generated_extract_r$RELEASE_NUMBER.log"
 
 git status
-git commit -m "feat: release manifest"
+git add . && git commit -m "feat: release manifest"
 
 # TODO: uncomment this line
 # git push origin $BRANCH_NAME
+# hub pull-request
+
+
+
+
+
+
+

@@ -3,9 +3,7 @@ import sys
 import argparse
 import scripts
 import csv
-
 import utils
-
 
 if sys.version_info[0] < 3:
     raise Exception("Must be using Python 3")
@@ -57,6 +55,8 @@ def main():
                 element["permission"] = "READ"
                 indexable_data.append(element)
 
+        scripts.check_for_duplicates(indexable_data)
+
         utils.create_or_update_file_with_guid(
             os.path.join(args.output, "release_manifest.tsv"),
             indexable_data,
@@ -93,9 +93,9 @@ def main():
         headers = ["sample_id", "gcp_uri", "aws_uri", "file_size", "md5", "row_num"]
         utils.write_file(
             os.path.join(
-                args.output, "Data_requiring_manual_review.tsv"
+                args.output, "data_requiring_manual_review.tsv"
             ),
-            scripts.get_discrepancy_list(dbgap, genome_files),
+            scripts.get_discrepancy_list(genome_files, dbgap),
             fieldnames=headers,
         )
 
