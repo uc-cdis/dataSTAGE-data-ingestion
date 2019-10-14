@@ -7,6 +7,11 @@ set -o pipefail
 # 0. (Optional) Check for additional PHS ID inputs that should be included from the review process
 
 
+
+
+
+echo $CREDS_JSON
+
  
 ###############################################################################
 # 1. Create a manifest from a bucket
@@ -33,8 +38,9 @@ echo $GS_CREDS_JSON >> gs_cloud_key.json
 # 2. Create extract file
 PHS_ID_LIST_PATH=/phs-id-list/`ls /phs-id-list/ | head -n 1`
 
-cd /
-git clone https://github.com/uc-cdis/dbgap-extract.git
+# PHS_ID_LIST_PATH='/dataSTAGE-data-ingestion/test_phs_list.txt'
+
+cd / && git clone https://github.com/uc-cdis/dbgap-extract.git
 cd dbgap-extract
 # TODO: alter these 2 lines to use master branch
 git checkout feat/validate-extract
@@ -53,10 +59,6 @@ if [ -f "google-groups.sh" ]; then
   chmod +x google-groups.sh
   mv google-groups.sh /dataSTAGE-data-ingestion/scripts/joindure/output/google-groups.sh
 fi
-echo '47: --'
-ls
-echo '49: --'
-ls /dataSTAGE-data-ingestion/scripts/joindure/output/
 mv mapping.txt /dataSTAGE-data-ingestion/scripts/joindure/mapping.txt
 
 
@@ -95,10 +97,3 @@ git add . && git commit -m "feat: release manifest"
 # TODO: uncomment this line
 # git push origin $BRANCH_NAME
 # hub pull-request
-
-
-
-
-
-
-
