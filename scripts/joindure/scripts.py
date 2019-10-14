@@ -135,6 +135,6 @@ def check_for_duplicates(indexable_data):
             id_dict[uid] = 1
         else:
             duplicates.append(uid)
-    error_message = 'Error: Duplicate sample ids found in indexable data: {}.'.format([]) #str(duplicates))
+    error_message = 'Error: Duplicate sample ids found in indexable data: {}.'.format(str(duplicates))
     logging.error(error_message)
     raise ValueError(error_message)

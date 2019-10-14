@@ -2,17 +2,11 @@
 set -e
 set -o pipefail
 
-git config --global --unset http.proxy 
+git config --global --unset http.proxy
 git config --global --unset https.proxy
 
 ###############################################################################
 # 0. (Optional) Check for additional PHS ID inputs that should be included from the review process
-
-
-
-
-
-echo $CREDS_JSON
 
  
 ###############################################################################
