@@ -4,7 +4,6 @@ set -o pipefail
 
 git config --global --unset http.proxy 
 git config --global --unset https.proxy
-reset
 
 ###############################################################################
 # 0. (Optional) Check for additional PHS ID inputs that should be included from the review process
