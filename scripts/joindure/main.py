@@ -98,7 +98,7 @@ def main():
             os.path.join(
                 args.output, "data_requiring_manual_review.tsv"
             ),
-            scripts.get_discrepancy_list(genome_files, dbgap),
+            scripts.get_discrepancy_list(dbgap, genome_files),
             fieldnames=headers,
         )
 
