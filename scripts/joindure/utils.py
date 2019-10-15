@@ -29,7 +29,7 @@ def get_sample_data_from_manifest(manifest_file, dem="\t"):
     return files
 
 
-def get_sample_info_from_dbgap_manifest(manifest_file, dem="\t"):
+def get_sample_info_from_dbgap_extract_file(manifest_file, dem="\t"):
     """
     get sample info from dbgap manifest
 

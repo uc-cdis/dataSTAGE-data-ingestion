@@ -10,7 +10,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 from utils import (
     read_mapping_file,
     get_sample_data_from_manifest,
-    get_sample_info_from_dbgap_manifest,
+    get_sample_info_from_dbgap_extract_file,
 )
 
 LOG_FILE = "joindure-log-" + datetime.now().strftime("%m-%d-%Y-%H-%M-%S") + ".log"

@@ -14,19 +14,22 @@ def parse_arguments():
 
     merge_cmd = subparsers.add_parser("merge")
     merge_cmd.add_argument("--genome_manifest", required=True)
-    merge_cmd.add_argument("--dbgap_manifest", required=True)
+    merge_cmd.add_argument("--dbgap_extract_file", required=True)
     merge_cmd.add_argument("--output", required=True)
 
     return parser.parse_args()
 
 
-# python main.py merge --genome_manifest ../input/genome_file_manifest.csv --dbgap_manifest ../input/DataSTAGE_dbGaP_Consent_Extract.tsv --out ../output
+# python main.py merge --genome_manifest ../input/genome_file_manifest.csv --dbgap_extract_file ../input/DataSTAGE_dbGaP_Consent_Extract.tsv --out ../output
 def main():
 
     args = parse_arguments()
 
     genome_files = utils.get_sample_data_from_manifest(args.genome_manifest, dem=",")
-    dbgap = utils.get_sample_info_from_dbgap_manifest(args.dbgap_manifest)
+    dbgap = utils.get_sample_info_from_dbgap_extract_file(args.dbgap_extract_file)
+
+    if not os.path.exists(args.output):
+        os.makedirs(args.output)
 
     if args.action == "merge":
         headers = [
