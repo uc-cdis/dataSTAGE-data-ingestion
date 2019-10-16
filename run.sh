@@ -11,14 +11,16 @@ PHS_ID_LIST_PATH=/phs-id-list/`ls /phs-id-list/ | head -n 1`
 # PHS_ID_LIST_PATH='/dataSTAGE-data-ingestion/test_phs_list.txt'
 # DATA_FROM_MANUAL_REVIEW='/dataSTAGE-data-ingestion/data_requiring_manual_review.tsv'
 
-files_in_manual_review_mount=( /data-from-manual-review/* )
-if [ ${#files_in_manual_review_mount[@]} -ge 1 ]; then
-	DATA_FROM_MANUAL_REVIEW=/data-from-manual-review/`ls /data-from-manual-review/ | head -n 1`
-	cd /dataSTAGE-data-ingestion/scripts/
-	python3 add_studies_from_manual_review.py --phs_id_list $PHS_ID_LIST_PATH \
-		--data_requiring_manual_review $DATA_FROM_MANUAL_REVIEW \
-		--output_file merged_phs_id_list.txt
-	PHS_ID_LIST_PATH=/dataSTAGE-data-ingestion/scripts/merged_phs_id_list.txt
+if [ -d "/data-from-manual-review/" ]; then
+	files_in_manual_review_mount=( /data-from-manual-review/* )
+	if [ ${#files_in_manual_review_mount[@]} -ge 1 ]; then
+		DATA_FROM_MANUAL_REVIEW=/data-from-manual-review/`ls /data-from-manual-review/ | head -n 1`
+		cd /dataSTAGE-data-ingestion/scripts/
+		python3 add_studies_from_manual_review.py --phs_id_list $PHS_ID_LIST_PATH \
+			--data_requiring_manual_review $DATA_FROM_MANUAL_REVIEW \
+			--output_file merged_phs_id_list.txt
+		PHS_ID_LIST_PATH=/dataSTAGE-data-ingestion/scripts/merged_phs_id_list.txt
+	fi
 fi
 
  
