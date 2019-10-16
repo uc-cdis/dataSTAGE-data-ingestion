@@ -33,7 +33,7 @@ def retrieve_study_accessions_from_phs_id_list_file(filename):
     f = open(filename)
     contents = f.readlines()
     f.close()
-    return map(lambda x: x.strip(), contents)
+    return list(map(lambda x: x.strip(), contents))
 
 def main():
     parser = argparse.ArgumentParser(

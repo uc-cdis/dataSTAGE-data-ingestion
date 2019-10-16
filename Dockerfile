@@ -1,21 +1,17 @@
-FROM python:alpine
+FROM python:3.7-slim-buster
 
-RUN apk update && apk add --no-cache ca-certificates gcc musl-dev git jq curl bash
+RUN apt update && apt install -y git jq curl bash snapd groff python3-pip hub
 
-# Installing aws cli
-RUN apk -v --update add \
-        python \
-        py-pip \
-        groff \
-        less \
-        mailcap \
-        && \
-    pip install --upgrade awscli==1.14.5 s3cmd==2.0.1 python-magic && \
-    apk -v --purge del py-pip && \
-    rm /var/cache/apk/*
-VOLUME /root/.aws
-VOLUME /project
-WORKDIR /project
+RUN curl -O https://bootstrap.pypa.io/get-pip.py
+
+RUN python3 get-pip.py
+
+RUN pip3 install awscli
+
+# RUN snap version
+# RUN systemctl restart snapd.service
+# RUN systemctl enable --now snapd.socket
+# RUN snap install hub --classic
 
 # Installing gcloud package (includes gsutil)
 RUN curl https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz > /tmp/google-cloud-sdk.tar.gz

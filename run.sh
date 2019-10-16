@@ -2,12 +2,24 @@
 set -e
 set -o pipefail
 
+# TODO: REMOVE THIS
+# mkdir /data-from-manual-review/
+
 ###############################################################################
 # 0. (Optional) Check for additional PHS ID inputs that should be included from the review process
 PHS_ID_LIST_PATH=/phs-id-list/`ls /phs-id-list/ | head -n 1`
 # PHS_ID_LIST_PATH='/dataSTAGE-data-ingestion/test_phs_list.txt'
+# DATA_FROM_MANUAL_REVIEW='/dataSTAGE-data-ingestion/data_requiring_manual_review.tsv'
 
-# python3 include_new_phs_ids.py --phs_id_list_file <> --data_requiring_manual_review_file <>
+files_in_manual_review_mount=( /data-from-manual-review/* )
+if [ ${#files_in_manual_review_mount[@]} -ge 1 ]; then
+	DATA_FROM_MANUAL_REVIEW=/data-from-manual-review/`ls /data-from-manual-review/ | head -n 1`
+	cd /dataSTAGE-data-ingestion/scripts/
+	python3 add_studies_from_manual_review.py --phs_id_list $PHS_ID_LIST_PATH \
+		--data_requiring_manual_review $DATA_FROM_MANUAL_REVIEW \
+		--output_file merged_phs_id_list.txt
+	PHS_ID_LIST_PATH=/dataSTAGE-data-ingestion/scripts/merged_phs_id_list.txt
+fi
 
  
 ###############################################################################
@@ -25,7 +37,7 @@ AWS_BUCKET_PATH=$(jq -r .aws_bucket_path <<< $CREDS_JSON)
 GITHUB_USER_EMAIL=$(jq -r .github_user_email <<< $CREDS_JSON)
 GITHUB_PERSONAL_ACCESS_TOKEN=$(jq -r .github_personal_access_token <<< $CREDS_JSON)
 
-cd scripts
+cd /dataSTAGE-data-ingestion/scripts/
 echo $GS_CREDS_JSON >> gs_cloud_key.json
 # gcloud auth activate-service-account --key-file=gs_cloud_key.json  --project=$GCP_PROJECT_ID
 
@@ -60,7 +72,7 @@ mv mapping.txt /dataSTAGE-data-ingestion/scripts/joindure/mapping.txt
 cd /dataSTAGE-data-ingestion/scripts/joindure
 
 pipenv run python3 main.py merge --genome_manifest /dataSTAGE-data-ingestion/genome_file_manifest.csv \
-    --dbgap_manifest /dbgap-extract/generated_extract.tsv --out output
+    --dbgap_extract_file /dbgap-extract/generated_extract.tsv --out output
 
 ls output
 
@@ -69,14 +81,20 @@ ls output
 # 5. Make PR to repo with outputs
 cd /
 git config --global user.email $GITHUB_USER_EMAIL
-git clone "http://planxcyborg:$GITHUB_PERSONAL_ACCESS_TOKEN@github.com/uc-cdis/dataSTAGE-data-ingestion-private.git"
+git clone "https://planxcyborg:$GITHUB_PERSONAL_ACCESS_TOKEN@github.com/uc-cdis/dataSTAGE-data-ingestion-private.git"
 
 cd dataSTAGE-data-ingestion-private/
+
+# git remote rm origin
+# git remote add origin "http://planxcyborg:$GITHUB_PERSONAL_ACCESS_TOKEN@github.com/uc-cdis/dataSTAGE-data-ingestion-private.git"
+
 git pull origin master && git fetch --all
 BRANCH_NAME_PREFIX='feat/release-'
 RELEASE_NUMBER=$(python3 /dataSTAGE-data-ingestion/scripts/get_release_number.py --current_branches "$(git branch -a)")
 echo "Creating branch $BRANCH_NAME_PREFIX$RELEASE_NUMBER"
+
 git checkout -b "$BRANCH_NAME_PREFIX$RELEASE_NUMBER"
+
 mkdir "release_$RELEASE_NUMBER"
 cd "release_$RELEASE_NUMBER"
 cp -R /dataSTAGE-data-ingestion/scripts/joindure/output/. .
@@ -85,8 +103,10 @@ cp /dbgap-extract/generated_extract.tsv "./generated_extract_r$RELEASE_NUMBER.ts
 cp /dbgap-extract/generated_extract.log "./generated_extract_r$RELEASE_NUMBER.log"
 
 git status
+# git remote add origin "http://github.com/uc-cdis/dataSTAGE-data-ingestion-private.git"
 git add . && git commit -m "feat: release manifest"
-
-# TODO: uncomment this line
-# git push origin $BRANCH_NAME
+# TODO: uncomment these lines
+# git push -u origin $BRANCH_NAME_PREFIX$RELEASE_NUMBER
 # hub pull-request
+
+hub version
