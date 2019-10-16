@@ -2,31 +2,30 @@ import argparse
 import os
 import sys
 from datetime import datetime
+import csv
 from generate_google_group_cmds import dedup_study_accessions, write_list_of_strings_to_file_as_rows
 
 def retrieve_study_accessions_from_manual_review_file(filename):
-    f = open(filename)
-    contents = f.readlines()
-    f.close()
-    headers = contents[0].split('\t')
-    index_of_study_accession_column = -2
-    ignore_column = -1
-    try:
-        index_of_study_accession_column = headers.index('study_accession')
-        ignore_column = headers.index('study_accession')
-    except ValueError as e:
-        print("ERROR: Could not find one of ['study accession' , 'ignore'] column in tsv headers.")
-
-    records = list(map(lambda x: x.split('\t'), contents[1:])) # First line of tsv is column names
-
     study_accessions_undeduped = []
-    for record in records:
-        if record[index_of_study_accession_column] is not None \
-            and record[index_of_study_accession_column] != '' \
-            and record[ignore_column].toLowerCase() != 'x':
-            study_accessions_undeduped.append(record[index_of_study_accession_column].strip())
+    with open(filename, 'rU') as fd:
+        rd = csv.reader(fd, delimiter="\t", quotechar='"')
+        rownum = 0
+        for row in rd:
+            if rownum == 0:
+                index_of_study_accession_column = -2
+                ignore_column = -1
+                try:
+                    index_of_study_accession_column = row.index('study_accession')
+                    ignore_column = row.index('study_accession')
+                except ValueError as e:
+                    print("ERROR: Could not find one of ['study accession' , 'ignore'] column in tsv headers.")
+            else:
+                if row[index_of_study_accession_column] is not None \
+                    and row[index_of_study_accession_column] != '' \
+                    and row[ignore_column].lower() != 'x':
+                    study_accessions_undeduped.append(row[index_of_study_accession_column].strip())
+            rownum += 1
 
-    print(study_accessions_undeduped)
     study_accessions = dedup_study_accessions(study_accessions_undeduped)
     return study_accessions
 
