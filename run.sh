@@ -2,9 +2,7 @@
 set -e
 set -o pipefail
 
-# TODO: delete this
 echo $CREDS_JSON
-
 
 ###############################################################################
 # 0. (Optional) Check for additional PHS ID inputs that should be included from the review process
@@ -57,6 +55,12 @@ git pull origin feat/validate-extract
 pipenv install
 pipenv run python3 dbgap_extract.py --study_accession_list_filename $PHS_ID_LIST_PATH --output_filename generated_extract.tsv
 
+# If the step is successful, don't print its output
+extract_step_failed=$?
+if [ $extract_step_failed -eq 1 ]; then
+    cat generated_extract.log
+fi
+
 ###############################################################################
 # 3. Generate a list of commands to create Google Groups and a mapping file for the joindure script
 cd /dataSTAGE-data-ingestion/scripts/
@@ -85,7 +89,11 @@ ls output
 # 5. Make PR to repo with outputs
 cd /
 git config --global user.email $GITHUB_USER_EMAIL
-git clone "https://$GITHUB_USERNAME:$GITHUB_PERSONAL_ACCESS_TOKEN@github.com/uc-cdis/dataSTAGE-data-ingestion-private.git"
+echo "GITHUB_USER_NAME:"
+echo $GITHUB_USER_NAME
+echo "GITHUB_PERSONAL_ACCESS_TOKEN:"
+echo $GITHUB_PERSONAL_ACCESS_TOKEN
+git clone "https://$GITHUB_USER_NAME:$GITHUB_PERSONAL_ACCESS_TOKEN@github.com/uc-cdis/dataSTAGE-data-ingestion-private.git"
 
 cd dataSTAGE-data-ingestion-private/
 
