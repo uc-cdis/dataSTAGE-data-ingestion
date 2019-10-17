@@ -2,6 +2,7 @@ import argparse
 import sys
 import subprocess
 import logging
+import os
 from datetime import datetime
 
 GOOGLE_GROUPS_OUTFILE = "google-groups.sh"
@@ -88,9 +89,13 @@ def main():
    
     study_accessions = retrieve_study_accessions_from_extract(args.extract_filename)
 
+    if os.path.exists(MAPPING_OUTFILE):
+        os.remove(MAPPING_OUTFILE)
     mapping_entries = make_mapping_entries(study_accessions)
     write_list_of_strings_to_file_as_rows(mapping_entries, MAPPING_OUTFILE)
 
+    if os.path.exists(GOOGLE_GROUPS_OUTFILE):
+        os.remove(GOOGLE_GROUPS_OUTFILE)
     commands = generate_cmd_sets(study_accessions)
     write_list_of_strings_to_file_as_rows(commands, GOOGLE_GROUPS_OUTFILE)
     

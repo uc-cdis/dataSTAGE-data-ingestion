@@ -53,7 +53,7 @@ cd dbgap-extract
 git checkout feat/validate-extract
 git pull origin feat/validate-extract
 pipenv install
-pipenv run python3 dbgap_extract.py --study_accession_list_filename $PHS_ID_LIST_PATH --output_filename generated_extract.tsv
+pipenv run python3 dbgap_extract.py --study_accession_list_filename $PHS_ID_LIST_PATH --output_filename generated_extract.tsv > /dev/null 2>&1
 
 # If the step is successful, don't print its output
 extract_step_failed=$?
