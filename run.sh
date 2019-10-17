@@ -2,13 +2,10 @@
 set -e
 set -o pipefail
 
-echo $CREDS_JSON
-
 ###############################################################################
 # 0. (Optional) Check for additional PHS ID inputs that should be included from the review process
 PHS_ID_LIST_PATH=/phs-id-list/`ls /phs-id-list/ | head -n 1`
-# PHS_ID_LIST_PATH='/dataSTAGE-data-ingestion/test_phs_list.txt'
-# DATA_FROM_MANUAL_REVIEW='/dataSTAGE-data-ingestion/data_requiring_manual_review.tsv'
+DATA_FROM_MANUAL_REVIEW='/dataSTAGE-data-ingestion/data_requiring_manual_review.tsv'
 
 if [ -d "/data-from-manual-review/" ]; then
 	files_in_manual_review_mount=( /data-from-manual-review/* )
@@ -41,9 +38,9 @@ GITHUB_PERSONAL_ACCESS_TOKEN=$(jq -r .github_personal_access_token <<< $CREDS_JS
 
 cd /dataSTAGE-data-ingestion/scripts/
 echo $GS_CREDS_JSON >> gs_cloud_key.json
-# gcloud auth activate-service-account --key-file=gs_cloud_key.json  --project=$GCP_PROJECT_ID
+gcloud auth activate-service-account --key-file=gs_cloud_key.json  --project=$GCP_PROJECT_ID
+GCP_PROJECT_ID=$GCP_PROJECT_ID ./generate-file-manifest.sh > ../genome_file_manifest.csv
 
-# GCP_PROJECT_ID=$GCP_PROJECT_ID ./generate-file-manifest.sh > ../genome_file_manifest.csv
 
 ###############################################################################
 # 2. Create extract file
@@ -89,22 +86,13 @@ ls output
 # 5. Make PR to repo with outputs
 cd /
 git config --global user.email $GITHUB_USER_EMAIL
-echo "GITHUB_USER_NAME:"
-echo $GITHUB_USER_NAME
-echo "GITHUB_PERSONAL_ACCESS_TOKEN:"
-echo $GITHUB_PERSONAL_ACCESS_TOKEN
 git clone "https://$GITHUB_USER_NAME:$GITHUB_PERSONAL_ACCESS_TOKEN@github.com/uc-cdis/dataSTAGE-data-ingestion-private.git"
 
 cd dataSTAGE-data-ingestion-private/
 
-# git remote rm origin
-# git remote add origin "http://planxcyborg:$GITHUB_PERSONAL_ACCESS_TOKEN@github.com/uc-cdis/dataSTAGE-data-ingestion-private.git"
-
 git pull origin master && git fetch --all
 BRANCH_NAME_PREFIX='feat/release-'
 RELEASE_NUMBER=$(python3 /dataSTAGE-data-ingestion/scripts/get_release_number.py --current_branches "$(git branch -a)")
-echo "Creating branch $BRANCH_NAME_PREFIX$RELEASE_NUMBER"
-
 git checkout -b "$BRANCH_NAME_PREFIX$RELEASE_NUMBER"
 
 mkdir "release_$RELEASE_NUMBER"
@@ -114,11 +102,6 @@ mv ./release_manifest.tsv "./release_manifest_r$RELEASE_NUMBER.tsv"
 cp /dbgap-extract/generated_extract.tsv "./generated_extract_r$RELEASE_NUMBER.tsv"
 cp /dbgap-extract/generated_extract.log "./generated_extract_r$RELEASE_NUMBER.log"
 
-git status
-# git remote add origin "http://github.com/uc-cdis/dataSTAGE-data-ingestion-private.git"
 git add . && git commit -m "feat: release manifest"
-# TODO: uncomment these lines
-# git push -u origin $BRANCH_NAME_PREFIX$RELEASE_NUMBER
-# hub pull-request
-
-hub version
+git push -u origin $BRANCH_NAME_PREFIX$RELEASE_NUMBER
+hub pull-request

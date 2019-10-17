@@ -17,11 +17,11 @@ ENV PATH $PATH:/usr/local/gcloud/google-cloud-sdk/bin
 
 RUN mkdir /dataSTAGE-data-ingestion
 
-COPY . /dataSTAGE-data-ingestion
-
 WORKDIR /dataSTAGE-data-ingestion
 
 RUN pip3 install --upgrade pip && pip3 install pipenv
+
+COPY . /dataSTAGE-data-ingestion
 
 RUN chmod +x /dataSTAGE-data-ingestion/scripts/generate-file-manifest.sh && chmod +x run.sh
 
