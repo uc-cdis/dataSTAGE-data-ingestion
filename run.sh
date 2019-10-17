@@ -2,8 +2,9 @@
 set -e
 set -o pipefail
 
-# TODO: REMOVE THIS
-# mkdir /data-from-manual-review/
+# TODO: delete this
+echo $CREDS_JSON
+
 
 ###############################################################################
 # 0. (Optional) Check for additional PHS ID inputs that should be included from the review process
@@ -37,6 +38,7 @@ GCP_PROJECT_ID=$(jq -r .gcp_project_id <<< $CREDS_JSON)
 GS_BUCKET_PATH=$(jq -r .gs_bucket_path <<< $CREDS_JSON)
 AWS_BUCKET_PATH=$(jq -r .aws_bucket_path <<< $CREDS_JSON)
 GITHUB_USER_EMAIL=$(jq -r .github_user_email <<< $CREDS_JSON)
+GITHUB_USER_NAME=$(jq -r .github_user_name <<< $CREDS_JSON)
 GITHUB_PERSONAL_ACCESS_TOKEN=$(jq -r .github_personal_access_token <<< $CREDS_JSON)
 
 cd /dataSTAGE-data-ingestion/scripts/
@@ -83,7 +85,7 @@ ls output
 # 5. Make PR to repo with outputs
 cd /
 git config --global user.email $GITHUB_USER_EMAIL
-git clone "https://planxcyborg:$GITHUB_PERSONAL_ACCESS_TOKEN@github.com/uc-cdis/dataSTAGE-data-ingestion-private.git"
+git clone "https://$GITHUB_USERNAME:$GITHUB_PERSONAL_ACCESS_TOKEN@github.com/uc-cdis/dataSTAGE-data-ingestion-private.git"
 
 cd dataSTAGE-data-ingestion-private/
 

@@ -8,11 +8,6 @@ RUN python3 get-pip.py
 
 RUN pip3 install awscli
 
-# RUN snap version
-# RUN systemctl restart snapd.service
-# RUN systemctl enable --now snapd.socket
-# RUN snap install hub --classic
-
 # Installing gcloud package (includes gsutil)
 RUN curl https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz > /tmp/google-cloud-sdk.tar.gz
 RUN mkdir -p /usr/local/gcloud \
