@@ -34,7 +34,7 @@ def main():
     if args.action == "merge":
         headers = [
             "GUID",
-            "sample_id",
+            "submitted_sample_id",
             "dbgap_sample_id",
             "sra_sample_id",
             "biosample_id",
@@ -42,7 +42,17 @@ def main():
             "dbgap_subject_id",
             "consent_short_name",
             "study_accession_with_consent",
+            "study_accession",
             "study_with_consent",
+            "datastage_subject_id",
+            "consent_code",
+            "sex",
+            "body_site",
+            "analyte_type",
+            "sample_use",
+            "repository",
+            "dbgap_status",
+            "sra_data_details",
             "file_size",
             "md5",
             "md5_hex",
@@ -75,7 +85,17 @@ def main():
             "repository",
             "submitted_sample_id",
             "study_accession_with_consent",
+            "study_accession",
             "study_with_consent",
+            "datastage_subject_id",
+            "consent_code",
+            "sex",
+            "body_site",
+            "analyte_type",
+            "sample_use",
+            "repository",
+            "dbgap_status",
+            "sra_data_details",
             "submitted_subject_id",
             "consent_short_name",
             "analyte_type",
@@ -93,7 +113,7 @@ def main():
             scripts.get_discrepancy_list(genome_files, dbgap),
             fieldnames=headers,
         )
-        headers = ["sample_id", "gcp_uri", "aws_uri", "file_size", "md5", "row_num", "study_accession", "ignore"]
+        headers = ["submitted_sample_id", "gcp_uri", "aws_uri", "file_size", "md5", "row_num", "study_accession", "ignore"]
         utils.write_file(
             os.path.join(
                 args.output, "data_requiring_manual_review.tsv"

@@ -98,6 +98,7 @@ git checkout -b "$BRANCH_NAME_PREFIX$RELEASE_NUMBER"
 mkdir "release_$RELEASE_NUMBER"
 cd "release_$RELEASE_NUMBER"
 cp -R /dataSTAGE-data-ingestion/scripts/joindure/output/. .
+cp -R /dataSTAGE-data-ingestion/scripts/fence-image-commands.sh .
 mv ./release_manifest.tsv "./release_manifest_r$RELEASE_NUMBER.tsv"
 cp /dbgap-extract/generated_extract.tsv "./generated_extract_r$RELEASE_NUMBER.tsv"
 cp /dbgap-extract/generated_extract.log "./generated_extract_r$RELEASE_NUMBER.log"

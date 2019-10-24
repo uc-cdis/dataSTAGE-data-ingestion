@@ -43,6 +43,7 @@ def merge_manifest(genome_files, dbgap):
                     row = copy.deepcopy(meta_data)
                     row["md5_hex"] = base64.b64decode(meta_data.get("md5")).hex()
                     row["biosample_id"] = element.get("biosample_id", "None")
+                    row["submitted_sample_id"] = element.get("submitted_sample_id", "None")
                     row["dbgap_sample_id"] = element.get("dbgap_sample_id", "None")
                     row["sra_sample_id"] = element.get("sra_sample_id", "None")
                     row["submitted_subject_id"] = element.get(
@@ -55,9 +56,40 @@ def merge_manifest(genome_files, dbgap):
                     row["study_accession_with_consent"] = element.get(
                         "study_accession_with_consent", "None"
                     )
+                    row["study_accession"] = element.get(
+                        "study_accession", "None"
+                    )
                     row["study_with_consent"] = element.get(
                         "study_with_consent", "None"
                     )
+                    row["datastage_subject_id"] = element.get(
+                        "datastage_subject_id", "None"
+                    )
+                    row["consent_code"] = element.get(
+                        "consent_code", "None"
+                    )
+                    row["sex"] = element.get(
+                        "sex", "None"
+                    )
+                    row["body_site"] = element.get(
+                        "body_site", "None"
+                    )
+                    row["analyte_type"] = element.get(
+                        "analyte_type", "None"
+                    )
+                    row["sample_use"] = element.get(
+                        "sample_use", "None"
+                    )
+                    row["repository"] = element.get(
+                        "repository", "None"
+                    )
+                    row["dbgap_status"] = element.get(
+                        "dbgap_status", "None"
+                    )
+                    row["sra_data_details"] = element.get(
+                        "sra_data_details", "None"
+                    )
+
                     accession_with_consent = element.get("study_with_consent")
 
                     if accession_with_consent is None:
@@ -78,12 +110,14 @@ def merge_manifest(genome_files, dbgap):
             else:
                 row = copy.deepcopy(meta_data)
                 row["biosample_id"] = "None"
+                row["submitted_sample_id"] = "None"
                 row["dbgap_sample_id"] = "None"
                 row["sra_sample_id"] = "None"
                 row["submitted_subject_id"] = "None"
                 row["dbgap_subject_id"] = "None"
                 row["consent_short_name"] = "None"
                 row["study_with_consent"] = "None"
+                row["datastage_subject_id"] = "None"
                 row["g_access_group"] = "None"
                 row["md5_hex"] = "None"
                 results.append(row)

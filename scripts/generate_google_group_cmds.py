@@ -58,7 +58,7 @@ def dedup_study_accessions(study_accessions):
 def retrieve_study_accessions_from_extract(extract_filename):
     f = open(extract_filename)
     records = f.readlines()[1:] # First line of tsv is column names
-    undeduped_study_accessions = list(map(lambda x: x.split('\t')[-1].strip(), records))
+    undeduped_study_accessions = list(map(lambda x: x.split('\t')[-2].strip(), records))
     f.close()
     study_accessions = dedup_study_accessions(undeduped_study_accessions)
     return study_accessions

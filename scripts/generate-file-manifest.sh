@@ -43,7 +43,7 @@ join_cmd='join -a1 -a2 -o auto -t'','''
 if [[ $rc == 0 ]]; then
   awk -F '[/,]' '{print $5","$0}' $gcp_file_list | grep "^NWD" | sort -t',' -k1,1 > ${tmp_dir}/gcp_manifest.csv &&
   cat $aws_file_list | rev | cut -f1 -d' ' | rev | awk -F '[/,]' '{print $1",s3://nih-nhlbi-datacommons/"$0}' | grep "^NWD" | sort -t',' -k1,1 > ${tmp_dir}/aws_manifest.csv &&
-  printf "sample_id,aws_uri,gcp_uri,file_size,md5\n" &&
+  printf "submitted_sample_id,aws_uri,gcp_uri,file_size,md5\n" &&
   ${join_cmd} ${tmp_dir}/aws_manifest.csv ${tmp_dir}/gcp_manifest.csv | awk -F '.' '{print $1","$0}' | cut -f1,3- -d','
   rc=$?
 fi
