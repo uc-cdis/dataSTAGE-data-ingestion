@@ -2,6 +2,9 @@
 set -e
 set -o pipefail
 
+echo "create google groups??"
+echo $CREATE_GOOGLE_GROUPS
+
 ###############################################################################
 # 0. (Optional) Check for additional PHS ID inputs that should be included from the review process
 PHS_ID_LIST_PATH=/phs-id-list/`ls /phs-id-list/ | head -n 1`

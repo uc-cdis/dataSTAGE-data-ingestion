@@ -56,6 +56,7 @@ while getopts ":a:" opt; do
         # ./$GOOGLE_GROUP_CREATE_SCRIPT_PRUNED_FILE
         echo 'would have run the command'
       fi
+      ;;
     \?)
       echo "Invalid option: -$OPTARG" >&2
       exit 1
