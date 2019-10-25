@@ -21,10 +21,10 @@ def get_sample_data_from_manifest(manifest_file, dem="\t"):
         csvReader = csv.DictReader(csvfile, delimiter=dem)
         for row in csvReader:
             row["file_size"] = int(row["file_size"])
-            if row["sample_id"] in files:
-                files[row["sample_id"]].append(row)
+            if row["submitted_sample_id"] in files:
+                files[row["submitted_sample_id"]].append(row)
             else:
-                files[row["sample_id"]] = [row]
+                files[row["submitted_sample_id"]] = [row]
 
     return files
 
@@ -90,7 +90,7 @@ def _sync_2_dicts(dict1, dict2):
     for key, new_row in dict1.items():
         if key not in dict2:
             new_row["GUID"] = "None"
-            dict2[new_row["sample_id"] + "|" + new_row["md5"]] = new_row
+            dict2[new_row["submitted_sample_id"] + "|" + new_row["md5"]] = new_row
 
     return dict2
 
@@ -114,13 +114,13 @@ def create_or_update_file_with_guid(fname, indexable_data, fieldnames=None):
         dict2 = OrderedDict()
 
         for data in indexable_data:
-            dict1[data["sample_id"] + "|" + data["md5"]] = data
+            dict1[data["submitted_sample_id"] + "|" + data["md5"]] = data
 
         with open(fname, "rt") as csvfile:
             csvReader = csv.DictReader(csvfile, delimiter="\t")
             for row in csvReader:
                 row["file_size"] = int(row["file_size"])
-                dict2[row["sample_id"] + "|" + row["md5"]] = row
+                dict2[row["submitted_sample_id"] + "|" + row["md5"]] = row
 
         # merge dict1 to dict1
         dict2 = _sync_2_dicts(dict1, dict2)

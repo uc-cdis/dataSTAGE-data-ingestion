@@ -151,10 +151,10 @@ def get_discrepancy_list(genome_files, dbgap):
 
 def get_unique_id(record):
     # Unique id format: '<sample_id><md5>'
-    return record['sample_id'] + record['md5']
+    return record['submitted_sample_id'] + record['md5']
 
 def check_for_duplicates(indexable_data):
-    # The concatenation of the sample_id with the filename is to be unique
+    # The concatenation of the submitted_sample_id with the filename is to be unique
     unique_ids = list(map(get_unique_id, indexable_data))
 
     # No duplicates
