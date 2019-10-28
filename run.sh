@@ -39,6 +39,7 @@ export GITHUB_TOKEN=$GITHUB_PERSONAL_ACCESS_TOKEN
 
 cd /dataSTAGE-data-ingestion/scripts/
 echo $GS_CREDS_JSON >> gs_cloud_key.json
+# TODO: Uncomment these lines
 # gcloud auth activate-service-account --key-file=gs_cloud_key.json  --project=$GCP_PROJECT_ID
 # GCP_PROJECT_ID=$GCP_PROJECT_ID ./generate-file-manifest.sh > ../genome_file_manifest.csv
 

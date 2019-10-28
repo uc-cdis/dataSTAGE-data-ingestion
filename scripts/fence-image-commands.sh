@@ -44,9 +44,7 @@ echo "Pruned google groups commands:"
 cat $GOOGLE_GROUP_CREATE_SCRIPT_PRUNED_FILE
 
 chmod +x $GOOGLE_GROUP_CREATE_SCRIPT_PRUNED_FILE
-echo "create google groups?"
-echo "$CREATE_GOOGLE_GROUPS"
 if [ "$CREATE_GOOGLE_GROUPS" == "true" ]; then
-  # ./$GOOGLE_GROUP_CREATE_SCRIPT_PRUNED_FILE
-  echo 'would have run the command'
+  echo "Creating google groups..."
+  ./$GOOGLE_GROUP_CREATE_SCRIPT_PRUNED_FILE
 fi
