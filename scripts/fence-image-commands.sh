@@ -43,21 +43,7 @@ echo "Pruned google groups commands:"
 cat $GOOGLE_GROUP_CREATE_SCRIPT_PRUNED_FILE
 
 chmod +x $GOOGLE_GROUP_CREATE_SCRIPT_PRUNED_FILE
-while getopts ":a:" opt; do
-  case $opt in
-    create_google_groups)
-      if [ $OPTARG == 'true' ]; then
-        # ./$GOOGLE_GROUP_CREATE_SCRIPT_PRUNED_FILE
-        echo 'would have run the command'
-      fi
-      ;;
-    \?)
-      echo "Invalid option: -$OPTARG" >&2
-      exit 1
-      ;;
-    :)
-      echo "Option -$OPTARG requires an argument." >&2
-      exit 1
-      ;;
-  esac
-done
+if [ "$CREATE_GOOGLE_GROUPS" = "true" ]; then
+  # ./$GOOGLE_GROUP_CREATE_SCRIPT_PRUNED_FILE
+  echo 'would have run the command'
+fi
