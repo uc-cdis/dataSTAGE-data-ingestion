@@ -1,11 +1,5 @@
 # This script is to be run from within a fence image
 
-while true; do
-    files=( /data-ingestion-pipeline-output/* )
-    (( ${#files[@]} >= 3 )) && break
-    sleep 5s
-done
-
 echo 'Received output from data-ingestion-pipeline:'
 ls /data-ingestion-pipeline-output/
 

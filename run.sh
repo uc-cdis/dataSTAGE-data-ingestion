@@ -93,7 +93,7 @@ git pull origin master && git fetch --all
 BRANCH_NAME_PREFIX='feat/release-'
 RELEASE_NUMBER=$(python3 /dataSTAGE-data-ingestion/scripts/get_release_number.py --current_branches "$(git branch -a)")
 git checkout -b "$BRANCH_NAME_PREFIX$RELEASE_NUMBER"
-
+git pull origin master && git fetch --all
 mkdir "release_$RELEASE_NUMBER"
 cd "release_$RELEASE_NUMBER"
 cp -R /dataSTAGE-data-ingestion/scripts/joindure/output/. .
