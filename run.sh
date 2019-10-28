@@ -101,6 +101,10 @@ mv ./release_manifest.tsv "./release_manifest_r$RELEASE_NUMBER.tsv"
 cp /dbgap-extract/generated_extract.tsv "./generated_extract_r$RELEASE_NUMBER.tsv"
 cp /dbgap-extract/generated_extract.log "./generated_extract_r$RELEASE_NUMBER.log"
 
+# Attempt to avoid hitting GitHub's filesize limit
+zip -r "./release_manifest_r$RELEASE_NUMBER.zip" "./release_manifest_r$RELEASE_NUMBER.tsv"
+rm "./release_manifest_r$RELEASE_NUMBER.tsv"
+
 git add . && git commit -m "feat: release manifest"
 git push -u origin $BRANCH_NAME_PREFIX$RELEASE_NUMBER
 
