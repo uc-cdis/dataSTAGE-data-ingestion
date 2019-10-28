@@ -8,6 +8,7 @@ GOOGLE_GROUP_CREATE_SCRIPT_FILE="/data-ingestion-pipeline-output/google-groups.s
 GOOGLE_GROUP_CREATE_SCRIPT_PRUNED_FILE="google-groups-pruned.sh"
 
 fence-create google-list-authz-groups > $EXISTING_GOOGLE_GROUPS_FILE
+cat $EXISTING_GOOGLE_GROUPS_FILE
 
 EXISTING_GROUPS=( )
 FOUND_GROUP_HEADER=0
@@ -43,7 +44,9 @@ echo "Pruned google groups commands:"
 cat $GOOGLE_GROUP_CREATE_SCRIPT_PRUNED_FILE
 
 chmod +x $GOOGLE_GROUP_CREATE_SCRIPT_PRUNED_FILE
-if [ "$CREATE_GOOGLE_GROUPS" = "true" ]; then
+echo "create google groups?"
+echo "$CREATE_GOOGLE_GROUPS"
+if [ "$CREATE_GOOGLE_GROUPS" == "true" ]; then
   # ./$GOOGLE_GROUP_CREATE_SCRIPT_PRUNED_FILE
   echo 'would have run the command'
 fi
