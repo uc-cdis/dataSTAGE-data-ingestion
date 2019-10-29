@@ -1,8 +1,14 @@
+# Run with:
+# python3 -m pytest tests.py
+
 import pytest
 from mock import MagicMock
 from mock import patch
+import sys
 
-from scripts import scripts
+sys.path.insert(0, 'joindure')
+
+import joindure.scripts as joindure
 
 
 genome_data = {
@@ -62,11 +68,10 @@ dbgap_data = {
     ],
 }
 
-
-@patch("scripts.scripts.read_mapping_file")
+@patch("joindure.scripts.read_mapping_file")
 def test_merging(mock_read_mapping_file):
     mock_read_mapping_file.return_value = {}
-    L = scripts.merge_manifest(genome_data, dbgap_data)
+    L = joindure.merge_manifest(genome_data, dbgap_data)
     assert len(L) == 4
     assert L[0]["sample_id"] == "sample_id1"
     assert L[0]["biosample_id"] == "biosample_id1"
@@ -74,10 +79,10 @@ def test_merging(mock_read_mapping_file):
     assert L[1]["biosample_id"] == "biosample_id1_2"
 
 
-@patch("scripts.scripts.read_mapping_file")
+@patch("joindure.scripts.read_mapping_file")
 def test_get_error_list(mock_read_mapping_file):
     mock_read_mapping_file.return_value = {}
-    L = scripts.get_discrepancy_list(genome_data, dbgap_data)
+    L = joindure.get_discrepancy_list(genome_data, dbgap_data)
     assert len(L) == 1
     assert L[0]["sample_id"] == "sample_id3"
     assert L[0]["biosample_id"] == "biosample_id3"
