@@ -1,14 +1,14 @@
 # Run with:
 # python3 -m pytest tests.py
 
+import sys
+sys.path.insert(0, "joindure")
+
 import pytest
 from mock import MagicMock
 from mock import patch
-import sys
-
-sys.path.insert(0, "joindure")
-
 import joindure.scripts as joindure
+import get_release_number
 from test_data import *
 
 ###### Joindure tests #######
@@ -39,3 +39,25 @@ def test_check_for_duplicates():
 
     # The test has passed if this does not throw an exception
     L = joindure.check_for_duplicates(indexable_data_with_no_duplicates)
+
+def test_get_release_number():
+    git_branch_a_mock_output="""
+        * feat/release-703\nmaster\nremotes/origin/HEAD -> origin/master
+        remotes/origin/feat/release-703
+        remotes/origin/feat/release-702
+        remotes/origin/master
+        remotes/origin/feat/bug-fixes
+    """
+    release_num = get_release_number.get_branch_number(git_branch_a_mock_output)
+    assert(release_num == 704)
+
+    git_branch_a_mock_output="""
+        feat/release-1
+      * master
+        remotes/origin/HEAD -> origin/master
+        remotes/origin/feat/release-1
+        remotes/origin/master
+    """
+    release_num = get_release_number.get_branch_number(git_branch_a_mock_output)
+    assert(release_num == 2)
+

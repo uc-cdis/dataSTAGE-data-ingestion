@@ -6,7 +6,6 @@ from datetime import datetime
 
 BRANCH_NAME_PREFIX = "feat/release-"
 
-
 def get_branch_number(git_branch_a):
     branches = git_branch_a.split()
     branches = list(filter(lambda x: BRANCH_NAME_PREFIX in x, branches))
