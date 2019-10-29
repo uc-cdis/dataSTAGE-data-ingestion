@@ -6,7 +6,7 @@ from mock import MagicMock
 from mock import patch
 import sys
 
-sys.path.insert(0, 'joindure')
+sys.path.insert(0, "joindure")
 
 import joindure.scripts as joindure
 
@@ -67,6 +67,7 @@ dbgap_data = {
         }
     ],
 }
+
 
 @patch("joindure.scripts.read_mapping_file")
 def test_merging(mock_read_mapping_file):
