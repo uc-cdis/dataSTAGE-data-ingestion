@@ -3,7 +3,7 @@ set -e
 set -o pipefail
 
 ###############################################################################
-# 0. (Optional) Check for additional PHS ID inputs that should be included from the review process
+# 1. (Optional) Check for additional PHS ID inputs that should be included from the review process
 PHS_ID_LIST_PATH=/phs-id-list/`ls /phs-id-list/ | head -n 1`
 DATA_FROM_MANUAL_REVIEW='/dataSTAGE-data-ingestion/data_requiring_manual_review.tsv'
 
@@ -21,7 +21,7 @@ fi
 
  
 ###############################################################################
-# 1. Create a manifest from a bucket
+# 2. Create a manifest from a bucket
 export AWS_ACCESS_KEY_ID=$(jq -r .aws_creds.aws_access_key_id <<< $CREDS_JSON)
 export AWS_SECRET_ACCESS_KEY=$(jq -r .aws_creds.aws_secret_access_key <<< $CREDS_JSON)
 AWS_SESSION_TOKEN=$(jq -r .aws_creds.aws_session_token <<< $CREDS_JSON)
@@ -44,7 +44,7 @@ echo $GS_CREDS_JSON >> gs_cloud_key.json
 # GCP_PROJECT_ID=$GCP_PROJECT_ID ./generate-file-manifest.sh > ../genome_file_manifest.csv
 
 ###############################################################################
-# 2. Create extract file
+# 3. Create extract file
 cd / && git clone https://github.com/uc-cdis/dbgap-extract.git
 cd dbgap-extract
 # TODO: alter these 2 lines to use master branch
@@ -60,7 +60,7 @@ if [ $extract_step_failed -eq 1 ]; then
 fi
 
 ###############################################################################
-# 3. Generate a list of commands to create Google Groups and a mapping file for the joindure script
+# 4. Generate a list of commands to create Google Groups and a mapping file for the joindure script
 cd /dataSTAGE-data-ingestion/scripts/
 if [ ! -d "joindure/output" ]; then
 	mkdir joindure/output
@@ -73,7 +73,7 @@ fi
 mv mapping.txt /dataSTAGE-data-ingestion/scripts/joindure/mapping.txt
 
 ###############################################################################
-# 4. Run joindure script
+# 5. Run joindure script
 cd /dataSTAGE-data-ingestion/scripts/joindure
 
 pipenv run python3 main.py merge --genome_manifest /dataSTAGE-data-ingestion/genome_file_manifest.csv \
@@ -83,7 +83,7 @@ cp /dataSTAGE-data-ingestion/scripts/fence-image-commands.sh /dataSTAGE-data-ing
 ls output
 
 ###############################################################################
-# 5. Make PR to repo with outputs
+# 6. Make PR to repo with outputs
 cd /
 git config --global user.email $GITHUB_USER_EMAIL
 git clone "https://$GITHUB_USER_NAME:$GITHUB_PERSONAL_ACCESS_TOKEN@github.com/uc-cdis/dataSTAGE-data-ingestion-private.git"
