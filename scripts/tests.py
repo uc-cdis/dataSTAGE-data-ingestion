@@ -11,6 +11,7 @@ from mock import patch
 import joindure.scripts as joindure
 import get_release_number
 import add_studies_from_manual_review
+import generate_google_group_cmds
 from test_data.test_data import *
 
 
@@ -78,4 +79,15 @@ def test_retrieve_study_accessions_from_manual_review_file():
     expected_study_accessions = ["phs001143.v2", "phs1234", "phs909090"]
     assert all(
         [a == b for a, b in zip(actual_study_accessions, expected_study_accessions)]
+    )
+
+
+###### Test generate_google_group_cmds.py ######
+def test_dedup_study_accessions():
+    actual = generate_google_group_cmds.dedup_study_accessions(
+        ["phs001143", "phs001145", "phs001148", "phs001148"]
+    )
+    expected = ["phs001143", "phs001145", "phs001148"]
+    assert all(
+        [a == b for a, b in zip(actual, expected)]
     )
