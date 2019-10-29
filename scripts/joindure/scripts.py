@@ -131,7 +131,6 @@ def merge_manifest(genome_files, dbgap):
         return []
     return results
 
-
 def get_discrepancy_list(genome_files, dbgap):
     results = []
     n = 1
@@ -151,7 +150,7 @@ def get_discrepancy_list(genome_files, dbgap):
 
 def get_unique_id(record):
     # Unique id format: '<sample_id><md5>'
-    return record['submitted_sample_id'] + record['md5']
+    return 'sample-id: ' + record['submitted_sample_id'] + ', md5: ' + record['md5']
 
 def check_for_duplicates(indexable_data):
     # The concatenation of the submitted_sample_id with the filename is to be unique

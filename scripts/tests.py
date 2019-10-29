@@ -9,66 +9,9 @@ import sys
 sys.path.insert(0, "joindure")
 
 import joindure.scripts as joindure
+from test_data import *
 
-
-genome_data = {
-    "sample_id1": [
-        {
-            "sample_id": "sample_id1",
-            "aws_uri": "aws_uri_1",
-            "gcp_uri": "gcp_uri_1",
-            "md5": "md5_1",
-            "file_size": "file_size_1",
-        }
-    ],
-    "sample_id2": [
-        {
-            "sample_id": "sample_id2",
-            "aws_uri": "aws_uri_2",
-            "gcp_uri": "gcp_uri_2",
-            "md5": "md5_2",
-            "file_size": "file_size_2",
-        },
-        {
-            "aws_uri": "aws_uri_2",
-            "gcp_uri": "gcp_uri_2",
-            "md5": "md5_2",
-            "file_size": "file_size_2",
-        },
-    ],
-}
-
-
-dbgap_data = {
-    "sample_id1": [
-        {
-            "sample_id": "sample_id1",
-            "biosample_id": "biosample_id1",
-            "sra_sample_id": "sra_sample_id1",
-        },
-        {
-            "sample_id": "sample_id2",
-            "biosample_id": "biosample_id1_2",
-            "sra_sample_id": "sra_sample_id1_2",
-        },
-    ],
-    "sample_id2": [
-        {
-            "sample_id": "sample_id2",
-            "biosample_id": "biosample_id2",
-            "sra_sample_id": "sra_sample_id2",
-        }
-    ],
-    "sample_id3": [
-        {
-            "sample_id": "sample_id3",
-            "biosample_id": "biosample_id3",
-            "sra_sample_id": "sra_sample_id3",
-        }
-    ],
-}
-
-
+###### Joindure tests #######
 @patch("joindure.scripts.read_mapping_file")
 def test_merging(mock_read_mapping_file):
     mock_read_mapping_file.return_value = {}
@@ -79,7 +22,6 @@ def test_merging(mock_read_mapping_file):
     assert L[1]["sample_id"] == "sample_id1"
     assert L[1]["biosample_id"] == "biosample_id1_2"
 
-
 @patch("joindure.scripts.read_mapping_file")
 def test_get_error_list(mock_read_mapping_file):
     mock_read_mapping_file.return_value = {}
@@ -88,3 +30,12 @@ def test_get_error_list(mock_read_mapping_file):
     assert L[0]["sample_id"] == "sample_id3"
     assert L[0]["biosample_id"] == "biosample_id3"
     assert L[0]["row_num"] == 4
+
+def test_check_for_duplicates():
+    with pytest.raises(ValueError) as excinfo:
+        L = joindure.check_for_duplicates(indexable_data_with_duplicates)
+    assert "NWD2" in str(excinfo.value)
+    assert "XJ4eRUTID0PBhEl4Vp4x/w==" in str(excinfo.value)
+
+    # The test has passed if this does not throw an exception
+    L = joindure.check_for_duplicates(indexable_data_with_no_duplicates)
