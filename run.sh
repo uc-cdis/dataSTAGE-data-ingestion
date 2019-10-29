@@ -37,10 +37,15 @@ GITHUB_USER_NAME=$(jq -r .github_user_name <<< $CREDS_JSON)
 GITHUB_PERSONAL_ACCESS_TOKEN=$(jq -r .github_personal_access_token <<< $CREDS_JSON)
 export GITHUB_TOKEN=$GITHUB_PERSONAL_ACCESS_TOKEN
 
+# TODO: delete this line
+rm /dataSTAGE-data-ingestion/genome_file_manifest.csv
+
 cd /dataSTAGE-data-ingestion/scripts/
 echo $GS_CREDS_JSON >> gs_cloud_key.json
 gcloud auth activate-service-account --key-file=gs_cloud_key.json  --project=$GCP_PROJECT_ID
 GCP_PROJECT_ID=$GCP_PROJECT_ID ./generate-file-manifest.sh > ../genome_file_manifest.csv
+
+ls -lh ../
 
 ###############################################################################
 # 3. Create extract file
