@@ -9,9 +9,11 @@ from mock import MagicMock
 from mock import patch
 import joindure.scripts as joindure
 import get_release_number
-from test_data import *
+import add_studies_from_manual_review
+from test_data.test_data import *
 
-###### Joindure tests #######
+
+###### Test joindure script #######
 @patch("joindure.scripts.read_mapping_file")
 def test_merging(mock_read_mapping_file):
     mock_read_mapping_file.return_value = {}
@@ -40,6 +42,8 @@ def test_check_for_duplicates():
     # The test has passed if this does not throw an exception
     L = joindure.check_for_duplicates(indexable_data_with_no_duplicates)
 
+
+###### Test get_release_number.py #######
 def test_get_release_number():
     git_branch_a_mock_output="""
         * feat/release-703\nmaster\nremotes/origin/HEAD -> origin/master
@@ -61,3 +65,12 @@ def test_get_release_number():
     release_num = get_release_number.get_branch_number(git_branch_a_mock_output)
     assert(release_num == 2)
 
+
+###### Test add_studies_from_manual_review.py #######
+def test_retrieve_study_accessions_from_manual_review_file():
+    actual_study_accessions = add_studies_from_manual_review.retrieve_study_accessions_from_manual_review_file(
+        "test_data/test_data_requiring_manual_review.tsv"
+    )
+
+    expected_study_accessions = ['phs001143.v2', 'phs1234', 'phs909090']
+    assert all([a == b for a, b in zip(actual_study_accessions, expected_study_accessions)])
