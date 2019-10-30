@@ -41,10 +41,9 @@ def retrieve_study_accessions_from_manual_review_file(filename):
 
 
 def retrieve_study_accessions_from_phs_id_list_file(filename):
-    f = open(filename)
-    contents = f.readlines()
-    f.close()
-    return list(map(lambda x: x.strip(), contents))
+    with open(filename) as f:
+        contents = f.readlines()
+        return list(map(lambda x: x.strip(), contents))
 
 
 def main():

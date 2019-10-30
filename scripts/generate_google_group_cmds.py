@@ -58,15 +58,12 @@ def dedup_study_accessions(study_accessions):
     rv.sort()
     return rv
 
-
 def retrieve_study_accessions_from_extract(extract_filename):
-    f = open(extract_filename)
-    records = f.readlines()[1:]  # First line of tsv is column names
-    undeduped_study_accessions = list(map(lambda x: x.split("\t")[-2].strip(), records))
-    f.close()
-    study_accessions = dedup_study_accessions(undeduped_study_accessions)
-    return study_accessions
-
+    with open(extract_filename) as f: 
+        records = f.readlines()[1:]  # First line of tsv is column names
+        undeduped_study_accessions = list(map(lambda x: x.split("\t")[-2].strip(), records))
+        study_accessions = dedup_study_accessions(undeduped_study_accessions)
+        return study_accessions
 
 def write_list_of_strings_to_file_as_rows(array_in, output_filename):
     with open(output_filename, "a+") as out_file:
