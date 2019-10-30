@@ -44,8 +44,5 @@ fence-create link-bucket-to-project --bucket_id allProjects --bucket_provider go
 fence-create link-bucket-to-project --bucket_id allProjects --bucket_provider google --project_auth_id phs1234
 END
 )
-    echo "--**--"
-    echo "$expected"
-    echo "--**--"
     assert_equal "$actual" "$expected"
 }
