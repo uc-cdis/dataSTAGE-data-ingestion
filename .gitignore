@@ -1,2 +1,8 @@
 .DS_Store
 scripts/output/*
+*.log
+*/__pycache__/
+__pycache__/
+*/.cache_/
+*/google-groups.sh
+*/mapping.txt
