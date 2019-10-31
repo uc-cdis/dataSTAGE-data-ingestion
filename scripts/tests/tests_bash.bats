@@ -55,6 +55,16 @@ END
 
     python3 generate_google_group_cmds.py --extract_filename tests/test_data/test_extract.tsv
 
+    assert [ -f "mapping.txt" ]
+    actual_mapping=`cat mapping.txt`
+    expected_mapping=`cat tests/test_data/expected_output/mapping.txt`
+    assert_equal "$actual_mapping" "$expected_mapping"
+
+    assert [ -f "google-groups.sh" ]
+    actual_google_groups=`cat google-groups.sh`
+    expected_google_groups=`cat tests/test_data/expected_output/google-groups.sh`
+    assert_equal "$actual_google_groups" "$expected_google_groups"
+
     mv mapping.txt joindure/
 
     cd joindure/
