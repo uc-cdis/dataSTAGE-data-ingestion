@@ -9,7 +9,6 @@ GOOGLE_GROUPS_OUTFILE = "google-groups.sh"
 MAPPING_OUTFILE = "mapping.txt"
 logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
 
-
 def generate_cmd_sets(studies):
     commands = []
     for study_accession_with_consent in studies:
@@ -38,7 +37,6 @@ def generate_cmd_sets(studies):
 
     return commands
 
-
 def make_mapping_entries(study_accessions):
     entries = []
     for study in study_accessions:
@@ -46,7 +44,6 @@ def make_mapping_entries(study_accessions):
             "{}: stagedcp_{}_read_gbag@dcp.bionimbus.org".format(study, study)
         )
     return entries
-
 
 def dedup_study_accessions(study_accessions):
     dict_of_things = {}
@@ -59,16 +56,25 @@ def dedup_study_accessions(study_accessions):
     return rv
 
 def retrieve_study_accessions_from_extract(extract_filename):
+    # Retrieve study_with_consent in a column-order-agnostic way
     with open(extract_filename) as f: 
-        records = f.readlines()[1:]  # First line of tsv is column names
-        undeduped_study_accessions = list(map(lambda x: x.split("\t")[-2].strip(), records))
+        rows = f.readlines()
+        headers = rows[0].split("\t")
+        records = list(map(lambda x: x.split("\t"), rows[1:]))
+        records_as_dicts = []
+        for record in records:
+            record_dict = {}
+            for i in range(len(record)):
+                record_dict[headers[i]] = record[i]
+            records_as_dicts.append(record_dict)
+
+        undeduped_study_accessions = list(map(lambda x: x['study_with_consent'], records_as_dicts))
         study_accessions = dedup_study_accessions(undeduped_study_accessions)
         return study_accessions
 
 def write_list_of_strings_to_file_as_rows(array_in, output_filename):
     with open(output_filename, "a+") as out_file:
         out_file.write("\n".join(array_in))
-
 
 def main():
     parser = argparse.ArgumentParser(
@@ -104,7 +110,6 @@ def main():
             GOOGLE_GROUPS_OUTFILE, MAPPING_OUTFILE
         )
     )
-
 
 if __name__ == "__main__":
     main()
