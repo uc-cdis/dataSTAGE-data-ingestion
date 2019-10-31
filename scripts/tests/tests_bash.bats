@@ -48,13 +48,7 @@ END
 }
 
 
-@test "joindure script and generate_google_group_cmds.py work together locally as expected" {
-    # cd dbgap-extract/
-    # python3 dbgap_extract.py --study_accession_list_filename phs_id_list.txt --output_filename generated_extract.tsv 
-    # cd ../dataSTAGE-data-ingestion/scripts
-    # rm mapping.txt
-    
-    
+@test "joindure script and generate_google_group_cmds.py work together locally as expected" {   
     if [ -f "mapping.txt" ]; then
         rm mapping.txt
     fi
