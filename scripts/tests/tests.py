@@ -70,6 +70,14 @@ def test_get_release_number():
     release_num = get_release_number.get_branch_number(git_branch_a_mock_output)
     assert release_num == 2
 
+    git_branch_a_mock_output = """
+      * master
+        remotes/origin/HEAD -> origin/master
+        remotes/origin/master
+    """
+    release_num = get_release_number.get_branch_number(git_branch_a_mock_output)
+    assert release_num == 1
+
 
 ###### Test add_studies_from_manual_review.py #######
 def test_retrieve_study_accessions_from_manual_review_file():
