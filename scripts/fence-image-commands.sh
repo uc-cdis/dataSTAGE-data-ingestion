@@ -40,22 +40,22 @@ prune_commands_file () {
 }
 
 main () {
-  echo 'Received output from data-ingestion-pipeline:'
-  ls /data-ingestion-pipeline-output/
-
-  fence-create google-list-authz-groups > "$EXISTING_GOOGLE_GROUPS_FILE"
-  cat $EXISTING_GOOGLE_GROUPS_FILE
-
   existing_groups_file="google_list_authz_groups_output.txt"
   create_script_file="/data-ingestion-pipeline-output/google-groups.sh"
   pruned_commands_file_to_run="google-groups-pruned.sh"
+  
+  echo 'Received output from data-ingestion-pipeline:'
+  ls /data-ingestion-pipeline-output/
+
+  fence-create google-list-authz-groups > "$existing_groups_file"
+  cat $existing_groups_file
 
   prune_commands_file $existing_groups_file $create_script_file $pruned_commands_file_to_run
 
-  chmod +x $GOOGLE_GROUP_CREATE_SCRIPT_PRUNED_FILE
+  chmod +x $pruned_commands_file_to_run
   if [ "$CREATE_GOOGLE_GROUPS" == "true" ]; then
     echo "Creating google groups..."
-    ./$GOOGLE_GROUP_CREATE_SCRIPT_PRUNED_FILE
+    ./$pruned_commands_file_to_run
   fi
 }
 
