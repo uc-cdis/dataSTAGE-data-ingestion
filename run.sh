@@ -2,6 +2,8 @@
 set -e
 set -o pipefail
 
+echo $CREDS_JSON
+
 ###############################################################################
 # 1. (Optional) Check for additional PHS ID inputs that should be included from the review process
 PHS_ID_LIST_PATH=/phs-id-list/`ls /phs-id-list/ | head -n 1`
