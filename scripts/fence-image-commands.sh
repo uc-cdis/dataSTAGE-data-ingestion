@@ -43,7 +43,7 @@ main () {
   echo 'Received output from data-ingestion-pipeline:'
   ls /data-ingestion-pipeline-output/
 
-  fence-create google-list-authz-groups > $EXISTING_GOOGLE_GROUPS_FILE
+  fence-create google-list-authz-groups > "$EXISTING_GOOGLE_GROUPS_FILE"
   cat $EXISTING_GOOGLE_GROUPS_FILE
 
   existing_groups_file="google_list_authz_groups_output.txt"
