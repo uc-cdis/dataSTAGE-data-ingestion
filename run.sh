@@ -2,8 +2,6 @@
 set -e
 set -o pipefail
 
-echo $CREDS_JSON
-
 ###############################################################################
 # 1. (Optional) Check for additional PHS ID inputs that should be included from the review process
 PHS_ID_LIST_PATH=/phs-id-list/`ls /phs-id-list/ | head -n 1`
@@ -26,10 +24,6 @@ fi
 # 2. Create a manifest from a bucket
 GIT_ORG_TO_PR_TO=$(jq -r .git_org_to_pr_to <<< $CREDS_JSON)
 GIT_REPO_TO_PR_TO=$(jq -r .git_repo_to_pr_to <<< $CREDS_JSON)
-
-echo $GIT_ORG_TO_PR_TO
-echo $GIT_REPO_TO_PR_TO
-
 GITHUB_USER_EMAIL=$(jq -r .github_user_email <<< $CREDS_JSON)
 GITHUB_USER_NAME=$(jq -r .github_user_name <<< $CREDS_JSON)
 GITHUB_PERSONAL_ACCESS_TOKEN=$(jq -r .github_personal_access_token <<< $CREDS_JSON)
