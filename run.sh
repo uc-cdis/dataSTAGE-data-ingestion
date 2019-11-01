@@ -22,29 +22,33 @@ fi
  
 ###############################################################################
 # 2. Create a manifest from a bucket
-export AWS_ACCESS_KEY_ID=$(jq -r .aws_creds.aws_access_key_id <<< $CREDS_JSON)
-export AWS_SECRET_ACCESS_KEY=$(jq -r .aws_creds.aws_secret_access_key <<< $CREDS_JSON)
-AWS_SESSION_TOKEN=$(jq -r .aws_creds.aws_session_token <<< $CREDS_JSON)
-if [[ -z "$AWS_SESSION_TOKEN" ]]; then
-  export AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN
+echo "CREATE_GENOME_MANIFEST"
+echo $CREATE_GENOME_MANIFEST
+if [ "$CREATE_GENOME_MANIFEST" == "true" ]; then
+	export AWS_ACCESS_KEY_ID=$(jq -r .aws_creds.aws_access_key_id <<< $CREDS_JSON)
+	export AWS_SECRET_ACCESS_KEY=$(jq -r .aws_creds.aws_secret_access_key <<< $CREDS_JSON)
+	AWS_SESSION_TOKEN=$(jq -r .aws_creds.aws_session_token <<< $CREDS_JSON)
+	if [[ -z "$AWS_SESSION_TOKEN" ]]; then
+	  export AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN
+	fi
+	GS_CREDS_JSON=$(jq -r .gs_creds <<< $CREDS_JSON)
+	GCP_PROJECT_ID=$(jq -r .gcp_project_id <<< $CREDS_JSON)
+	GS_BUCKET_PATH=$(jq -r .gs_bucket_path <<< $CREDS_JSON)
+	AWS_BUCKET_PATH=$(jq -r .aws_bucket_path <<< $CREDS_JSON)
+	GITHUB_USER_EMAIL=$(jq -r .github_user_email <<< $CREDS_JSON)
+	GITHUB_USER_NAME=$(jq -r .github_user_name <<< $CREDS_JSON)
+	GITHUB_PERSONAL_ACCESS_TOKEN=$(jq -r .github_personal_access_token <<< $CREDS_JSON)
+	export GITHUB_TOKEN=$GITHUB_PERSONAL_ACCESS_TOKEN
+
+	# TODO: delete this line
+	rm /dataSTAGE-data-ingestion/genome_file_manifest.csv
+
+	cd /dataSTAGE-data-ingestion/scripts/
+	echo $GS_CREDS_JSON >> gs_cloud_key.json
+	gcloud auth activate-service-account --key-file=gs_cloud_key.json  --project=$GCP_PROJECT_ID
+	gsutil ls
+	GCP_PROJECT_ID=$GCP_PROJECT_ID ./generate-file-manifest.sh > ../genome_file_manifest.csv
 fi
-GS_CREDS_JSON=$(jq -r .gs_creds <<< $CREDS_JSON)
-GCP_PROJECT_ID=$(jq -r .gcp_project_id <<< $CREDS_JSON)
-GS_BUCKET_PATH=$(jq -r .gs_bucket_path <<< $CREDS_JSON)
-AWS_BUCKET_PATH=$(jq -r .aws_bucket_path <<< $CREDS_JSON)
-GITHUB_USER_EMAIL=$(jq -r .github_user_email <<< $CREDS_JSON)
-GITHUB_USER_NAME=$(jq -r .github_user_name <<< $CREDS_JSON)
-GITHUB_PERSONAL_ACCESS_TOKEN=$(jq -r .github_personal_access_token <<< $CREDS_JSON)
-export GITHUB_TOKEN=$GITHUB_PERSONAL_ACCESS_TOKEN
-
-# TODO: delete this line
-rm /dataSTAGE-data-ingestion/genome_file_manifest.csv
-
-cd /dataSTAGE-data-ingestion/scripts/
-echo $GS_CREDS_JSON >> gs_cloud_key.json
-gcloud auth activate-service-account --key-file=gs_cloud_key.json  --project=$GCP_PROJECT_ID
-gsutil ls
-GCP_PROJECT_ID=$GCP_PROJECT_ID ./generate-file-manifest.sh > ../genome_file_manifest.csv
 
 ls -lh ../
 
