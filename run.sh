@@ -22,8 +22,17 @@ fi
  
 ###############################################################################
 # 2. Create a manifest from a bucket
-echo "CREATE_GENOME_MANIFEST"
-echo $CREATE_GENOME_MANIFEST
+GIT_ORG_TO_PR_TO=$(jq -r .git_org_to_pr_to <<< $CREDS_JSON)
+GIT_REPO_TO_PR_TO=$(jq -r .git_repo_to_pr_to <<< $CREDS_JSON)
+
+echo $GIT_ORG_TO_PR_TO
+echo $GIT_REPO_TO_PR_TO
+
+GITHUB_USER_EMAIL=$(jq -r .github_user_email <<< $CREDS_JSON)
+GITHUB_USER_NAME=$(jq -r .github_user_name <<< $CREDS_JSON)
+GITHUB_PERSONAL_ACCESS_TOKEN=$(jq -r .github_personal_access_token <<< $CREDS_JSON)
+export GITHUB_TOKEN=$GITHUB_PERSONAL_ACCESS_TOKEN
+
 if [ "$CREATE_GENOME_MANIFEST" == "true" ]; then
 	export AWS_ACCESS_KEY_ID=$(jq -r .aws_creds.aws_access_key_id <<< $CREDS_JSON)
 	export AWS_SECRET_ACCESS_KEY=$(jq -r .aws_creds.aws_secret_access_key <<< $CREDS_JSON)
@@ -34,11 +43,7 @@ if [ "$CREATE_GENOME_MANIFEST" == "true" ]; then
 	GS_CREDS_JSON=$(jq -r .gs_creds <<< $CREDS_JSON)
 	GCP_PROJECT_ID=$(jq -r .gcp_project_id <<< $CREDS_JSON)
 	GS_BUCKET_PATH=$(jq -r .gs_bucket_path <<< $CREDS_JSON)
-	AWS_BUCKET_PATH=$(jq -r .aws_bucket_path <<< $CREDS_JSON)
-	GITHUB_USER_EMAIL=$(jq -r .github_user_email <<< $CREDS_JSON)
-	GITHUB_USER_NAME=$(jq -r .github_user_name <<< $CREDS_JSON)
-	GITHUB_PERSONAL_ACCESS_TOKEN=$(jq -r .github_personal_access_token <<< $CREDS_JSON)
-	export GITHUB_TOKEN=$GITHUB_PERSONAL_ACCESS_TOKEN
+	AWS_BUCKET_PATH=$(jq -r .aws_bucket_path <<< $CREDS_JSON)	
 
 	# TODO: delete this line
 	rm /dataSTAGE-data-ingestion/genome_file_manifest.csv
@@ -49,8 +54,6 @@ if [ "$CREATE_GENOME_MANIFEST" == "true" ]; then
 	gsutil ls
 	GCP_PROJECT_ID=$GCP_PROJECT_ID ./generate-file-manifest.sh > ../genome_file_manifest.csv
 fi
-
-ls -lh ../
 
 ###############################################################################
 # 3. Create extract file
@@ -95,9 +98,9 @@ ls output
 # 6. Make PR to repo with outputs
 cd /
 git config --global user.email $GITHUB_USER_EMAIL
-git clone "https://$GITHUB_USER_NAME:$GITHUB_PERSONAL_ACCESS_TOKEN@github.com/uc-cdis/dataSTAGE-data-ingestion-private.git"
+git clone "https://$GITHUB_USER_NAME:$GITHUB_PERSONAL_ACCESS_TOKEN@github.com/$GIT_ORG_TO_PR_TO/$GIT_REPO_TO_PR_TO.git"
 
-cd dataSTAGE-data-ingestion-private/
+cd $GIT_REPO_TO_PR_TO
 
 git pull origin master && git fetch --all
 BRANCH_NAME_PREFIX='feat/release-'
