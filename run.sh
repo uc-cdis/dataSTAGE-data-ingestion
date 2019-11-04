@@ -106,13 +106,19 @@ git pull origin master && git fetch --all
 mkdir -p "release-$RELEASE_NUMBER/intermediate_files"
 cd "release-$RELEASE_NUMBER"
 cp -R /dataSTAGE-data-ingestion/scripts/joindure/output/. ./intermediate_files/
-mv ./intermediate_files/release_manifest.tsv "./release_manifest_r$RELEASE_NUMBER.tsv"
-cp /dbgap-extract/generated_extract.tsv "./intermediate_files/generated_extract_r$RELEASE_NUMBER.tsv"
-cp /dbgap-extract/generated_extract.log "./intermediate_files/generated_extract_r$RELEASE_NUMBER.log"
+mv ./intermediate_files/release_manifest.tsv "./release_manifest.tsv"
+cp /dbgap-extract/generated_extract.tsv "./intermediate_files/dbgap_extract.tsv"
+cp /dbgap-extract/generated_extract.log "./intermediate_files/dbgap_extract.log"
+cp $PHS_ID_LIST_PATH ./intermediate_files/phsids.txt
+cp /dataSTAGE-data-ingestion/genome_file_manifest.csv ./
+
 
 # Attempt to avoid hitting GitHub's filesize limit
-zip -r "./release_manifest_r$RELEASE_NUMBER.zip" "./release_manifest_r$RELEASE_NUMBER.tsv"
-rm "./release_manifest_r$RELEASE_NUMBER.tsv"
+zip -r "./release_manifest_r$RELEASE_NUMBER.zip" "./release_manifest.tsv"
+rm ./release_manifest.tsv
+gzip genome_file_manifest.csv
+rm ./genome_file_manifest.csv
+rm fence-image-commands.sh
 
 git add . && git commit -m "feat: release manifest"
 git push -u origin $BRANCH_NAME_PREFIX$RELEASE_NUMBER
