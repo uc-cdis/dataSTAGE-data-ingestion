@@ -1,4 +1,6 @@
-# Run with:
+# Run all tests with:
+# ./test_all.sh
+# Run just this file with:
 # python3 -m pytest tests.py
 
 import sys

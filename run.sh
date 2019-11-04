@@ -29,26 +29,23 @@ GITHUB_USER_NAME=$(jq -r .github_user_name <<< $CREDS_JSON)
 GITHUB_PERSONAL_ACCESS_TOKEN=$(jq -r .github_personal_access_token <<< $CREDS_JSON)
 export GITHUB_TOKEN=$GITHUB_PERSONAL_ACCESS_TOKEN
 
-echo '31: '
-ls /genome-file-manifest
-GENOME_FILE_MANIFEST_PATH=/genome-file-manifest`ls /genome-file-manifest/ | head -n 1`
+echo "31"
 echo $GENOME_FILE_MANIFEST_PATH
+# TODO: delete this line
+rm /dataSTAGE-data-ingestion/genome_file_manifest.csv
 
-if [ ! -f $GENOME_FILE_MANIFEST_PATH ]; then
+if [ -z "$GENOME_FILE_MANIFEST_PATH" ]; then
 	echo 'Genome file manifest not found. Creating one...'
-	export AWS_ACCESS_KEY_ID=$(jq -r .aws_creds.aws_access_key_id <<< $CREDS_JSON)
-	export AWS_SECRET_ACCESS_KEY=$(jq -r .aws_creds.aws_secret_access_key <<< $CREDS_JSON)
-	AWS_SESSION_TOKEN=$(jq -r .aws_creds.aws_session_token <<< $CREDS_JSON)
+	export AWS_ACCESS_KEY_ID=$(jq -r .genome_bucket_aws_creds.aws_access_key_id <<< $CREDS_JSON)
+	export AWS_SECRET_ACCESS_KEY=$(jq -r .genome_bucket_aws_creds.aws_secret_access_key <<< $CREDS_JSON)
+	AWS_SESSION_TOKEN=$(jq -r .genome_bucket_aws_creds.aws_session_token <<< $CREDS_JSON)
 	if [[ -z "$AWS_SESSION_TOKEN" ]]; then
 	  export AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN
 	fi
 	GS_CREDS_JSON=$(jq -r .gs_creds <<< $CREDS_JSON)
 	GCP_PROJECT_ID=$(jq -r .gcp_project_id <<< $CREDS_JSON)
 	GS_BUCKET_PATH=$(jq -r .gs_bucket_path <<< $CREDS_JSON)
-	AWS_BUCKET_PATH=$(jq -r .aws_bucket_path <<< $CREDS_JSON)	
-
-	# TODO: delete this line
-	rm /dataSTAGE-data-ingestion/genome_file_manifest.csv
+	AWS_BUCKET_PATH=$(jq -r .aws_bucket_path <<< $CREDS_JSON)
 
 	cd /dataSTAGE-data-ingestion/scripts/
 	echo $GS_CREDS_JSON >> gs_cloud_key.json
@@ -56,7 +53,15 @@ if [ ! -f $GENOME_FILE_MANIFEST_PATH ]; then
 	gsutil ls
 	GCP_PROJECT_ID=$GCP_PROJECT_ID ./generate-file-manifest.sh > ../genome_file_manifest.csv
 	GENOME_FILE_MANIFEST_PATH=../genome_file_manifest.csv
+else
+	export AWS_ACCESS_KEY_ID=$(jq -r .genome_bucket_aws_creds.aws_access_key_id <<< $CREDS_JSON)
+	export AWS_SECRET_ACCESS_KEY=$(jq -r .genome_bucket_aws_creds.aws_secret_access_key <<< $CREDS_JSON)	
+	aws s3 cp $GENOME_FILE_MANIFEST_PATH ./
+	ls
 fi
+
+
+
 
 ###############################################################################
 # 3. Create extract file
