@@ -29,7 +29,13 @@ GITHUB_USER_NAME=$(jq -r .github_user_name <<< $CREDS_JSON)
 GITHUB_PERSONAL_ACCESS_TOKEN=$(jq -r .github_personal_access_token <<< $CREDS_JSON)
 export GITHUB_TOKEN=$GITHUB_PERSONAL_ACCESS_TOKEN
 
-if [ "$CREATE_GENOME_MANIFEST" == "true" ]; then
+echo '31: '
+ls /genome-file-manifest
+GENOME_FILE_MANIFEST_PATH=/genome-file-manifest`ls /genome-file-manifest/ | head -n 1`
+echo $GENOME_FILE_MANIFEST_PATH
+
+if [ ! -f $GENOME_FILE_MANIFEST_PATH ]; then
+	echo 'Genome file manifest not found. Creating one...'
 	export AWS_ACCESS_KEY_ID=$(jq -r .aws_creds.aws_access_key_id <<< $CREDS_JSON)
 	export AWS_SECRET_ACCESS_KEY=$(jq -r .aws_creds.aws_secret_access_key <<< $CREDS_JSON)
 	AWS_SESSION_TOKEN=$(jq -r .aws_creds.aws_session_token <<< $CREDS_JSON)
@@ -49,6 +55,7 @@ if [ "$CREATE_GENOME_MANIFEST" == "true" ]; then
 	gcloud auth activate-service-account --key-file=gs_cloud_key.json  --project=$GCP_PROJECT_ID
 	gsutil ls
 	GCP_PROJECT_ID=$GCP_PROJECT_ID ./generate-file-manifest.sh > ../genome_file_manifest.csv
+	GENOME_FILE_MANIFEST_PATH=../genome_file_manifest.csv
 fi
 
 ###############################################################################
