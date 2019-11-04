@@ -103,12 +103,12 @@ BRANCH_NAME_PREFIX='feat/release-'
 RELEASE_NUMBER=$(python3 /dataSTAGE-data-ingestion/scripts/get_release_number.py --current_branches "$(git branch -a)")
 git checkout -b "$BRANCH_NAME_PREFIX$RELEASE_NUMBER"
 git pull origin master && git fetch --all
-mkdir "release_$RELEASE_NUMBER"
-cd "release_$RELEASE_NUMBER"
-cp -R /dataSTAGE-data-ingestion/scripts/joindure/output/. .
-mv ./release_manifest.tsv "./release_manifest_r$RELEASE_NUMBER.tsv"
-cp /dbgap-extract/generated_extract.tsv "./generated_extract_r$RELEASE_NUMBER.tsv"
-cp /dbgap-extract/generated_extract.log "./generated_extract_r$RELEASE_NUMBER.log"
+mkdir -p "release-$RELEASE_NUMBER/intermediate_files"
+cd "release-$RELEASE_NUMBER"
+cp -R /dataSTAGE-data-ingestion/scripts/joindure/output/. ./intermediate_files/
+mv ./intermediate_files/release_manifest.tsv "./release_manifest_r$RELEASE_NUMBER.tsv"
+cp /dbgap-extract/generated_extract.tsv "./intermediate_files/generated_extract_r$RELEASE_NUMBER.tsv"
+cp /dbgap-extract/generated_extract.log "./intermediate_files/generated_extract_r$RELEASE_NUMBER.log"
 
 # Attempt to avoid hitting GitHub's filesize limit
 zip -r "./release_manifest_r$RELEASE_NUMBER.zip" "./release_manifest_r$RELEASE_NUMBER.tsv"
