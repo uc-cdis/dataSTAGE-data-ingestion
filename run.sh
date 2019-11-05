@@ -31,11 +31,11 @@ export GITHUB_TOKEN=$GITHUB_PERSONAL_ACCESS_TOKEN
 
 # TODO: delete these lines
 echo "31"
-echo $GENOME_FILE_MANIFEST_PATH
+echo $CREATE_GENOME_MANIFEST
 echo $CREDS_JSON
 rm /dataSTAGE-data-ingestion/genome_file_manifest.csv
 
-if [ -z "$GENOME_FILE_MANIFEST_PATH" ]; then
+if [ "$CREATE_GENOME_MANIFEST" == "true" ]; then
 	echo 'Genome file manifest not found. Creating one...'
 	export AWS_ACCESS_KEY_ID=$(jq -r .genome_bucket_aws_creds.aws_access_key_id <<< $CREDS_JSON)
 	export AWS_SECRET_ACCESS_KEY=$(jq -r .genome_bucket_aws_creds.aws_secret_access_key <<< $CREDS_JSON)
@@ -53,14 +53,12 @@ if [ -z "$GENOME_FILE_MANIFEST_PATH" ]; then
 	GCP_PROJECT_ID=$GCP_PROJECT_ID ./generate-file-manifest.sh > ../genome_file_manifest.csv
 	GENOME_FILE_MANIFEST_PATH=../genome_file_manifest.csv
 else
-	export AWS_ACCESS_KEY_ID=$(jq -r .genome_bucket_aws_creds.aws_access_key_id <<< $CREDS_JSON)
-	export AWS_SECRET_ACCESS_KEY=$(jq -r .genome_bucket_aws_creds.aws_secret_access_key <<< $CREDS_JSON)	
-	aws s3 cp $GENOME_FILE_MANIFEST_PATH ./
+	export AWS_ACCESS_KEY_ID=$(jq -r .local_bucket_aws_creds.aws_access_key_id <<< $CREDS_JSON)
+	export AWS_SECRET_ACCESS_KEY=$(jq -r .local_bucket_aws_creds.aws_secret_access_key <<< $CREDS_JSON)
+	BUCKET_NAME=$(jq -r .local_bucket_aws_creds.bucket_name <<< $CREDS_JSON)	
+	aws s3 cp "s3://$BUCKET_NAME/genome_file_manifest.csv " /dataSTAGE-data-ingestion/genome_file_manifest.csv
 	ls
 fi
-
-
-
 
 ###############################################################################
 # 3. Create extract file
