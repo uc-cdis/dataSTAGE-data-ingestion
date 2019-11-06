@@ -108,7 +108,9 @@ cp /dataSTAGE-data-ingestion/genome_file_manifest.csv ./
 zip -r "./release_manifest_r$RELEASE_NUMBER.zip" "./release_manifest.tsv"
 rm ./release_manifest.tsv
 gzip genome_file_manifest.csv
-rm fence-image-commands.sh
+ls
+ls intermediate_files
+rm intermediate_files/fence-image-commands.sh
 
 git add . && git commit -m "feat: release manifest"
 git push -u origin $BRANCH_NAME_PREFIX$RELEASE_NUMBER
