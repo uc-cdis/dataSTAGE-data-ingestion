@@ -27,17 +27,10 @@ GIT_REPO_TO_PR_TO=$(jq -r .git_repo_to_pr_to <<< $CREDS_JSON)
 GITHUB_USER_EMAIL=$(jq -r .github_user_email <<< $CREDS_JSON)
 GITHUB_USER_NAME=$(jq -r .github_user_name <<< $CREDS_JSON)
 
-# TODO: delete these lines
-echo $CREATE_GENOME_MANIFEST
-echo $CREDS_JSON
-rm /dataSTAGE-data-ingestion/genome_file_manifest.csv
-
 if [ "$CREATE_GENOME_MANIFEST" == "true" ]; then
 	echo 'Genome file manifest not found. Creating one...'
-	
 	GS_CREDS_JSON=$(jq -r .gs_creds <<< $CREDS_JSON)
 	GCP_PROJECT_ID=$(jq -r .gcp_project_id <<< $CREDS_JSON)
-
 	cd /dataSTAGE-data-ingestion/scripts/
 	echo $GS_CREDS_JSON >> gs_cloud_key.json
 	gcloud auth activate-service-account --key-file=gs_cloud_key.json  --project=$GCP_PROJECT_ID
@@ -45,14 +38,7 @@ if [ "$CREATE_GENOME_MANIFEST" == "true" ]; then
 	GCP_PROJECT_ID=$GCP_PROJECT_ID ./generate-file-manifest.sh > ../genome_file_manifest.csv
 	GENOME_FILE_MANIFEST_PATH=../genome_file_manifest.csv
 else
-	
-	echo $BUCKET_NAME
-	echo $AWS_ACCESS_KEY_ID
-	echo $AWS_SECRET_ACCESS_KEY
-	aws sts get-caller-identity
-	aws s3 ls
 	aws s3 cp "s3://$BUCKET_NAME/genome_file_manifest.csv " /dataSTAGE-data-ingestion/genome_file_manifest.csv
-	ls
 fi
 
 ###############################################################################
