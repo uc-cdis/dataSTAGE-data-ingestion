@@ -1,7 +1,7 @@
 # This file is used specifically to set variables that must be exported.
 # Usage: source ./setup_env.sh
 
-GITHUB_PERSONAL_ACCESS_TOKEN=$(jq -r .github_personal_access_token <<< $CREDS_JSON)
+export GITHUB_PERSONAL_ACCESS_TOKEN=$(jq -r .github_personal_access_token <<< $CREDS_JSON)
 export GITHUB_TOKEN=$GITHUB_PERSONAL_ACCESS_TOKEN
 
 if [ "$CREATE_GENOME_MANIFEST" == "true" ]; then
