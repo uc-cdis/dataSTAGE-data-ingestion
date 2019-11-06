@@ -55,7 +55,12 @@ if [ "$CREATE_GENOME_MANIFEST" == "true" ]; then
 else
 	export AWS_ACCESS_KEY_ID=$(jq -r .local_bucket_aws_creds.aws_access_key_id <<< $CREDS_JSON)
 	export AWS_SECRET_ACCESS_KEY=$(jq -r .local_bucket_aws_creds.aws_secret_access_key <<< $CREDS_JSON)
-	BUCKET_NAME=$(jq -r .local_data_aws_creds.bucket_name <<< $CREDS_JSON)	
+	AWS_SESSION_TOKEN=$(jq -r .genome_bucket_aws_creds.aws_session_token <<< $CREDS_JSON)
+	BUCKET_NAME=$(jq -r .local_data_aws_creds.bucket_name <<< $CREDS_JSON)
+	echo $BUCKET_NAME
+	echo $AWS_ACCESS_KEY_ID
+	echo $AWS_SECRET_ACCESS_KEY
+	aws s3 ls
 	aws s3 cp "s3://$BUCKET_NAME/genome_file_manifest.csv " /dataSTAGE-data-ingestion/genome_file_manifest.csv
 	ls
 fi
