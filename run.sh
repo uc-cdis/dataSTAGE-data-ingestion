@@ -53,9 +53,8 @@ if [ "$CREATE_GENOME_MANIFEST" == "true" ]; then
 	GCP_PROJECT_ID=$GCP_PROJECT_ID ./generate-file-manifest.sh > ../genome_file_manifest.csv
 	GENOME_FILE_MANIFEST_PATH=../genome_file_manifest.csv
 else
-	export AWS_ACCESS_KEY_ID=$(jq -r .local_bucket_aws_creds.aws_access_key_id <<< $CREDS_JSON)
-	export AWS_SECRET_ACCESS_KEY=$(jq -r .local_bucket_aws_creds.aws_secret_access_key <<< $CREDS_JSON)
-	AWS_SESSION_TOKEN=$(jq -r .genome_bucket_aws_creds.aws_session_token <<< $CREDS_JSON)
+	export AWS_ACCESS_KEY_ID=$(jq -r .local_data_aws_creds.aws_access_key_id <<< $CREDS_JSON)
+	export AWS_SECRET_ACCESS_KEY=$(jq -r .local_data_aws_creds.aws_secret_access_key <<< $CREDS_JSON)
 	BUCKET_NAME=$(jq -r .local_data_aws_creds.bucket_name <<< $CREDS_JSON)
 	echo $BUCKET_NAME
 	echo $AWS_ACCESS_KEY_ID
