@@ -26,23 +26,15 @@ GIT_ORG_TO_PR_TO=$(jq -r .git_org_to_pr_to <<< $CREDS_JSON)
 GIT_REPO_TO_PR_TO=$(jq -r .git_repo_to_pr_to <<< $CREDS_JSON)
 GITHUB_USER_EMAIL=$(jq -r .github_user_email <<< $CREDS_JSON)
 GITHUB_USER_NAME=$(jq -r .github_user_name <<< $CREDS_JSON)
-GITHUB_PERSONAL_ACCESS_TOKEN=$(jq -r .github_personal_access_token <<< $CREDS_JSON)
-export GITHUB_TOKEN=$GITHUB_PERSONAL_ACCESS_TOKEN
 
 # TODO: delete these lines
-echo "31"
 echo $CREATE_GENOME_MANIFEST
 echo $CREDS_JSON
 rm /dataSTAGE-data-ingestion/genome_file_manifest.csv
 
 if [ "$CREATE_GENOME_MANIFEST" == "true" ]; then
 	echo 'Genome file manifest not found. Creating one...'
-	export AWS_ACCESS_KEY_ID=$(jq -r .genome_bucket_aws_creds.aws_access_key_id <<< $CREDS_JSON)
-	export AWS_SECRET_ACCESS_KEY=$(jq -r .genome_bucket_aws_creds.aws_secret_access_key <<< $CREDS_JSON)
-	AWS_SESSION_TOKEN=$(jq -r .genome_bucket_aws_creds.aws_session_token <<< $CREDS_JSON)
-	if [[ -z "$AWS_SESSION_TOKEN" ]]; then
-	  export AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN
-	fi
+	
 	GS_CREDS_JSON=$(jq -r .gs_creds <<< $CREDS_JSON)
 	GCP_PROJECT_ID=$(jq -r .gcp_project_id <<< $CREDS_JSON)
 
@@ -53,12 +45,11 @@ if [ "$CREATE_GENOME_MANIFEST" == "true" ]; then
 	GCP_PROJECT_ID=$GCP_PROJECT_ID ./generate-file-manifest.sh > ../genome_file_manifest.csv
 	GENOME_FILE_MANIFEST_PATH=../genome_file_manifest.csv
 else
-	export AWS_ACCESS_KEY_ID=$(jq -r .local_data_aws_creds.aws_access_key_id <<< $CREDS_JSON)
-	export AWS_SECRET_ACCESS_KEY=$(jq -r .local_data_aws_creds.aws_secret_access_key <<< $CREDS_JSON)
-	BUCKET_NAME=$(jq -r .local_data_aws_creds.bucket_name <<< $CREDS_JSON)
+	
 	echo $BUCKET_NAME
 	echo $AWS_ACCESS_KEY_ID
 	echo $AWS_SECRET_ACCESS_KEY
+	aws sts get-caller-identity
 	aws s3 ls
 	aws s3 cp "s3://$BUCKET_NAME/genome_file_manifest.csv " /dataSTAGE-data-ingestion/genome_file_manifest.csv
 	ls
