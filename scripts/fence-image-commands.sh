@@ -1,5 +1,9 @@
 # This script is to be run from within a fence image
 
+# google_group_diff () {
+
+# }
+
 prune_commands_file () {
   EXISTING_GOOGLE_GROUPS_FILE=$1
   GOOGLE_GROUP_CREATE_SCRIPT_FILE=$2
@@ -43,7 +47,7 @@ main () {
   existing_groups_file="google_list_authz_groups_output.txt"
   create_script_file="/data-ingestion-pipeline-output/google-groups.sh"
   pruned_commands_file_to_run="google-groups-pruned.sh"
-  
+
   echo 'Received output from data-ingestion-pipeline:'
   ls /data-ingestion-pipeline-output/
 
@@ -55,7 +59,18 @@ main () {
   chmod +x $pruned_commands_file_to_run
   if [ "$CREATE_GOOGLE_GROUPS" == "true" ]; then
     echo "Creating google groups..."
-    ./$pruned_commands_file_to_run
+    # ./$pruned_commands_file_to_run
+
+    echo "Ran creation commands. Now checking existing groups:"
+    fence-create google-list-authz-groups > "$post_creation_existing_groups_file"
+    prune_commands_file $post_creation_existing_groups_file $pruned_commands_file_to_run $file_expected_to_be_empty
+    $pruned_file_contents=`cat $file_expected_to_be_empty`
+    if [ ! -z "$pruned_file_contents" ]; then
+      echo "Error: some google groups were not created:"
+      cat $pruned_file_contents
+      exit 1
+    fi
+
   fi
 }
 
