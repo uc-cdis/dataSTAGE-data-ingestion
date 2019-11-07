@@ -109,7 +109,7 @@ cp /dataSTAGE-data-ingestion/genome_file_manifest.csv ./
 zip -r "./release_manifest_r$RELEASE_NUMBER.zip" "./release_manifest.tsv"
 rm ./release_manifest.tsv
 zip -r "./intermediate_files/data_requiring_manual_review.zip" "./intermediate_files/data_requiring_manual_review.tsv"
-rm ./data_requiring_manual_review.tsv
+rm ./intermediate_files/data_requiring_manual_review.tsv
 gzip genome_file_manifest.csv
 rm intermediate_files/fence-image-commands.sh
 
