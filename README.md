@@ -15,3 +15,10 @@ Steps in the pipeline (run.sh):
 4. Generate a list of commands to create Google Groups and a mapping file for the joindure script. This step uses a new script called generate_google_group_cmds.py stored in this repo which uses the extract output to create a mapping.txt file (important for the joindure script) and a google-groups.sh file (to later be run by the fence sidecar which is deployed with this job.)
 5. Run joindure script. This script is stored in this repo in scripts/joindure.
 6. Make PR to this repo with the outputs: https://github.com/uc-cdis/dataSTAGE-data-ingestion-private
+
+
+This repo has a suite of unit tests which be run like so:
+
+`cd scripts/tests`
+
+`./test_all.sh`
