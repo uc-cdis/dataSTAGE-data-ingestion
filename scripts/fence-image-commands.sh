@@ -66,7 +66,7 @@ main () {
     file_expected_to_be_empty='post_creation_existing_vs_to_create_groups_diff.txt'
     fence-create google-list-authz-groups > "$post_creation_existing_groups_file"
     prune_commands_file $post_creation_existing_groups_file $pruned_commands_file_to_run $file_expected_to_be_empty
-    $groups_not_created=`cat $file_expected_to_be_empty`
+    groups_not_created=`cat $file_expected_to_be_empty`
     if [ ! -z "$groups_not_created" ]; then
       echo "Error: some google groups were not created:"
       cat "$groups_not_created"
