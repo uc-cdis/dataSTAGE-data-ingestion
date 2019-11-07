@@ -73,9 +73,7 @@ main () {
   chmod +x $pruned_commands_file_to_run
   if [ "$CREATE_GOOGLE_GROUPS" == "true" ]; then
     echo "Creating google groups..."
-    # TODO : UNCOMMENT THIS
-    # ./$pruned_commands_file_to_run
-
+    ./$pruned_commands_file_to_run
     echo "Ran creation commands. Now checking existing groups:"
     post_creation_existing_groups_file='post_creation_existing_groups.txt'
     file_expected_to_be_empty='post_creation_existing_vs_to_create_groups_diff.txt'
@@ -89,7 +87,6 @@ main () {
       cat $group_names_not_created_file
       exit 1
     fi
-
   fi
 }
 
