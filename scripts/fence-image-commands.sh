@@ -62,12 +62,14 @@ main () {
     # ./$pruned_commands_file_to_run
 
     echo "Ran creation commands. Now checking existing groups:"
+    post_creation_existing_groups_file='post_creation_existing_groups.txt'
+    file_expected_to_be_empty='post_creation_existing_vs_to_create_groups_diff.txt'
     fence-create google-list-authz-groups > "$post_creation_existing_groups_file"
     prune_commands_file $post_creation_existing_groups_file $pruned_commands_file_to_run $file_expected_to_be_empty
-    $pruned_file_contents=`cat $file_expected_to_be_empty`
-    if [ ! -z "$pruned_file_contents" ]; then
+    $groups_not_created=`cat $file_expected_to_be_empty`
+    if [ ! -z "$groups_not_created" ]; then
       echo "Error: some google groups were not created:"
-      cat $pruned_file_contents
+      cat "$groups_not_created"
       exit 1
     fi
 
