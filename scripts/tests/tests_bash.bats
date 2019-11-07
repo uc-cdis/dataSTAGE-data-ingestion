@@ -47,6 +47,39 @@ END
     assert_equal "$actual" "$expected"
 }
 
+@test "unit test phs_from_fence_cmds function" { 
+    file_to_retrieve_phs_from="tests/test_data/google-groups.sh"
+    file_to_output_results_to="tests/test_data/phs_output.txt"
+    if [ -f "$file_to_retrieve_phs_from" ]; then
+        rm "$file_to_retrieve_phs_from"
+    fi
+    if [ -f "$file_to_output_results_to" ]; then
+        rm "$file_to_output_results_to"
+    fi
+
+    # 1 of these existing groups is in the data-ingestion-pipeline output
+    cat > "$file_to_retrieve_phs_from" << EOF
+fence-create link-external-bucket --bucket-name phs1234
+fence-create link-external-bucket --bucket-name phs4321
+fence-create link-bucket-to-project --bucket_id phs1234 --bucket_provider google --project_auth_id phs1234
+fence-create link-bucket-to-project --bucket_id phs4321 --bucket_provider google --project_auth_id phs4321
+fence-create link-bucket-to-project --bucket_id phs1234 --bucket_provider google --project_auth_id topmed
+fence-create link-bucket-to-project --bucket_id phs4321 --bucket_provider google --project_auth_id topmed
+fence-create link-bucket-to-project --bucket_id allProjects --bucket_provider google --project_auth_id phs1234
+fence-create link-bucket-to-project --bucket_id allProjects --bucket_provider google --project_auth_id phs4321
+fence-create link-bucket-to-project --bucket_id allProjects --bucket_provider google --project_auth_id phs1234
+fence-create link-bucket-to-project --bucket_id allProjects --bucket_provider google --project_auth_id phs4321
+EOF
+
+    phs_from_file $file_to_retrieve_phs_from $file_to_output_results_to
+    
+    actual=`cat $file_to_output_results_to`
+    expected=$(cat <<-END
+phs1234 phs4321
+END
+)
+    assert_equal "$actual" "$expected"
+}
 
 @test "joindure script and generate_google_group_cmds.py work together locally as expected" {   
     if [ -f "mapping.txt" ]; then
