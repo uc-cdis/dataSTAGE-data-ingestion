@@ -47,9 +47,7 @@ fi
 # 3. Create extract file
 cd / && git clone https://github.com/uc-cdis/dbgap-extract.git
 cd dbgap-extract
-# TODO: alter these 2 lines to use master branch
-git checkout feat/validate-extract
-git pull origin feat/validate-extract
+git pull origin master
 pipenv install
 pipenv run python3 dbgap_extract.py --study_accession_list_filename $PHS_ID_LIST_PATH --output_filename generated_extract.tsv > /dev/null 2>&1
 

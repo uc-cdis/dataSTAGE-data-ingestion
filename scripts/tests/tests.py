@@ -6,7 +6,7 @@
 import sys
 
 sys.path.insert(0, "joindure")
-sys.path.append("..") #
+sys.path.append("..")
 
 import pytest
 from mock import MagicMock
