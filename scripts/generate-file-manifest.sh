@@ -30,8 +30,8 @@ rc=0
 
 if true; then
 #exit -1
-aws s3 ls s3://nih-nhlbi-datacommons/ > ${aws_file_list} &&
-gsutil -u ${GCP_PROJECT_ID} ls -L gs://topmed-irc-share/genomes/ |
+aws s3 ls s3://devplanetv1-proj1-databucket-gen3/ > ${aws_file_list} &&
+gsutil -u ${GCP_PROJECT_ID} ls -L gs://staging_topmed_irc_share/ |
   grep "^gs://\|^    Content-Length\|^    Hash (md5)" | 
   paste - - - | 
   awk '{print substr($1, 1, length($1)-1)","$3","$6}' > ${gcp_file_list}

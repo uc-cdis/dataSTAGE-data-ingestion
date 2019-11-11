@@ -36,6 +36,7 @@ if [ "$CREATE_GENOME_MANIFEST" == "true" ]; then
 	gcloud auth activate-service-account --key-file=gs_cloud_key.json  --project=$GCP_PROJECT_ID
 	GCP_PROJECT_ID=$GCP_PROJECT_ID ./generate-file-manifest.sh > ../genome_file_manifest.csv
 	GENOME_FILE_MANIFEST_PATH=../genome_file_manifest.csv
+	cat ../genome_file_manifest.csv
 else
 	echo 'Skipping genome file manifest creation step...'
 	BUCKET_NAME=$(jq -r .local_data_aws_creds.bucket_name <<< $CREDS_JSON)
