@@ -34,11 +34,14 @@ if [ "$CREATE_GENOME_MANIFEST" == "true" ]; then
 	cd /dataSTAGE-data-ingestion/scripts/
 	echo $GS_CREDS_JSON >> gs_cloud_key.json
 	
+	gcloud auth activate-service-account --key-file=gs_cloud_key.json  --project=$GCP_PROJECT_ID
+	
 	cat gs_cloud_key.json
 	echo "gcp project id: $GCP_PROJECT_ID"
 	gsutil -u $GCP_PROJECT_ID ls gs://staging_topmed_irc_share
 
-	gcloud auth activate-service-account --key-file=gs_cloud_key.json  --project=$GCP_PROJECT_ID
+	
+	
 	GCP_PROJECT_ID=$GCP_PROJECT_ID ./generate-file-manifest.sh > ../genome_file_manifest.csv
 	GENOME_FILE_MANIFEST_PATH=../genome_file_manifest.csv
 else
