@@ -19,7 +19,7 @@ if [ -d "/data-from-manual-review/" ]; then
 	fi
 fi
 
-
+ 
 ###############################################################################
 # 2. Create a manifest from a bucket
 GIT_ORG_TO_PR_TO=$(jq -r .git_org_to_pr_to <<< $CREDS_JSON)
@@ -33,15 +33,7 @@ if [ "$CREATE_GENOME_MANIFEST" == "true" ]; then
 	GCP_PROJECT_ID=$(jq -r .gcp_project_id <<< $CREDS_JSON)
 	cd /dataSTAGE-data-ingestion/scripts/
 	echo $GS_CREDS_JSON >> gs_cloud_key.json
-	
 	gcloud auth activate-service-account --key-file=gs_cloud_key.json  --project=$GCP_PROJECT_ID
-	
-	cat gs_cloud_key.json
-	echo "gcp project id: $GCP_PROJECT_ID"
-	gsutil -u $GCP_PROJECT_ID ls gs://staging_topmed_irc_share
-
-	
-	
 	GCP_PROJECT_ID=$GCP_PROJECT_ID ./generate-file-manifest.sh > ../genome_file_manifest.csv
 	GENOME_FILE_MANIFEST_PATH=../genome_file_manifest.csv
 else
