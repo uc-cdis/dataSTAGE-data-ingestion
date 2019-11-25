@@ -81,7 +81,7 @@ END
     assert_equal "$actual" "$expected"
 }
 
-@test "joindure script and generate_google_group_cmds.py work together locally as expected" {   
+@test "manifestmerge script and generate_google_group_cmds.py work together locally as expected" {   
     if [ -f "studys_to_google_access_groups.txt" ]; then
         rm studys_to_google_access_groups.txt
     fi
@@ -98,9 +98,9 @@ END
     expected_google_groups=`cat tests/test_data/expected_output/google-groups.sh`
     assert_equal "$actual_google_groups" "$expected_google_groups"
 
-    mv studys_to_google_access_groups.txt joindure/
+    mv studys_to_google_access_groups.txt manifestmerge/
 
-    cd joindure/
+    cd manifestmerge/
 
     pipenv run python3 main.py merge --genome_manifest ../tests/test_data/test_genome_file_manifest.csv \
     --dbgap_extract_file ../tests/test_data/test_extract.tsv --out ../tests/test_data/output
@@ -127,5 +127,5 @@ END
     expected_data_requiring_manual_review=`cat ../tests/test_data/expected_output/data_requiring_manual_review.tsv`
     assert_equal "$actual_data_requiring_manual_review" "$expected_data_requiring_manual_review"
 
-    rm ../tests/joindure-log*.log
+    rm ../tests/manifestmerge-log*.log
 }

@@ -5,24 +5,24 @@
 
 import sys
 
-sys.path.insert(0, "joindure")
+sys.path.insert(0, "manifestmerge")
 sys.path.append("..")
 
 import pytest
 from mock import MagicMock
 from mock import patch
-import joindure.scripts as joindure
+import manifestmerge.scripts as manifestmerge
 import get_release_number
 import add_studies_from_manual_review
 import generate_google_group_cmds
 from test_data.test_data import *
 
 
-###### Test joindure script #######
-@patch("joindure.scripts.read_mapping_file")
+###### Test manifestmerge script #######
+@patch("manifestmerge.scripts.read_mapping_file")
 def test_merging(mock_read_mapping_file):
     mock_read_mapping_file.return_value = {}
-    L = joindure.merge_manifest(genome_data, dbgap_data)
+    L = manifestmerge.merge_manifest(genome_data, dbgap_data)
     assert len(L) == 4
     assert L[0]["sample_id"] == "sample_id1"
     assert L[0]["biosample_id"] == "biosample_id1"
@@ -30,10 +30,10 @@ def test_merging(mock_read_mapping_file):
     assert L[1]["biosample_id"] == "biosample_id1_2"
 
 
-@patch("joindure.scripts.read_mapping_file")
+@patch("manifestmerge.scripts.read_mapping_file")
 def test_get_error_list(mock_read_mapping_file):
     mock_read_mapping_file.return_value = {}
-    L = joindure.get_discrepancy_list(genome_data, dbgap_data)
+    L = manifestmerge.get_discrepancy_list(genome_data, dbgap_data)
     assert len(L) == 1
     assert L[0]["sample_id"] == "sample_id3"
     assert L[0]["biosample_id"] == "biosample_id3"
@@ -42,12 +42,12 @@ def test_get_error_list(mock_read_mapping_file):
 
 def test_check_for_duplicates():
     with pytest.raises(ValueError) as excinfo:
-        L = joindure.check_for_duplicates(indexable_data_with_duplicates)
+        L = manifestmerge.check_for_duplicates(indexable_data_with_duplicates)
     assert "NWD2" in str(excinfo.value)
     assert "XJ4eRUTID0PBhEl4Vp4x/w==" in str(excinfo.value)
 
     # The test has passed if this does not throw an exception
-    L = joindure.check_for_duplicates(indexable_data_with_no_duplicates)
+    L = manifestmerge.check_for_duplicates(indexable_data_with_no_duplicates)
 
 
 ###### Test get_release_number.py #######

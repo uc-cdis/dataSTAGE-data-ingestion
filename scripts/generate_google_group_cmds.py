@@ -47,7 +47,7 @@ def generate_cmd_sets(studies):
 
 def make_mapping_entries(study_accessions):
     """
-    Generate list of google group names that can be placed in a studys_to_google_access_groups.txt file for use with joindure script.
+    Generate list of google group names that can be placed in a studys_to_google_access_groups.txt file for use with manifestmerge script.
     Args:
         study_accessions (array of strings): list of study_accession_with_consent strings
     Returns:
@@ -95,20 +95,20 @@ def main():
     parser = argparse.ArgumentParser(
         description="Generate set of fence-create commands for study-related Google Groups."
     )
-    parser.add_argument("--extract_filename", help="a generated dbgap extract file")
+    parser.add_argument("--dbgap_extract", help="a generated dbgap extract file")
 
     args = parser.parse_args(sys.argv[1:])
 
-    if not args.extract_filename:
+    if not args.dbgap_extract:
         logging.debug("-------")
         logging.debug("Usage error. Run this script using the below command form:")
         logging.debug(
-            "> python generate_google_group_cmds.py --extract_filename <filename.tsv>"
+            "> python generate_google_group_cmds.py --dbgap_extract <filename.tsv>"
         )
         logging.debug("-------")
         exit(0)
 
-    study_accessions = retrieve_study_accessions_from_extract(args.extract_filename)
+    study_accessions = retrieve_study_accessions_from_extract(args.dbgap_extract)
 
     if os.path.exists(MAPPING_OUTFILE):
         os.remove(MAPPING_OUTFILE)

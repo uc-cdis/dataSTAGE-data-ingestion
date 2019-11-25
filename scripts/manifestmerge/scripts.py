@@ -13,7 +13,7 @@ from utils import (
     get_sample_info_from_dbgap_extract_file,
 )
 
-LOG_FILE = "joindure-log-" + datetime.now().strftime("%m-%d-%Y-%H-%M-%S") + ".log"
+LOG_FILE = "manifestmerge-log-" + datetime.now().strftime("%m-%d-%Y-%H-%M-%S") + ".log"
 logging.basicConfig(filename=LOG_FILE, level=logging.DEBUG)
 logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
 

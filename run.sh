@@ -57,26 +57,26 @@ if [ $extract_step_failed -eq 1 ]; then
 fi
 
 ###############################################################################
-# 4. Generate a list of commands to create Google Groups and a mapping file for the joindure script
+# 4. Generate a list of commands to create Google Groups and a mapping file for the manifestmerge script
 cd /dataSTAGE-data-ingestion/scripts/
-if [ ! -d "joindure/output" ]; then
-	mkdir joindure/output
+if [ ! -d "manifestmerge/output" ]; then
+	mkdir manifestmerge/output
 fi
 python3 generate_google_group_cmds.py --extract_filename /dbgap-extract/generated_extract.tsv
 if [ -f "google-groups.sh" ]; then
   chmod +x google-groups.sh
-  mv google-groups.sh /dataSTAGE-data-ingestion/scripts/joindure/output/google-groups.sh
+  mv google-groups.sh /dataSTAGE-data-ingestion/scripts/manifestmerge/output/google-groups.sh
 fi
-mv studys_to_google_access_groups.txt /dataSTAGE-data-ingestion/scripts/joindure/studys_to_google_access_groups.txt
+mv studys_to_google_access_groups.txt /dataSTAGE-data-ingestion/scripts/manifestmerge/studys_to_google_access_groups.txt
 
 ###############################################################################
-# 5. Run joindure script
-cd /dataSTAGE-data-ingestion/scripts/joindure
+# 5. Run manifestmerge script
+cd /dataSTAGE-data-ingestion/scripts/manifestmerge
 
 pipenv run python3 main.py merge --genome_manifest /dataSTAGE-data-ingestion/genome_file_manifest.csv \
     --dbgap_extract_file /dbgap-extract/generated_extract.tsv --out output
 
-cp /dataSTAGE-data-ingestion/scripts/fence-image-commands.sh /dataSTAGE-data-ingestion/scripts/joindure/output
+cp /dataSTAGE-data-ingestion/scripts/fence-image-commands.sh /dataSTAGE-data-ingestion/scripts/manifestmerge/output
 ls output
 
 ###############################################################################
@@ -94,7 +94,7 @@ git checkout -b "$BRANCH_NAME_PREFIX$RELEASE_NUMBER"
 git pull origin master && git fetch --all
 mkdir -p "release-$RELEASE_NUMBER/intermediate_files"
 cd "release-$RELEASE_NUMBER"
-cp -R /dataSTAGE-data-ingestion/scripts/joindure/output/. ./intermediate_files/
+cp -R /dataSTAGE-data-ingestion/scripts/manifestmerge/output/. ./intermediate_files/
 mv ./intermediate_files/release_manifest.tsv "./release_manifest.tsv"
 cp /dbgap-extract/generated_extract.tsv "./intermediate_files/dbgap_extract.tsv"
 cp /dbgap-extract/generated_extract.log "./intermediate_files/dbgap_extract.log"
