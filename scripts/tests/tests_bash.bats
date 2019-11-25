@@ -25,8 +25,8 @@ fence-create link-external-bucket --bucket-name phs1234
 fence-create link-external-bucket --bucket-name phs4321
 fence-create link-bucket-to-project --bucket_id phs1234 --bucket_provider google --project_auth_id phs1234
 fence-create link-bucket-to-project --bucket_id phs4321 --bucket_provider google --project_auth_id phs4321
-fence-create link-bucket-to-project --bucket_id phs1234 --bucket_provider google --project_auth_id topmed
-fence-create link-bucket-to-project --bucket_id phs4321 --bucket_provider google --project_auth_id topmed
+fence-create link-bucket-to-project --bucket_id phs1234 --bucket_provider google --project_auth_id admin
+fence-create link-bucket-to-project --bucket_id phs4321 --bucket_provider google --project_auth_id admin
 fence-create link-bucket-to-project --bucket_id allProjects --bucket_provider google --project_auth_id phs1234
 fence-create link-bucket-to-project --bucket_id allProjects --bucket_provider google --project_auth_id phs4321
 fence-create link-bucket-to-project --bucket_id allProjects --bucket_provider google --project_auth_id phs1234
@@ -39,7 +39,7 @@ EOF
     expected=$(cat <<-END
 fence-create link-external-bucket --bucket-name phs1234
 fence-create link-bucket-to-project --bucket_id phs1234 --bucket_provider google --project_auth_id phs1234
-fence-create link-bucket-to-project --bucket_id phs1234 --bucket_provider google --project_auth_id topmed
+fence-create link-bucket-to-project --bucket_id phs1234 --bucket_provider google --project_auth_id admin
 fence-create link-bucket-to-project --bucket_id allProjects --bucket_provider google --project_auth_id phs1234
 fence-create link-bucket-to-project --bucket_id allProjects --bucket_provider google --project_auth_id phs1234
 END
@@ -63,8 +63,8 @@ fence-create link-external-bucket --bucket-name phs1234
 fence-create link-external-bucket --bucket-name phs4321
 fence-create link-bucket-to-project --bucket_id phs1234 --bucket_provider google --project_auth_id phs1234
 fence-create link-bucket-to-project --bucket_id phs4321 --bucket_provider google --project_auth_id phs4321
-fence-create link-bucket-to-project --bucket_id phs1234 --bucket_provider google --project_auth_id topmed
-fence-create link-bucket-to-project --bucket_id phs4321 --bucket_provider google --project_auth_id topmed
+fence-create link-bucket-to-project --bucket_id phs1234 --bucket_provider google --project_auth_id admin
+fence-create link-bucket-to-project --bucket_id phs4321 --bucket_provider google --project_auth_id admin
 fence-create link-bucket-to-project --bucket_id allProjects --bucket_provider google --project_auth_id phs1234
 fence-create link-bucket-to-project --bucket_id allProjects --bucket_provider google --project_auth_id phs4321
 fence-create link-bucket-to-project --bucket_id allProjects --bucket_provider google --project_auth_id phs1234

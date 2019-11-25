@@ -4,13 +4,13 @@ set -o pipefail
 
 ###############################################################################
 # 1. (Optional) Check for additional PHS ID inputs that should be included from the review process
-PHS_ID_LIST_PATH=/phs-id-list/`ls /phs-id-list/ | head -n 1`
+PHS_ID_LIST_PATH=/phs-id-list/phsids.txt
 DATA_FROM_MANUAL_REVIEW='/dataSTAGE-data-ingestion/data_requiring_manual_review.tsv'
 
 if [ -d "/data-from-manual-review/" ]; then
 	files_in_manual_review_mount=( /data-from-manual-review/* )
 	if [ ${#files_in_manual_review_mount[@]} -ge 1 ]; then
-		DATA_FROM_MANUAL_REVIEW=/data-from-manual-review/`ls /data-from-manual-review/ | head -n 1`
+		DATA_FROM_MANUAL_REVIEW=/data-from-manual-review/data_requiring_manual_review.tsv
 		cd /dataSTAGE-data-ingestion/scripts/
 		python3 add_studies_from_manual_review.py --phs_id_list $PHS_ID_LIST_PATH \
 			--data_requiring_manual_review $DATA_FROM_MANUAL_REVIEW \

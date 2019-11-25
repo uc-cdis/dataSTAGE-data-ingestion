@@ -32,10 +32,10 @@ def generate_cmd_sets(studies):
         commands.append(link_to_gen3_project_cmd)
 
     for study_accession_with_consent in studies:
-        link_to_topmed_cmd = "fence-create link-bucket-to-project --bucket_id {} --bucket_provider google --project_auth_id topmed".format(
+        link_to_admin_cmd = "fence-create link-bucket-to-project --bucket_id {} --bucket_provider google --project_auth_id admin".format(
             study_accession_with_consent, study_accession_with_consent
         )
-        commands.append(link_to_topmed_cmd)
+        commands.append(link_to_admin_cmd)
 
     for study_accession_with_consent in studies:
         link_all_projects_cmd = "fence-create link-bucket-to-project --bucket_id allProjects --bucket_provider google --project_auth_id {}".format(
