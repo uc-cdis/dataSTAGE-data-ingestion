@@ -1,6 +1,6 @@
 python3 -m pytest tests.py 
 
-git submodule update --init
+brew install bats-core
 
 cd ..
-./libs/bats/bin/bats tests/*.bats
+bats tests/*.bats
