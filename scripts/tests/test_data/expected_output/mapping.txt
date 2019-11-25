@@ -1,2 +1,0 @@
-phs000920.c1: stagedcp_phs000920.c1_read_gbag@dcp.bionimbus.org
-phs000921.c2: stagedcp_phs000921.c2_read_gbag@dcp.bionimbus.org
