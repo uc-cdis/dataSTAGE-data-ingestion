@@ -6,7 +6,7 @@ import os
 from datetime import datetime
 
 GOOGLE_GROUPS_OUTFILE = "google-groups.sh"
-MAPPING_OUTFILE = "mapping.txt"
+MAPPING_OUTFILE = "studys_to_google_access_groups.txt"
 logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
 
 def generate_cmd_sets(studies):
@@ -47,11 +47,11 @@ def generate_cmd_sets(studies):
 
 def make_mapping_entries(study_accessions):
     """
-    Generate list of google group names that can be placed in a mapping.txt file for use with joindure script.
+    Generate list of google group names that can be placed in a studys_to_google_access_groups.txt file for use with joindure script.
     Args:
         study_accessions (array of strings): list of study_accession_with_consent strings
     Returns:
-        entries (array of strings): array of mapping.txt lines
+        entries (array of strings): array of studys_to_google_access_groups.txt lines
     """
     entries = []
     for study in study_accessions:

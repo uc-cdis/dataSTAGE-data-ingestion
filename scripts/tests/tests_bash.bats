@@ -82,15 +82,15 @@ END
 }
 
 @test "joindure script and generate_google_group_cmds.py work together locally as expected" {   
-    if [ -f "mapping.txt" ]; then
-        rm mapping.txt
+    if [ -f "studys_to_google_access_groups.txt" ]; then
+        rm studys_to_google_access_groups.txt
     fi
 
     python3 generate_google_group_cmds.py --extract_filename tests/test_data/test_extract.tsv
 
-    assert [ -f "mapping.txt" ]
-    actual_mapping=`cat mapping.txt`
-    expected_mapping=`cat tests/test_data/expected_output/mapping.txt`
+    assert [ -f "studys_to_google_access_groups.txt" ]
+    actual_mapping=`cat studys_to_google_access_groups.txt`
+    expected_mapping=`cat tests/test_data/expected_output/studys_to_google_access_groups.txt`
     assert_equal "$actual_mapping" "$expected_mapping"
 
     assert [ -f "google-groups.sh" ]
@@ -98,7 +98,7 @@ END
     expected_google_groups=`cat tests/test_data/expected_output/google-groups.sh`
     assert_equal "$actual_google_groups" "$expected_google_groups"
 
-    mv mapping.txt joindure/
+    mv studys_to_google_access_groups.txt joindure/
 
     cd joindure/
 

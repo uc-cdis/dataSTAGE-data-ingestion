@@ -67,7 +67,7 @@ if [ -f "google-groups.sh" ]; then
   chmod +x google-groups.sh
   mv google-groups.sh /dataSTAGE-data-ingestion/scripts/joindure/output/google-groups.sh
 fi
-mv mapping.txt /dataSTAGE-data-ingestion/scripts/joindure/mapping.txt
+mv studys_to_google_access_groups.txt /dataSTAGE-data-ingestion/scripts/joindure/studys_to_google_access_groups.txt
 
 ###############################################################################
 # 5. Run joindure script

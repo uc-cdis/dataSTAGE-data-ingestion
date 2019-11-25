@@ -28,7 +28,7 @@ def merge_manifest(genome_files, dbgap):
     Returns:
         result (list of OrderedDicts): list of items with attributes from both sources
     """
-    mapping = read_mapping_file("mapping.txt")
+    mapping = read_mapping_file("studys_to_google_access_groups.txt")
 
     results = []
     accession_missing_google_grp = set()
