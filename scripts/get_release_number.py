@@ -8,6 +8,13 @@ BRANCH_NAME_PREFIX = "feat/release-"
 
 
 def get_branch_number(git_branch_a):
+    """
+    Get smallest unused release number to create a new branch/directory name with
+    Args:
+        git_branch_a (str): the output of `git branch -a`
+    Returns:
+        branch number (int): the branch/relese number to use
+    """
     branches = git_branch_a.split()
     branches = list(filter(lambda x: BRANCH_NAME_PREFIX in x, branches))
 

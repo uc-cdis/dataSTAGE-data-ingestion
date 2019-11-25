@@ -10,6 +10,14 @@ MAPPING_OUTFILE = "mapping.txt"
 logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
 
 def generate_cmd_sets(studies):
+    """
+    Generate command strings that can be executed in a Fence image
+    to create google groups.
+    Args:
+        studies (array of strings): list of study_accession_with_consent strings to place in commands
+    Returns:
+        commands (array of strings): array of command strings
+    """
     commands = []
     for study_accession_with_consent in studies:
         link_external_bucket_cmd = "fence-create link-external-bucket --bucket-name {}".format(
@@ -38,6 +46,13 @@ def generate_cmd_sets(studies):
     return commands
 
 def make_mapping_entries(study_accessions):
+    """
+    Generate list of google group names that can be placed in a mapping.txt file for use with joindure script.
+    Args:
+        study_accessions (array of strings): list of study_accession_with_consent strings
+    Returns:
+        entries (array of strings): array of mapping.txt lines
+    """
     entries = []
     for study in study_accessions:
         entries.append(
@@ -56,7 +71,7 @@ def dedup_study_accessions(study_accessions):
     return rv
 
 def retrieve_study_accessions_from_extract(extract_filename):
-    # Retrieve study_with_consent in a column-order-agnostic way
+    """Retrieve study_with_consent in a column-order-agnostic way"""
     with open(extract_filename) as f: 
         rows = f.readlines()
         headers = rows[0].split("\t")

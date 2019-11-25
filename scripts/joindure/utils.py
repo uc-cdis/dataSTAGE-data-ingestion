@@ -5,17 +5,14 @@ from collections import OrderedDict
 
 def get_sample_data_from_manifest(manifest_file, dem="\t"):
     """
-    get sample metadata from the genome manifest
-
-    :param manifest_file: the path to the manifest
-    :param dem: the delimiliter
-    :return: a dictionary like this
-            {
-                "sample_id1": [{"aws_uri": "aws_uri_1", "gcp_uri": "gcp_uri_1", "md5": "md5_1", "file_size": "file_size_1"}, ...],
-                ...
-            }
+    Create an OrderedDictionary mapping sample_id to properties from a
+    genome_file_manifest.csv file (output of the generate-file-manifest.sh script).
+    Args:
+        manifest_file (string)
+        dem (string): delimiter used to separate entries in the file. for a tsv, this is \t
+    Returns:
+        files (OrderedDict): maps a sample_id to its properties
     """
-
     files = OrderedDict()
     with open(manifest_file, "rt") as csvfile:
         csvReader = csv.DictReader(csvfile, delimiter=dem)
@@ -31,15 +28,14 @@ def get_sample_data_from_manifest(manifest_file, dem="\t"):
 
 def get_sample_info_from_dbgap_extract_file(manifest_file, dem="\t"):
     """
-    get sample info from dbgap manifest
+    Create an OrderedDictionary mapping sample_id to properties from a
+    dbgap_extract.tsv file (output of the dbgap_extract.py script).
 
-    :param manifest_file: the path of the input manifest
-    :param dem: 
-    :return: a dictionary
-    {
-        "sample_id1": ["biosample_id": "biosample_id1", "sra_sample_id": "sra_sample_id1", ...],
-        ...
-    }
+    Args:
+        manifest_file (string)
+        dem (string): delimiter used to separate entries in the file. for a tsv, this is \t
+    Returns:
+        files (OrderedDict): maps a sample_id to its properties
     """
     files = OrderedDict()
     with open(manifest_file, "rt") as csvfile:
@@ -54,13 +50,6 @@ def get_sample_info_from_dbgap_extract_file(manifest_file, dem="\t"):
 
 
 def write_file(filename, rows, fieldnames=None):
-    """
-
-    :param filename: the path to the file
-    :param rows: a list of data rows
-    :param fieldnames: a list of header
-    :return: None
-    """
     fieldnames = fieldnames or rows[0].keys()
     with open(filename, mode="w") as outfile:
         writer = csv.DictWriter(outfile, delimiter="\t", fieldnames=fieldnames, extrasaction='ignore')
@@ -72,9 +61,14 @@ def write_file(filename, rows, fieldnames=None):
 
 def read_mapping_file(fname):
     """
-    
-    :param fname: path to the mapping file
-    :return:
+        Uses a mapping.txt file to create a dictionary mapping study_accession_with_consent's 
+        to their google group name.
+        
+        Args:
+            manifest_file (string)
+            dem (string): delimiter used to separate entries in the file. for a tsv, this is \t
+        Returns:
+            files (OrderedDict): maps a sample_id to its properties
     """
     mapping = {}
     with open(fname, "r") as fopen:
@@ -97,13 +91,15 @@ def _sync_2_dicts(dict1, dict2):
 
 def create_or_update_file_with_guid(fname, indexable_data, fieldnames=None):
     """
-    if the file does not exit, create a file with indexable_data
-    if the file does exis, merge the the file with indexable_data
-
-    :param fname: output path
-    :param indexable_data: a list of dictionary
-    :param fieldnames: the file header
-    :return: None
+    If the file fname does not exist, create a file with the indexable_data.
+    if the file fname does exist, merge the file with the indexable_data.
+    
+    Args:
+        fname (string): output path
+        indexable_data (list of OrderedDicts): a list of dictionary
+        fieldnames (list of strings): the file header
+    Returns:
+        None
     """
     if not os.path.exists(fname):
         for data in indexable_data:

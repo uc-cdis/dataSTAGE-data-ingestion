@@ -10,6 +10,14 @@ from generate_google_group_cmds import (
 
 
 def retrieve_study_accessions_from_manual_review_file(filename):
+    """
+    Obtains a list of study accession strings from a "data_requiring_manual_review.tsv" file.
+    Just takes the study accession column and dedups it.
+    Args:
+        filename (string) 
+    Returns:
+        study_accessions (list of strings)
+    """
     study_accessions_undeduped = []
     with open(filename, "rU") as fd:
         rd = csv.reader(fd, delimiter="\t", quotechar='"')
@@ -41,6 +49,14 @@ def retrieve_study_accessions_from_manual_review_file(filename):
 
 
 def retrieve_study_accessions_from_phs_id_list_file(filename):
+    """
+    Obtains a list of study accession strings from a "phs_id_list.txt" file,
+    which is a newline-separated list of phs ids.
+    Args:
+        filename (string) 
+    Returns:
+        study_accessions (list of strings)
+    """
     with open(filename) as f:
         contents = f.readlines()
         return list(map(lambda x: x.strip(), contents))

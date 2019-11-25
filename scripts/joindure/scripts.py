@@ -19,11 +19,14 @@ logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
 
 def merge_manifest(genome_files, dbgap):
     """
-    merge two manifests
+    Merges data from two files -- the genome_file_manifest and the dbgap_extract -- 
+    into one file against the sample_id column.
     
-    :param genome_files: path to the genome manifest
-    :param dbgap_file: path to the dbgap manifest
-    :return:
+    Args:
+        genome_files (string): path to the genome manifest
+        dbgap_file (string): dbgap_file
+    Returns:
+        result (list of OrderedDicts): list of items with attributes from both sources
     """
     mapping = read_mapping_file("mapping.txt")
 
@@ -132,6 +135,15 @@ def merge_manifest(genome_files, dbgap):
     return results
 
 def get_discrepancy_list(genome_files, dbgap):
+    """
+    Identifies sample_id's that are present in the second arg but not the first
+    
+    Args:
+        genome_files (string): path to the genome manifest
+        dbgap_file (string): dbgap_file
+    Returns:
+        results (list of OrderedDicts): list of items that are present in the second arg but not the first
+    """
     results = []
     n = 1
     for sample_id, sample_info in dbgap.items():
@@ -149,11 +161,18 @@ def get_discrepancy_list(genome_files, dbgap):
     return results
 
 def get_unique_id(record):
-    # Unique id format: '<sample_id><md5>'
+    """ Returns unique id for a record in the format: '<sample_id><md5>' """
     return 'sample-id: ' + record['submitted_sample_id'] + ', md5: ' + record['md5']
 
 def check_for_duplicates(indexable_data):
-    # The concatenation of the submitted_sample_id with the filename is to be unique
+    """
+    Throw a value error if there are duplicate records in the indexable_data output.
+    The concatenation of the submitted_sample_id with the filename is to be unique
+    Args:
+        indexable_data (list of OrderedDicts): combined list of data items from merged manifests
+    Returns:
+        None
+    """
     unique_ids = list(map(get_unique_id, indexable_data))
 
     # No duplicates
