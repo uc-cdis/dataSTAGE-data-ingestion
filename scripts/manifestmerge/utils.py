@@ -52,7 +52,9 @@ def get_sample_info_from_dbgap_extract_file(manifest_file, dem="\t"):
 def write_file(filename, rows, fieldnames=None):
     fieldnames = fieldnames or rows[0].keys()
     with open(filename, mode="w") as outfile:
-        writer = csv.DictWriter(outfile, delimiter="\t", fieldnames=fieldnames, extrasaction='ignore')
+        writer = csv.DictWriter(
+            outfile, delimiter="\t", fieldnames=fieldnames, extrasaction="ignore"
+        )
         writer.writeheader()
 
         for row in rows:

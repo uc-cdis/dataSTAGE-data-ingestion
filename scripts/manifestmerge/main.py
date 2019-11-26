@@ -8,10 +8,15 @@ import utils
 if sys.version_info[0] < 3:
     raise Exception("Must be using Python 3")
 
-INDEXABLE_DATA_OUTPUT_FILENAME="release_manifest.tsv"
-MANUAL_REVIEW_OUTPUT_FILENAME="data_requiring_manual_review.tsv"
-EXTRANEOUS_DATA_OUTPUT_FILENAME="extraneous_dbgap_metadata.tsv"
-OUTPUT_FILES=[INDEXABLE_DATA_OUTPUT_FILENAME, MANUAL_REVIEW_OUTPUT_FILENAME, EXTRANEOUS_DATA_OUTPUT_FILENAME]
+INDEXABLE_DATA_OUTPUT_FILENAME = "release_manifest.tsv"
+MANUAL_REVIEW_OUTPUT_FILENAME = "data_requiring_manual_review.tsv"
+EXTRANEOUS_DATA_OUTPUT_FILENAME = "extraneous_dbgap_metadata.tsv"
+OUTPUT_FILES = (
+    INDEXABLE_DATA_OUTPUT_FILENAME,
+    MANUAL_REVIEW_OUTPUT_FILENAME,
+    EXTRANEOUS_DATA_OUTPUT_FILENAME,
+)
+
 
 def parse_arguments():
     parser = argparse.ArgumentParser()
@@ -23,6 +28,7 @@ def parse_arguments():
     merge_cmd.add_argument("--output", required=True)
 
     return parser.parse_args()
+
 
 # python main.py merge --genome_manifest ../input/genome_file_manifest.csv --dbgap_extract_file ../input/DataSTAGE_dbGaP_Consent_Extract.tsv --out ../output
 def main():
@@ -121,11 +127,18 @@ def main():
             scripts.get_discrepancy_list(genome_files, dbgap),
             fieldnames=headers,
         )
-        headers = ["submitted_sample_id", "gcp_uri", "aws_uri", "file_size", "md5", "row_num", "study_accession", "ignore"]
+        headers = [
+            "submitted_sample_id",
+            "gcp_uri",
+            "aws_uri",
+            "file_size",
+            "md5",
+            "row_num",
+            "study_accession",
+            "ignore",
+        ]
         utils.write_file(
-            os.path.join(
-                args.output, MANUAL_REVIEW_OUTPUT_FILENAME
-            ),
+            os.path.join(args.output, MANUAL_REVIEW_OUTPUT_FILENAME),
             scripts.get_discrepancy_list(dbgap, genome_files),
             fieldnames=headers,
         )

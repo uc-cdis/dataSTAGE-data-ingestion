@@ -16,9 +16,9 @@ def get_branch_number(git_branch_a):
         branch number (int): the branch/relese number to use
     """
     branches = git_branch_a.split()
-    branches = list(filter(lambda x: BRANCH_NAME_PREFIX in x, branches))
+    branches = [branch for branch in branches if BRANCH_NAME_PREFIX in branch]
 
-    releases = list(map(lambda x: int(x.split("-")[-1]), branches))
+    releases = [int(branch.split("-")[-1]) for branch in branches]
 
     if len(releases) == 0:
         return 1

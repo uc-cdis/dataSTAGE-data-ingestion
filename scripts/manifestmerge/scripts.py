@@ -17,6 +17,7 @@ LOG_FILE = "manifestmerge-log-" + datetime.now().strftime("%m-%d-%Y-%H-%M-%S") +
 logging.basicConfig(filename=LOG_FILE, level=logging.DEBUG)
 logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
 
+
 def merge_manifest(genome_files, dbgap):
     """
     Merges data from two files -- the genome_file_manifest and the dbgap_extract -- 
@@ -46,7 +47,9 @@ def merge_manifest(genome_files, dbgap):
                     row = copy.deepcopy(meta_data)
                     row["md5_hex"] = base64.b64decode(meta_data.get("md5")).hex()
                     row["biosample_id"] = element.get("biosample_id", "None")
-                    row["submitted_sample_id"] = element.get("submitted_sample_id", "None")
+                    row["submitted_sample_id"] = element.get(
+                        "submitted_sample_id", "None"
+                    )
                     row["dbgap_sample_id"] = element.get("dbgap_sample_id", "None")
                     row["sra_sample_id"] = element.get("sra_sample_id", "None")
                     row["submitted_subject_id"] = element.get(
@@ -59,39 +62,21 @@ def merge_manifest(genome_files, dbgap):
                     row["study_accession_with_consent"] = element.get(
                         "study_accession_with_consent", "None"
                     )
-                    row["study_accession"] = element.get(
-                        "study_accession", "None"
-                    )
+                    row["study_accession"] = element.get("study_accession", "None")
                     row["study_with_consent"] = element.get(
                         "study_with_consent", "None"
                     )
                     row["datastage_subject_id"] = element.get(
                         "datastage_subject_id", "None"
                     )
-                    row["consent_code"] = element.get(
-                        "consent_code", "None"
-                    )
-                    row["sex"] = element.get(
-                        "sex", "None"
-                    )
-                    row["body_site"] = element.get(
-                        "body_site", "None"
-                    )
-                    row["analyte_type"] = element.get(
-                        "analyte_type", "None"
-                    )
-                    row["sample_use"] = element.get(
-                        "sample_use", "None"
-                    )
-                    row["repository"] = element.get(
-                        "repository", "None"
-                    )
-                    row["dbgap_status"] = element.get(
-                        "dbgap_status", "None"
-                    )
-                    row["sra_data_details"] = element.get(
-                        "sra_data_details", "None"
-                    )
+                    row["consent_code"] = element.get("consent_code", "None")
+                    row["sex"] = element.get("sex", "None")
+                    row["body_site"] = element.get("body_site", "None")
+                    row["analyte_type"] = element.get("analyte_type", "None")
+                    row["sample_use"] = element.get("sample_use", "None")
+                    row["repository"] = element.get("repository", "None")
+                    row["dbgap_status"] = element.get("dbgap_status", "None")
+                    row["sra_data_details"] = element.get("sra_data_details", "None")
 
                     accession_with_consent = element.get("study_with_consent")
 
@@ -134,6 +119,7 @@ def merge_manifest(genome_files, dbgap):
         return []
     return results
 
+
 def get_discrepancy_list(genome_files, dbgap):
     """
     Identifies sample_id's that are present in the second arg but not the first
@@ -160,9 +146,11 @@ def get_discrepancy_list(genome_files, dbgap):
 
     return results
 
+
 def get_unique_id(record):
     """ Returns unique id for a record in the format: '<sample_id><md5>' """
-    return 'sample-id: ' + record['submitted_sample_id'] + ', md5: ' + record['md5']
+    return "sample-id: " + record["submitted_sample_id"] + ", md5: " + record["md5"]
+
 
 def check_for_duplicates(indexable_data):
     """
@@ -187,6 +175,8 @@ def check_for_duplicates(indexable_data):
             id_dict[uid] = 1
         else:
             duplicates.append(uid)
-    error_message = 'Error: Duplicate sample ids found in indexable data: {}.'.format(str(duplicates))
+    error_message = "Error: Duplicate sample ids found in indexable data: {}.".format(
+        str(duplicates)
+    )
     logging.error(error_message)
     raise ValueError(error_message)

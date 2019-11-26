@@ -62,7 +62,7 @@ cd /dataSTAGE-data-ingestion/scripts/
 if [ ! -d "manifestmerge/output" ]; then
 	mkdir manifestmerge/output
 fi
-python3 generate_google_group_cmds.py --extract_filename /dbgap-extract/generated_extract.tsv
+python3 generate_google_group_cmds.py --dbgap_extract /dbgap-extract/generated_extract.tsv
 if [ -f "google-groups.sh" ]; then
   chmod +x google-groups.sh
   mv google-groups.sh /dataSTAGE-data-ingestion/scripts/manifestmerge/output/google-groups.sh

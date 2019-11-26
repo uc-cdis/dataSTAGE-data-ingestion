@@ -61,6 +61,9 @@ def make_mapping_entries(study_accessions):
     return entries
 
 def dedup_study_accessions(study_accessions):
+
+    return sorted(list({thing.strip() for thing in study_accessions if "phs"in thing}))
+
     dict_of_things = {}
     for thing in study_accessions:
         if "phs" not in thing:

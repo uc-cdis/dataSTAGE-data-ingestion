@@ -3,9 +3,6 @@
 # This is a test script written in Bash Automated Test System ("bats")
 # https://github.com/sstephenson/bats
 
-load '../libs/bats-support/load'
-load '../libs/bats-assert/load'
-
 source fence-image-commands.sh --source-only
 
 @test "fence-image-commands.sh should use google-list-authz-results to correctly prune creation commands" {
@@ -24,7 +21,7 @@ EOF
 fence-create link-external-bucket --bucket-name phs1234
 fence-create link-external-bucket --bucket-name phs4321
 fence-create link-bucket-to-project --bucket_id phs1234 --bucket_provider google --project_auth_id phs1234
-fence-create link-bucket-to-project --bucket_id phs4321 --bucket_provider google --project_auth_id phs4321
+fence-create link-bucket-to-project --bucket_id phs4321 --buc ket_provider google --project_auth_id phs4321
 fence-create link-bucket-to-project --bucket_id phs1234 --bucket_provider google --project_auth_id admin
 fence-create link-bucket-to-project --bucket_id phs4321 --bucket_provider google --project_auth_id admin
 fence-create link-bucket-to-project --bucket_id allProjects --bucket_provider google --project_auth_id phs1234
@@ -44,7 +41,7 @@ fence-create link-bucket-to-project --bucket_id allProjects --bucket_provider go
 fence-create link-bucket-to-project --bucket_id allProjects --bucket_provider google --project_auth_id phs1234
 END
 )
-    assert_equal "$actual" "$expected"
+    [ "$actual" == "$expected" ]
 }
 
 @test "unit test phs_from_fence_cmds function" { 
@@ -78,7 +75,7 @@ EOF
 phs1234 phs4321
 END
 )
-    assert_equal "$actual" "$expected"
+    [ "$actual" == "$expected" ]
 }
 
 @test "manifestmerge script and generate_google_group_cmds.py work together locally as expected" {   
@@ -86,46 +83,47 @@ END
         rm studys_to_google_access_groups.txt
     fi
 
-    python3 generate_google_group_cmds.py --extract_filename tests/test_data/test_extract.tsv
+    python3 generate_google_group_cmds.py --dbgap_extract tests/test_data/test_extract.tsv
 
-    assert [ -f "studys_to_google_access_groups.txt" ]
+    [ -f "studys_to_google_access_groups.txt" ]
     actual_mapping=`cat studys_to_google_access_groups.txt`
     expected_mapping=`cat tests/test_data/expected_output/studys_to_google_access_groups.txt`
-    assert_equal "$actual_mapping" "$expected_mapping"
+    [ "$actual_mapping" == "$expected_mapping" ]
 
-    assert [ -f "google-groups.sh" ]
+    [ -f "google-groups.sh" ]
     actual_google_groups=`cat google-groups.sh`
     expected_google_groups=`cat tests/test_data/expected_output/google-groups.sh`
-    assert_equal "$actual_google_groups" "$expected_google_groups"
+    [ "$actual_google_groups" == "$expected_google_groups" ]
 
     mv studys_to_google_access_groups.txt manifestmerge/
 
     cd manifestmerge/
 
     pipenv run python3 main.py merge --genome_manifest ../tests/test_data/test_genome_file_manifest.csv \
-    --dbgap_extract_file ../tests/test_data/test_extract.tsv --out ../tests/test_data/output
+    --dbgap_extract_file ../tests/test_data/test_extract.tsv --out output
 
-    ls output
     
     # Should create 3 files
     number_of_files_created=`ls -1q output/ | wc -l`
-    assert_equal $number_of_files_created 3
+    [ $number_of_files_created == 3 ]
 
-    assert [ -f "output/release_manifest.tsv" ]
-    assert [ -f "output/extraneous_dbgap_metadata.tsv" ]
-    assert [ -f "output/data_requiring_manual_review.tsv" ]
+    [ -f "output/release_manifest.tsv" ]
+    [ -f "output/extraneous_dbgap_metadata.tsv" ]
+    [ -f "output/data_requiring_manual_review.tsv" ]
 
     actual_release_manifest=`cat ../tests/test_data/output/release_manifest.tsv`
     expected_release_manifest=`cat ../tests/test_data/expected_output/release_manifest.tsv`
-    assert_equal "$actual_release_manifest" "$expected_release_manifest"
+    echo $actual_release_manifest
+    echo $expected_release_manifest
+    [ "$actual_release_manifest" == "$expected_release_manifest" ]
     
     actual_extraneous_data=`cat ../tests/test_data/output/extraneous_dbgap_metadata.tsv`
     expected_extraneous_data=`cat ../tests/test_data/expected_output/extraneous_dbgap_metadata.tsv`
-    assert_equal "$actual_extraneous_data" "$expected_extraneous_data"
+    [ "$actual_extraneous_data" == "$expected_extraneous_data" ]
 
     actual_data_requiring_manual_review=`cat ../tests/test_data/output/data_requiring_manual_review.tsv`
     expected_data_requiring_manual_review=`cat ../tests/test_data/expected_output/data_requiring_manual_review.tsv`
-    assert_equal "$actual_data_requiring_manual_review" "$expected_data_requiring_manual_review"
+    [ "$actual_data_requiring_manual_review" == "$expected_data_requiring_manual_review" ]
 
     rm ../tests/manifestmerge-log*.log
 }
