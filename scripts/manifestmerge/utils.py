@@ -17,11 +17,13 @@ def get_sample_data_from_manifest(manifest_file, dem="\t"):
     with open(manifest_file, "rt") as csvfile:
         csvReader = csv.DictReader(csvfile, delimiter=dem)
         for row in csvReader:
-            row["file_size"] = int(row["file_size"])
-            if row["submitted_sample_id"] in files:
-                files[row["submitted_sample_id"]].append(row)
+            # Remove whitespace from fieldnames
+            row_stripped = { k.strip(): v for k, v in row.items() }
+            row_stripped["file_size"] = int(row_stripped["file_size"])
+            if row_stripped["submitted_sample_id"] in files:
+                files[row_stripped["submitted_sample_id"]].append(row_stripped)
             else:
-                files[row["submitted_sample_id"]] = [row]
+                files[row_stripped["submitted_sample_id"]] = [row_stripped]
 
     return files
 

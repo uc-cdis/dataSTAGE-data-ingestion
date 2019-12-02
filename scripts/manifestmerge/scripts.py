@@ -46,6 +46,8 @@ def merge_manifest(genome_files, dbgap):
                 for element in dbgap[sample_id]:
                     row = copy.deepcopy(meta_data)
                     row["md5_hex"] = base64.b64decode(meta_data.get("md5")).hex()
+                    row["aws_uri"] = meta_data.get("aws_uri")
+                    row["gcp_uri"] = meta_data.get("gcp_uri")
                     row["biosample_id"] = element.get("biosample_id", "None")
                     row["submitted_sample_id"] = element.get(
                         "submitted_sample_id", "None"

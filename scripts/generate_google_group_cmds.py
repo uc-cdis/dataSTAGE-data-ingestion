@@ -61,17 +61,7 @@ def make_mapping_entries(study_accessions):
     return entries
 
 def dedup_study_accessions(study_accessions):
-
     return sorted(list({thing.strip() for thing in study_accessions if "phs"in thing}))
-
-    dict_of_things = {}
-    for thing in study_accessions:
-        if "phs" not in thing:
-            continue
-        dict_of_things[thing.strip()] = 1
-    rv = list(dict_of_things.keys())
-    rv.sort()
-    return rv
 
 def retrieve_study_accessions_from_extract(extract_filename):
     """Retrieve study_with_consent in a column-order-agnostic way"""

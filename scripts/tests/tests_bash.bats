@@ -2,7 +2,7 @@
 
 # This is a test script written in Bash Automated Test System ("bats")
 # https://github.com/sstephenson/bats
-
+ 
 source fence-image-commands.sh --source-only
 
 @test "fence-image-commands.sh should use google-list-authz-results to correctly prune creation commands" {
@@ -21,7 +21,7 @@ EOF
 fence-create link-external-bucket --bucket-name phs1234
 fence-create link-external-bucket --bucket-name phs4321
 fence-create link-bucket-to-project --bucket_id phs1234 --bucket_provider google --project_auth_id phs1234
-fence-create link-bucket-to-project --bucket_id phs4321 --buc ket_provider google --project_auth_id phs4321
+fence-create link-bucket-to-project --bucket_id phs4321 --bucket_provider google --project_auth_id phs4321
 fence-create link-bucket-to-project --bucket_id phs1234 --bucket_provider google --project_auth_id admin
 fence-create link-bucket-to-project --bucket_id phs4321 --bucket_provider google --project_auth_id admin
 fence-create link-bucket-to-project --bucket_id allProjects --bucket_provider google --project_auth_id phs1234
@@ -102,7 +102,6 @@ END
     pipenv run python3 main.py merge --genome_manifest ../tests/test_data/test_genome_file_manifest.csv \
     --dbgap_extract_file ../tests/test_data/test_extract.tsv --out output
 
-    
     # Should create 3 files
     number_of_files_created=`ls -1q output/ | wc -l`
     [ $number_of_files_created == 3 ]
@@ -111,17 +110,17 @@ END
     [ -f "output/extraneous_dbgap_metadata.tsv" ]
     [ -f "output/data_requiring_manual_review.tsv" ]
 
-    actual_release_manifest=`cat ../tests/test_data/output/release_manifest.tsv`
+    actual_release_manifest=`cat ../manifestmerge/output/release_manifest.tsv`
     expected_release_manifest=`cat ../tests/test_data/expected_output/release_manifest.tsv`
     echo $actual_release_manifest
     echo $expected_release_manifest
     [ "$actual_release_manifest" == "$expected_release_manifest" ]
     
-    actual_extraneous_data=`cat ../tests/test_data/output/extraneous_dbgap_metadata.tsv`
+    actual_extraneous_data=`cat ../manifestmerge/output/extraneous_dbgap_metadata.tsv`
     expected_extraneous_data=`cat ../tests/test_data/expected_output/extraneous_dbgap_metadata.tsv`
     [ "$actual_extraneous_data" == "$expected_extraneous_data" ]
 
-    actual_data_requiring_manual_review=`cat ../tests/test_data/output/data_requiring_manual_review.tsv`
+    actual_data_requiring_manual_review=`cat ../manifestmerge/output/data_requiring_manual_review.tsv`
     expected_data_requiring_manual_review=`cat ../tests/test_data/expected_output/data_requiring_manual_review.tsv`
     [ "$actual_data_requiring_manual_review" == "$expected_data_requiring_manual_review" ]
 
