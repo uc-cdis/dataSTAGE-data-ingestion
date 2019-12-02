@@ -99,6 +99,4 @@ def test_dedup_study_accessions():
         ["phs001143", "phs001145", "phs001148", "phs001148"]
     )
     expected = ["phs001143", "phs001145", "phs001148"]
-    assert all(
-        [a == b for a, b in zip(actual, expected)]
-    )
+    assert all([a == b for a, b in zip(actual, expected)])

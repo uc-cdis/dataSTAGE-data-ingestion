@@ -73,7 +73,7 @@ mv studys_to_google_access_groups.txt /dataSTAGE-data-ingestion/scripts/manifest
 # 5. Run manifestmerge script
 cd /dataSTAGE-data-ingestion/scripts/manifestmerge
 
-pipenv run python3 main.py merge --genome_manifest /dataSTAGE-data-ingestion/genome_file_manifest.csv \
+pipenv run python3 main.py --genome_manifest /dataSTAGE-data-ingestion/genome_file_manifest.csv \
     --dbgap_extract_file /dbgap-extract/generated_extract.tsv --out output
 
 cp /dataSTAGE-data-ingestion/scripts/fence-image-commands.sh /dataSTAGE-data-ingestion/scripts/manifestmerge/output

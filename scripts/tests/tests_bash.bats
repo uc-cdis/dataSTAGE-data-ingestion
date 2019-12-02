@@ -99,7 +99,7 @@ END
 
     cd manifestmerge/
 
-    pipenv run python3 main.py merge --genome_manifest ../tests/test_data/test_genome_file_manifest.csv \
+    pipenv run python3 main.py --genome_manifest ../tests/test_data/test_genome_file_manifest.csv \
     --dbgap_extract_file ../tests/test_data/test_extract.tsv --out output
 
     # Should create 3 files

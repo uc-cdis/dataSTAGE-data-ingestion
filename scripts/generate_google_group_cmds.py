@@ -7,8 +7,17 @@ from datetime import datetime
 
 GOOGLE_GROUPS_OUTFILE = "google-groups.sh"
 MAPPING_OUTFILE = "studys_to_google_access_groups.txt"
+
+"""
+Need a group all SAs will go in that will only have storage.objects.list iam permission on the bucket when using object-level ACL access.
+This is because many Google APIs require both get and list permissions to act upon data in the bucket.
+"""
+ALL_SERVICE_ACCOUNTS_BUCKET_ID = "allProjects"
+
+
 logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
 logging.getLogger().setLevel(logging.DEBUG)
+
 
 def generate_cmd_sets(studies):
     """
@@ -33,10 +42,11 @@ def generate_cmd_sets(studies):
         commands.append(link_to_admin_cmd)
 
     for study_accession_with_consent in studies:
-        link_all_projects_cmd = f"fence-create link-bucket-to-project --bucket_id allProjects --bucket_provider google --project_auth_id {study_accession_with_consent}"
+        link_all_projects_cmd = f"fence-create link-bucket-to-project --bucket_id {ALL_SERVICE_ACCOUNTS_BUCKET_ID} --bucket_provider google --project_auth_id {study_accession_with_consent}"
         commands.append(link_all_projects_cmd)
 
     return commands
+
 
 def make_mapping_entries(study_accessions):
     """
@@ -53,8 +63,10 @@ def make_mapping_entries(study_accessions):
         )
     return entries
 
+
 def dedup_study_accessions(study_accessions):
-    return sorted(list({thing.strip() for thing in study_accessions if "phs"in thing}))
+    return sorted(list({thing.strip() for thing in study_accessions if "phs" in thing}))
+
 
 def retrieve_study_accessions_from_extract(extract_filename):
     """Retrieve study_with_consent in a column-order-agnostic way"""
@@ -64,21 +76,25 @@ def retrieve_study_accessions_from_extract(extract_filename):
         undeduped_study_accessions = []
         for line in f:
             if on_header_line:
-                field_names = line.split('\t')
-                index_of_study_with_consent_field = field_names.index('study_with_consent')
+                field_names = line.split("\t")
+                index_of_study_with_consent_field = field_names.index(
+                    "study_with_consent"
+                )
                 if index_of_study_with_consent_field == -1:
-                    raise ValueError('study_with_consent field not found in extract')
+                    raise ValueError("study_with_consent field not found in extract")
                 on_header_line = False
             else:
                 study_w_consent = line.split("\t")[index_of_study_with_consent_field]
                 undeduped_study_accessions.append(study_w_consent)
-                
+
         study_accessions = dedup_study_accessions(undeduped_study_accessions)
         return study_accessions
+
 
 def write_list_of_strings_to_file_as_rows(array_in, output_filename):
     with open(output_filename, "a+") as out_file:
         out_file.write("\n".join(array_in))
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -114,6 +130,7 @@ def main():
             GOOGLE_GROUPS_OUTFILE, MAPPING_OUTFILE
         )
     )
+
 
 if __name__ == "__main__":
     main()
