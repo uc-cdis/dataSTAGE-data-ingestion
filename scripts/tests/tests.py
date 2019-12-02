@@ -1,7 +1,7 @@
 # Run all tests with:
 # ./test_all.sh
 # Run just this file with:
-# python3 -m pytest tests.py
+# pipenv shell python -m pytest tests.py
 
 import sys
 
@@ -21,6 +21,10 @@ from test_data.test_data import *
 ###### Test manifestmerge script #######
 @patch("manifestmerge.scripts.read_mapping_file")
 def test_merging(mock_read_mapping_file):
+    """
+    Basic test of manifest-merge functionality: 2 data pieces from disparate files
+    are merged into one OrderedDict against the sample_id field
+    """
     mock_read_mapping_file.return_value = {}
     L = manifestmerge.merge_manifest(genome_data, dbgap_data)
     assert len(L) == 4
@@ -32,6 +36,11 @@ def test_merging(mock_read_mapping_file):
 
 @patch("manifestmerge.scripts.read_mapping_file")
 def test_get_error_list(mock_read_mapping_file):
+    """
+    Tests case where the dbgap extract has one record not contained
+    in the genome file manifest. We expect that this record will be placed
+    in the extraneous-data file (produced by get_discrepancy_list()).
+    """
     mock_read_mapping_file.return_value = {}
     L = manifestmerge.get_discrepancy_list(genome_data, dbgap_data)
     assert len(L) == 1
@@ -41,6 +50,11 @@ def test_get_error_list(mock_read_mapping_file):
 
 
 def test_check_for_duplicates():
+    """
+    Tests case where the release manifest that is created contains
+    two records with identical sample_ids and md5 hashes. Ensures the
+    function check_for_duplicates() catches this.
+    """
     with pytest.raises(ValueError) as excinfo:
         L = manifestmerge.check_for_duplicates(indexable_data_with_duplicates)
     assert "NWD2" in str(excinfo.value)
@@ -52,6 +66,11 @@ def test_check_for_duplicates():
 
 ###### Test get_release_number.py #######
 def test_get_release_number():
+    """
+    Tests case where the release manifest that is created contains
+    two records with identical sample_ids and md5 hashes. Ensures the
+    function check_for_duplicates() catches this.
+    """
     git_branch_a_mock_output = """
         * feat/release-703\nmaster\nremotes/origin/HEAD -> origin/master
         remotes/origin/feat/release-703
@@ -83,6 +102,10 @@ def test_get_release_number():
 
 ###### Test add_studies_from_manual_review.py #######
 def test_retrieve_study_accessions_from_manual_review_file():
+    """
+    Unit test for the function retrieve_study_accessions_from_manual_review_file().
+    Tests that study accessions are correctly retrieved from a test data_requiring_manual_review file.
+    """
     actual_study_accessions = add_studies_from_manual_review.retrieve_study_accessions_from_manual_review_file(
         "test_data/test_data_requiring_manual_review.tsv"
     )
@@ -95,8 +118,23 @@ def test_retrieve_study_accessions_from_manual_review_file():
 
 ###### Test generate_google_group_cmds.py ######
 def test_dedup_study_accessions():
+    """
+    Unit test dedup_study_accessions function.
+    """
     actual = generate_google_group_cmds.dedup_study_accessions(
         ["phs001143", "phs001145", "phs001148", "phs001148"]
     )
     expected = ["phs001143", "phs001145", "phs001148"]
+    assert all([a == b for a, b in zip(actual, expected)])
+
+    actual = generate_google_group_cmds.dedup_study_accessions(
+        ["phs001143", "phs001145", "phs001148"]
+    )
+    expected = ["phs001143", "phs001145", "phs001148"]
+    assert all([a == b for a, b in zip(actual, expected)])
+
+    actual = generate_google_group_cmds.dedup_study_accessions(
+        ["phs001143", "phs001143", "phs001143"]
+    )
+    expected = ["phs001143"]
     assert all([a == b for a, b in zip(actual, expected)])
