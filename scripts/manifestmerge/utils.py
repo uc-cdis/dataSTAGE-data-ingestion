@@ -52,6 +52,15 @@ def get_sample_info_from_dbgap_extract_file(manifest_file, dem="\t"):
 
 
 def write_file(filename, rows, fieldnames=None):
+    """
+        Writes to a file in TSV format.
+        
+        Args:
+            filename (string)
+            rows (list of lists of strings)
+        Returns:
+            None
+    """
     fieldnames = fieldnames or rows[0].keys()
     with open(filename, mode="w") as outfile:
         writer = csv.DictWriter(
