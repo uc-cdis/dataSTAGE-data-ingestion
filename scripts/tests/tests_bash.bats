@@ -112,8 +112,6 @@ END
 
     actual_release_manifest=`cat ../manifestmerge/output/release_manifest.tsv`
     expected_release_manifest=`cat ../tests/test_data/expected_output/release_manifest.tsv`
-    echo $actual_release_manifest
-    echo $expected_release_manifest
     [ "$actual_release_manifest" == "$expected_release_manifest" ]
     
     actual_extraneous_data=`cat ../manifestmerge/output/extraneous_dbgap_metadata.tsv`

@@ -21,27 +21,19 @@ def generate_cmd_sets(studies):
     """
     commands = []
     for study_accession_with_consent in studies:
-        link_external_bucket_cmd = "fence-create link-external-bucket --bucket-name {}".format(
-            study_accession_with_consent
-        )
+        link_external_bucket_cmd = f"fence-create link-external-bucket --bucket-name {study_accession_with_consent}"
         commands.append(link_external_bucket_cmd)
 
     for study_accession_with_consent in studies:
-        link_to_gen3_project_cmd = "fence-create link-bucket-to-project --bucket_id {} --bucket_provider google --project_auth_id {}".format(
-            study_accession_with_consent, study_accession_with_consent
-        )
+        link_to_gen3_project_cmd = f"fence-create link-bucket-to-project --bucket_id {study_accession_with_consent} --bucket_provider google --project_auth_id {study_accession_with_consent}"
         commands.append(link_to_gen3_project_cmd)
 
     for study_accession_with_consent in studies:
-        link_to_admin_cmd = "fence-create link-bucket-to-project --bucket_id {} --bucket_provider google --project_auth_id admin".format(
-            study_accession_with_consent, study_accession_with_consent
-        )
+        link_to_admin_cmd = f"fence-create link-bucket-to-project --bucket_id {study_accession_with_consent} --bucket_provider google --project_auth_id admin"
         commands.append(link_to_admin_cmd)
 
     for study_accession_with_consent in studies:
-        link_all_projects_cmd = "fence-create link-bucket-to-project --bucket_id allProjects --bucket_provider google --project_auth_id {}".format(
-            study_accession_with_consent, study_accession_with_consent
-        )
+        link_all_projects_cmd = f"fence-create link-bucket-to-project --bucket_id allProjects --bucket_provider google --project_auth_id {study_accession_with_consent}"
         commands.append(link_all_projects_cmd)
 
     return commands
