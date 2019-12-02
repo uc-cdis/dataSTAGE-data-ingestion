@@ -8,6 +8,7 @@ from datetime import datetime
 GOOGLE_GROUPS_OUTFILE = "google-groups.sh"
 MAPPING_OUTFILE = "studys_to_google_access_groups.txt"
 logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
+logging.getLogger().setLevel(logging.DEBUG)
 
 def generate_cmd_sets(studies):
     """
@@ -65,18 +66,21 @@ def dedup_study_accessions(study_accessions):
 
 def retrieve_study_accessions_from_extract(extract_filename):
     """Retrieve study_with_consent in a column-order-agnostic way"""
-    with open(extract_filename) as f: 
-        rows = f.readlines()
-        headers = rows[0].split("\t")
-        records = list(map(lambda x: x.split("\t"), rows[1:]))
-        records_as_dicts = []
-        for record in records:
-            record_dict = {}
-            for i in range(len(record)):
-                record_dict[headers[i]] = record[i]
-            records_as_dicts.append(record_dict)
-
-        undeduped_study_accessions = list(map(lambda x: x['study_with_consent'], records_as_dicts))
+    with open(extract_filename) as f:
+        on_header_line = True
+        index_of_study_with_consent_field = -1
+        undeduped_study_accessions = []
+        for line in f:
+            if on_header_line:
+                field_names = line.split('\t')
+                index_of_study_with_consent_field = field_names.index('study_with_consent')
+                if index_of_study_with_consent_field == -1:
+                    raise ValueError('study_with_consent field not found in extract')
+                on_header_line = False
+            else:
+                study_w_consent = line.split("\t")[index_of_study_with_consent_field]
+                undeduped_study_accessions.append(study_w_consent)
+                
         study_accessions = dedup_study_accessions(undeduped_study_accessions)
         return study_accessions
 
