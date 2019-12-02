@@ -39,11 +39,7 @@ def get_sample_info_from_dbgap_extract_file(manifest_file, dem="\t"):
     with open(manifest_file, "rt") as csvfile:
         csvReader = csv.DictReader(csvfile, delimiter=dem)
         for row in csvReader:
-            if row["submitted_sample_id"] in files:
-                files[row["submitted_sample_id"]].append(row)
-            else:
-                files[row["submitted_sample_id"]] = [row]
-
+            files.setdefault(row["submitted_sample_id"], []).append(row)
     return files
 
 
