@@ -85,7 +85,7 @@ def read_mapping_file(fname):
     return mapping
 
 
-def _sync_2_dicts(dict1, dict2):
+def sync_2_dicts(dict1, dict2):
     for key, new_row in dict1.items():
         if key not in dict2:
             new_row["GUID"] = "None"
@@ -124,6 +124,6 @@ def create_or_update_file_with_guid(fname, indexable_data, fieldnames=None):
                 dict2[row["submitted_sample_id"] + "|" + row["md5"]] = row
 
         # merge dict1 to dict1
-        dict2 = _sync_2_dicts(dict1, dict2)
+        dict2 = sync_2_dicts(dict1, dict2)
         L = [v for _, v in dict2.items()]
         write_file(fname, L, fieldnames)
