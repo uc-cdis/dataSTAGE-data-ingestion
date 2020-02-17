@@ -7,15 +7,129 @@ import logging
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 
-from utils import (
-    read_mapping_file,
-    get_sample_data_from_manifest,
-    get_sample_info_from_dbgap_extract_file,
-)
+from utils import *
 
 LOG_FILE = "manifestmerge-log-" + datetime.now().strftime("%m-%d-%Y-%H-%M-%S") + ".log"
 logging.basicConfig(filename=LOG_FILE, level=logging.DEBUG)
 logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
+
+INDEXABLE_DATA_OUTPUT_FILENAME = "release_manifest.tsv"
+MANUAL_REVIEW_OUTPUT_FILENAME = "data_requiring_manual_review.tsv"
+EXTRANEOUS_DATA_OUTPUT_FILENAME = "extraneous_dbgap_metadata.tsv"
+OUTPUT_FILES = (
+    INDEXABLE_DATA_OUTPUT_FILENAME,
+    MANUAL_REVIEW_OUTPUT_FILENAME,
+    EXTRANEOUS_DATA_OUTPUT_FILENAME,
+)
+
+def merge(genome_manifest, dbgap_extract_file, output):
+    genome_files = get_sample_data_from_manifest(genome_manifest, dem=",")
+    dbgap = get_sample_info_from_dbgap_extract_file(dbgap_extract_file)
+
+    if not os.path.exists(output):
+        os.makedirs(output)
+
+    # Clear out output files
+    for output_file in OUTPUT_FILES:
+        if os.path.exists(output_file):
+            os.remove(output_file)
+
+    headers = [
+        "GUID",
+        "submitted_sample_id",
+        "dbgap_sample_id",
+        "sra_sample_id",
+        "biosample_id",
+        "submitted_subject_id",
+        "dbgap_subject_id",
+        "consent_short_name",
+        "study_accession_with_consent",
+        "study_accession",
+        "study_with_consent",
+        "datastage_subject_id",
+        "consent_code",
+        "sex",
+        "body_site",
+        "analyte_type",
+        "sample_use",
+        "repository",
+        "dbgap_status",
+        "sra_data_details",
+        "file_size",
+        "md5",
+        "md5_hex",
+        "aws_uri",
+        "gcp_uri",
+        "permission",
+        "g_access_group",
+    ]
+    results = merge_manifest(genome_files, dbgap)
+    indexable_data = []
+    for element in results:
+        if element["g_access_group"] != "None":
+            element["permission"] = "READ"
+            indexable_data.append(element)
+
+    check_for_duplicates(indexable_data)
+
+    create_or_update_file_with_guid(
+        os.path.join(output, INDEXABLE_DATA_OUTPUT_FILENAME),
+        indexable_data,
+        fieldnames=headers,
+    )
+
+    # get_discrepancy_list
+    headers = [
+        "sample_use",
+        "dbgap_status",
+        "sra_data_details",
+        "dbgap_subject_id",
+        "repository",
+        "submitted_sample_id",
+        "study_accession_with_consent",
+        "study_accession",
+        "study_with_consent",
+        "datastage_subject_id",
+        "consent_code",
+        "sex",
+        "body_site",
+        "analyte_type",
+        "sample_use",
+        "repository",
+        "dbgap_status",
+        "sra_data_details",
+        "submitted_subject_id",
+        "consent_short_name",
+        "analyte_type",
+        "sra_sample_id",
+        "sex",
+        "biosample_id",
+        "dbgap_sample_id",
+        "consent_code",
+        "study_accession",
+        "body_site",
+        "row_num",
+    ]
+    write_file(
+        os.path.join(output, EXTRANEOUS_DATA_OUTPUT_FILENAME),
+        get_discrepancy_list(genome_files, dbgap),
+        fieldnames=headers,
+    )
+    headers = [
+        "submitted_sample_id",
+        "gcp_uri",
+        "aws_uri",
+        "file_size",
+        "md5",
+        "row_num",
+        "study_accession",
+        "ignore",
+    ]
+    write_file(
+        os.path.join(output, MANUAL_REVIEW_OUTPUT_FILENAME),
+        get_discrepancy_list(dbgap, genome_files),
+        fieldnames=headers,
+    )
 
 
 def merge_manifest(genome_files, dbgap):

@@ -14,7 +14,6 @@ This is because many Google APIs require both get and list permissions to act up
 """
 ALL_SERVICE_ACCOUNTS_BUCKET_ID = "allProjects"
 
-
 logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
 logging.getLogger().setLevel(logging.DEBUG)
 
@@ -96,24 +95,8 @@ def write_list_of_strings_to_file_as_rows(array_in, output_filename):
         out_file.write("\n".join(array_in))
 
 
-def main():
-    parser = argparse.ArgumentParser(
-        description="Generate set of fence-create commands for study-related Google Groups."
-    )
-    parser.add_argument("--dbgap_extract", help="a generated dbgap extract file")
-
-    args = parser.parse_args(sys.argv[1:])
-
-    if not args.dbgap_extract:
-        logging.debug("-------")
-        logging.debug("Usage error. Run this script using the below command form:")
-        logging.debug(
-            "> python generate_google_group_cmds.py --dbgap_extract <filename.tsv>"
-        )
-        logging.debug("-------")
-        exit(0)
-
-    study_accessions = retrieve_study_accessions_from_extract(args.dbgap_extract)
+def generate_google_group_cmds(dbgap_extract):
+    study_accessions = retrieve_study_accessions_from_extract(dbgap_extract)
 
     if os.path.exists(MAPPING_OUTFILE):
         os.remove(MAPPING_OUTFILE)
@@ -131,6 +114,25 @@ def main():
         )
     )
 
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Generate set of fence-create commands for study-related Google Groups."
+    )
+    parser.add_argument("--dbgap_extract", help="a generated dbgap extract file")
+
+    args = parser.parse_args(sys.argv[1:])
+
+    if not args.dbgap_extract:
+        logging.debug("-------")
+        logging.debug("Usage error. Run this script using the below command form:")
+        logging.debug(
+            "> python generate_google_group_cmds.py --dbgap_extract <filename.tsv>"
+        )
+        logging.debug("-------")
+        exit(0)
+
+    generate_google_group_cmds(args.dbgap_extract)
 
 if __name__ == "__main__":
     main()

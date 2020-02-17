@@ -62,6 +62,37 @@ def retrieve_study_accessions_from_phs_id_list_file(filename):
         return list(map(lambda x: x.strip(), contents))
 
 
+def add_studies_from_manual_review(phs_id_list, data_requiring_manual_review, output_file):
+    if (
+        not phs_id_list
+        or not data_requiring_manual_review
+        or not output_file
+    ):
+        print("-------")
+        print("Usage error. Call the script like this:")
+        print(
+            "> python3 add_studies_from_manual_review.py --phs_id_list <phs_id_list.txt> --data_requiring_manual_review <data_requiring_manual_review.tsv> --output_file <out_file.txt>"
+        )
+        print("-------")
+        exit(0)
+
+    new_study_accessions = retrieve_study_accessions_from_manual_review_file(
+        data_requiring_manual_review
+    )
+    old_study_accessions = retrieve_study_accessions_from_phs_id_list_file(
+        phs_id_list
+    )
+
+    if os.path.exists(output_file):
+        os.remove(output_file)
+
+    write_list_of_strings_to_file_as_rows(
+        new_study_accessions + old_study_accessions, output_file
+    )
+
+    print("Wrote merged PHS ID list to {}.".format(output_file))
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Combine a file of newline-separated PHS IDs with a manually filled out data_requiring_manual_review.tsv."
@@ -77,35 +108,7 @@ def main():
 
     args = parser.parse_args(sys.argv[1:])
 
-    if (
-        not args.phs_id_list
-        or not args.data_requiring_manual_review
-        or not args.output_file
-    ):
-        print("-------")
-        print("Usage error. Call the script like this:")
-        print(
-            "> python3 add_studies_from_manual_review.py --phs_id_list <phs_id_list.txt> --data_requiring_manual_review <data_requiring_manual_review.tsv> --output_file <out_file.txt>"
-        )
-        print("-------")
-        exit(0)
-
-    new_study_accessions = retrieve_study_accessions_from_manual_review_file(
-        args.data_requiring_manual_review
-    )
-    old_study_accessions = retrieve_study_accessions_from_phs_id_list_file(
-        args.phs_id_list
-    )
-
-    if os.path.exists(args.output_file):
-        os.remove(args.output_file)
-
-    write_list_of_strings_to_file_as_rows(
-        new_study_accessions + old_study_accessions, args.output_file
-    )
-
-    print("Wrote merged PHS ID list to {}.".format(args.output_file))
-
+    add_studies_from_manual_review(args.phs_id_list, args.data_requiring_manual_review, args.output_file)
 
 if __name__ == "__main__":
     main()

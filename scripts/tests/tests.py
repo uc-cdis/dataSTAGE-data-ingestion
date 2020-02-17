@@ -1,6 +1,6 @@
-# Run all tests with:
+# From within the tests folder, run all tests with:
 # ./test_all.sh
-# Run just this file with:
+# From within the tests folder, run just this file with:
 # pytest --cov=../../scripts --cov-config=../../.coveragerc tests.py
 
 import sys
@@ -19,7 +19,7 @@ import generate_google_group_cmds
 from test_data.test_data import *
 from collections import OrderedDict
 
-###### Test manifestmerge scripts #######
+###### Test manifestmerge #######
 @patch("manifestmerge.scripts.read_mapping_file")
 def test_merging(mock_read_mapping_file):
     """
@@ -64,7 +64,44 @@ def test_check_for_duplicates():
     # The test has passed if this does not throw an exception
     L = manifestmerge.scripts.check_for_duplicates(indexable_data_with_no_duplicates)
 
+def test_get_discrepancy_list():
+    manifestmerge.scripts.merge_manifest({}, {})
+    
+    pass
 
+def test_merge():
+    actual_release_manifest_file = 'test_data/test_output/release_manifest.tsv'
+    actual_data_requiring_manual_review_file = 'test_data/test_output/data_requiring_manual_review.tsv'
+    actual_extraneous_data_file = 'test_data/test_output/extraneous_dbgap_metadata.tsv'
+    
+    if os.path.exists(actual_release_manifest_file):
+        os.remove(actual_release_manifest_file)
+    if os.path.exists(actual_data_requiring_manual_review_file):
+        os.remove(actual_data_requiring_manual_review_file)
+    if os.path.exists(actual_extraneous_data_file):
+        os.remove(actual_extraneous_data_file)
+
+    manifestmerge.scripts.merge(
+        'test_data/test_genome_file_manifest.csv', 
+        'test_data/test_extract.tsv', 
+        'test_data/test_output/')
+    
+    expected_release_manifest_output = ['GUID\tsubmitted_sample_id\tdbgap_sample_id\tsra_sample_id\tbiosample_id\tsubmitted_subject_id\tdbgap_subject_id\tconsent_short_name\tstudy_accession_with_consent\tstudy_accession\tstudy_with_consent\tdatastage_subject_id\tconsent_code\tsex\tbody_site\tanalyte_type\tsample_use\trepository\tdbgap_status\tsra_data_details\tfile_size\tmd5\tmd5_hex\taws_uri\tgcp_uri\tpermission\tg_access_group\n', 'None\tNWD1\t1234\t\tSAMN1234\tBUR01234\t12340\tDS-AB-CD-EF-1\tphs000920.v3.p2.c1\tphs000920.v3.p2\tphs000920.c1\tphs000920.v3_BUR01234\t1\tfemale\tPeripheral Blood\tDNA\t\tAB4321\tLoaded\t(location:Greenland|time:evening)\t100\tfb23OXj8h9qX44uhlRei5A==\t7dbdb73978fc87da97e38ba19517a2e4\t\t\tREAD\tstagedcp_phs000920.c1_read_gbag@dcp.bionimbus.org\n', 'None\tNWD1\t1234\t\tSAMN1234\tBUR01234\t12340\tDS-AB-CD-EF-1\tphs000920.v3.p2.c1\tphs000920.v3.p2\tphs000920.c1\tphs000920.v3_BUR01234\t1\tfemale\tPeripheral Blood\tDNA\t\tAB4321\tLoaded\t(location:Greenland|time:evening)\t200\thb23OXj8h9qX44uhlRei6A==\t85bdb73978fc87da97e38ba19517a2e8\t\t\tREAD\tstagedcp_phs000920.c1_read_gbag@dcp.bionimbus.org\n', 'None\tNWD2\t4321\t\tSAMN4321\tBUR04321\t43210\tDS-AB-CD-EF-2\tphs000921.v3.p2.c2\tphs000921.v3.p2\tphs000921.c2\tphs000921.v3_BUR04321\t2\tother\tEyes\tDNA\t\tAB1234\tLoaded\t(location:Eritrea|time:morning)\t100\tib23OXj8h9qX44uhlRei7A==\t89bdb73978fc87da97e38ba19517a2ec\t\t\tREAD\tstagedcp_phs000921.c2_read_gbag@dcp.bionimbus.org\n', 'None\tNWD2\t4321\t\tSAMN4321\tBUR04321\t43210\tDS-AB-CD-EF-2\tphs000921.v3.p2.c2\tphs000921.v3.p2\tphs000921.c2\tphs000921.v3_BUR04321\t2\tother\tEyes\tDNA\t\tAB1234\tLoaded\t(location:Eritrea|time:morning)\t200\tjb23OXj8h9qX44uhlRei8A==\t8dbdb73978fc87da97e38ba19517a2f0\t\t\tREAD\tstagedcp_phs000921.c2_read_gbag@dcp.bionimbus.org\n']
+    expected_data_requiring_manual_review_output = ['submitted_sample_id\tgcp_uri\taws_uri\tfile_size\tmd5\trow_num\tstudy_accession\tignore\n']
+    expected_extraneous_data_output = ['sample_use\tdbgap_status\tsra_data_details\tdbgap_subject_id\trepository\tsubmitted_sample_id\tstudy_accession_with_consent\tstudy_accession\tstudy_with_consent\tdatastage_subject_id\tconsent_code\tsex\tbody_site\tanalyte_type\tsample_use\trepository\tdbgap_status\tsra_data_details\tsubmitted_subject_id\tconsent_short_name\tanalyte_type\tsra_sample_id\tsex\tbiosample_id\tdbgap_sample_id\tconsent_code\tstudy_accession\tbody_site\trow_num\n', '\tLoaded\t(location:Zaire|time:afternoon\t0\tAB0000\tNWD3\tphs000921.v3.p2.c2\t\tphs000921.c2\tphs000921.v3_BUR00000\t3\tnot specified\tMouth\tRNA\t\tAB0000\tLoaded\t(location:Zaire|time:afternoon\tBUR00000\tDS-AB-CD-EF-3\tRNA\t\tnot specified\tSAMN0000\t0\t3\t\tMouth\t3\n']
+
+    with open(actual_release_manifest_file) as actual_release_manifest_output:
+        r = actual_release_manifest_output.readlines()
+        assert expected_release_manifest_output == r
+    with open(actual_data_requiring_manual_review_file) as actual_data_requiring_manual_review_output:
+        r = actual_data_requiring_manual_review_output.readlines()
+        assert expected_data_requiring_manual_review_output == r
+    with open(actual_extraneous_data_file) as actual_extraneous_data_output:
+        r = actual_extraneous_data_output.readlines()
+        assert expected_extraneous_data_output == r
+
+
+###### Test utils.py #######
 def test_sync_2_dicts():
     dict1 = { 'NWD1|abc' : { 'GUID': '860aec-007', 'submitted_sample_id': 'NWD1', 'md5': 'abc', 'file_size': 20 } }
     dict2 = { 'NWD2|def' : { 'GUID': '960aec-007', 'submitted_sample_id': 'NWD2', 'md5': 'def', 'file_size': 21 } }
@@ -119,35 +156,8 @@ def test_get_sample_data_from_manifest():
     assert expected_output == actual_output
 
 
-def test_merge():
-    actual_release_manifest_file = 'test_data/test_output/release_manifest.tsv'
-    actual_data_requiring_manual_review_file = 'test_data/test_output/data_requiring_manual_review.tsv'
-    actual_extraneous_data_file = 'test_data/test_output/extraneous_dbgap_metadata.tsv'
-    
-    if os.path.exists(actual_release_manifest_file):
-        os.remove(actual_release_manifest_file)
-    if os.path.exists(actual_data_requiring_manual_review_file):
-        os.remove(actual_data_requiring_manual_review_file)
-    if os.path.exists(actual_extraneous_data_file):
-        os.remove(actual_extraneous_data_file)
-
-    manifestmerge.scripts.merge(
-        'test_data/test_genome_file_manifest.csv', 
-        'test_data/test_extract.tsv', 
-        'test_data/test_output/')
-    
-    with open(actual_release_manifest_file) as actual_release_manifest_output:
-        pass
-    with open(actual_data_requiring_manual_review_file) as actual_data_requiring_manual_review_output:
-        pass
-    with open(actual_extraneous_data_file) as actual_extraneous_data_output:
-        pass
-
-    assert 1 == 0
-
-
 ###### Test get_release_number.py #######
-def test_get_release_number():
+def test_get_branch_number():
     """
     Tests case where the release manifest that is created contains
     two records with identical sample_ids and md5 hashes. Ensures the
@@ -182,6 +192,7 @@ def test_get_release_number():
     assert release_num == 1
 
 
+
 ###### Test add_studies_from_manual_review.py #######
 def test_retrieve_study_accessions_from_manual_review_file():
     """
@@ -198,7 +209,31 @@ def test_retrieve_study_accessions_from_manual_review_file():
     )
 
 
-# ###### Test generate_google_group_cmds.py ######
+def test_retrieve_study_accessions_from_phs_id_list_file():
+    actual_study_accessions = add_studies_from_manual_review.retrieve_study_accessions_from_phs_id_list_file(
+        "test_data/phs_ids.txt"
+    )
+
+    expected_study_accessions = ["phs000920.v3.p2.c1", "phs000921.v3.p2.c2"]
+    assert all(
+        [a == b for a, b in zip(actual_study_accessions, expected_study_accessions)]
+    )
+
+
+def test_add_studies_from_manual_review():
+    add_studies_from_manual_review.add_studies_from_manual_review(
+        'test_data/phs_ids.txt', 
+        'test_data/test_data_requiring_manual_review.tsv', 
+        'test_data/requiring_manual_review_output.txt'
+    )
+
+    with open('test_data/requiring_manual_review_output.txt') as f:
+        actual_output = f.readlines()
+        expected_output = ['phs001143.v2\n', 'phs1234\n', 'phs909090\n', 'phs000920.v3.p2.c1\n', 'phs000921.v3.p2.c2']
+
+        assert expected_output == actual_output
+
+####### Test generate_google_group_cmds.py ######
 def test_retrieve_from_study_accessions_from_extract():
     actual_study_accessions = generate_google_group_cmds.retrieve_study_accessions_from_extract(
         "test_data/test_extract.tsv"
@@ -262,3 +297,28 @@ def test_generate_cmd_sets():
     assert len(actual_cmd_sets) == 0
     assert all([a == b for a, b in zip(actual_cmd_sets, expected_cmd_sets)])
 
+
+def test_make_mapping_entries():
+    study_accessions = ['phs00920', 'phs00921.v3', 'phs119992002.c3.p5.c64']
+    
+    expected_make_mapping_entries = [
+        'phs00920: stagedcp_phs00920_read_gbag@dcp.bionimbus.org', 
+        'phs00921.v3: stagedcp_phs00921.v3_read_gbag@dcp.bionimbus.org', 
+        'phs119992002.c3.p5.c64: stagedcp_phs119992002.c3.p5.c64_read_gbag@dcp.bionimbus.org'
+    ]
+    actual_make_mapping_entries =  generate_google_group_cmds.make_mapping_entries(study_accessions)
+
+    assert expected_make_mapping_entries == actual_make_mapping_entries
+
+
+def test_generate_generate_google_group_cmds():
+    generate_google_group_cmds.generate_google_group_cmds('test_data/test_extract.tsv')
+    with open('google-groups.sh') as f:
+        actual_output = f.readlines()
+        expected_output = ['fence-create link-external-bucket --bucket-name phs000920.c1\n', 'fence-create link-external-bucket --bucket-name phs000921.c2\n', 'fence-create link-bucket-to-project --bucket_id phs000920.c1 --bucket_provider google --project_auth_id phs000920.c1\n', 'fence-create link-bucket-to-project --bucket_id phs000921.c2 --bucket_provider google --project_auth_id phs000921.c2\n', 'fence-create link-bucket-to-project --bucket_id phs000920.c1 --bucket_provider google --project_auth_id admin\n', 'fence-create link-bucket-to-project --bucket_id phs000921.c2 --bucket_provider google --project_auth_id admin\n', 'fence-create link-bucket-to-project --bucket_id allProjects --bucket_provider google --project_auth_id phs000920.c1\n', 'fence-create link-bucket-to-project --bucket_id allProjects --bucket_provider google --project_auth_id phs000921.c2']
+        assert actual_output == expected_output
+    
+    with open('studys_to_google_access_groups.txt') as f:
+        actual_output = f.readlines()
+        expected_output = ['phs000920.c1: stagedcp_phs000920.c1_read_gbag@dcp.bionimbus.org\n', 'phs000921.c2: stagedcp_phs000921.c2_read_gbag@dcp.bionimbus.org']
+        assert actual_output == expected_output
