@@ -19,6 +19,9 @@ A genome file manifest can be optionally be provided as an input to the flow. If
 Additionally, a shell script is generated containing Fence commands that create Google Groups corresponding to the `study_with_consent` ids of the form `phs001234.c1`. The Kubernetes job wrapper in the [cloud-automation](https://github.com/uc-cdis/cloud-automation/blob/master/kube/services/jobs/data-ingestion-job.yaml) repository then executes these Fence commands inside a Fence sidecar image.
 
 
+![Diagram](data-ingestion-pipeline-diagram.png)
+[View on LucidChart](https://www.lucidchart.com/documents/view/ae33584d-6fc3-45ad-8e6d-5fcf8be6cf46)
+
 ## Testing
 This repo has a suite of unit tests which be run like so:
 
