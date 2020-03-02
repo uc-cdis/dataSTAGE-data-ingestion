@@ -14,7 +14,7 @@ The successful records ready to be indexed are written to a file called `release
 
 For the merging of IRC single sample CRAMs and VCFs between the external Google bucket and dbGaP: Sample IDs in the file manifest that had no corresponding pair in the study accessions provided are placed in a file called `data_requiring_manual_review.tsv`. A human user can later complete the missing fields in this file manually and optionally provide it to the tool on a future run for it to be included in the outputs.
 
-A genome file manifest can be optionally be provided as an input to the flow. If it is not provided, the tool will generate one using specific AWS and GS buckets containing data of interest. 
+To support the CRAM files and Single sample VCFs provided by the IRC: a genome file manifest of that bucket can be optionally be provided as an input to the flow. If it is not provided, the tool will attempt to generate one if it knows the specific AWS and GS buckets containing data of interest. 
 
 Additionally, a shell script is generated containing Fence commands that create Google Groups corresponding to the `study_with_consent` ids of the form `phs001234.c1`. The Kubernetes job wrapper in the [cloud-automation](https://github.com/uc-cdis/cloud-automation/blob/master/kube/services/jobs/data-ingestion-job.yaml) repository then executes these Fence commands inside a Fence sidecar image. This enables Fence to control who goes into these groups based on external authorization providers like dbGaP. The Google Groups themselves help to power the various Data Access Methods Fence exposes (including signed urls and temporary credentials).
 
