@@ -10,7 +10,7 @@ As input, the tool takes a file containing a list of study accession IDs. It hit
 
 As output, the tool makes a pull request to a [private GitHub repository](https://github.com/uc-cdis/dataSTAGE-data-ingestion-private) with the newly joined data, artifacts related to missing data, and logs from the operation.
 
-The successful records resulting from the merge operation are written to a file called `release_manifest_r<release-number>.tsv`, where the `<release-number>` is incremented from the previous release. This "release manifest" can be used to insert records into indexd. 
+The successful records ready to be indexed are written to a file called `release_manifest_r<release-number>.tsv`, where the `<release-number>` is incremented from the previous release. This "release manifest" can be used to insert records into indexd. 
 
 Sample IDs in the file manifest that had no corresponding pair in the study accessions provided are placed in a file called `data_requiring_manual_review.tsv`. A human user can later complete the missing fields in this file manually and optionally provide it to the tool on a future run for it to be included in the outputs.
 
