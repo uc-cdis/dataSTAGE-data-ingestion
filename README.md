@@ -16,7 +16,7 @@ For the merging of IRC single sample CRAMs and VCFs between the external Google 
 
 A genome file manifest can be optionally be provided as an input to the flow. If it is not provided, the tool will generate one using specific AWS and GS buckets containing data of interest. 
 
-Additionally, a shell script is generated containing Fence commands that create Google Groups corresponding to the `study_with_consent` ids of the form `phs001234.c1`. The Kubernetes job wrapper in the [cloud-automation](https://github.com/uc-cdis/cloud-automation/blob/master/kube/services/jobs/data-ingestion-job.yaml) repository then executes these Fence commands inside a Fence sidecar image.
+Additionally, a shell script is generated containing Fence commands that create Google Groups corresponding to the `study_with_consent` ids of the form `phs001234.c1`. The Kubernetes job wrapper in the [cloud-automation](https://github.com/uc-cdis/cloud-automation/blob/master/kube/services/jobs/data-ingestion-job.yaml) repository then executes these Fence commands inside a Fence sidecar image. This enables Fence to control who goes into these groups based on external authorization providers like dbGaP. The Google Groups themselves help to power the various Data Access Methods Fence exposes (including signed urls and temporary credentials).
 
 
 ![Diagram](data-ingestion-pipeline-diagram.png)
