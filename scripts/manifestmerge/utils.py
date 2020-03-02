@@ -64,7 +64,7 @@ def write_file(filename, rows, fieldnames=None):
             writer.writerow(row)
 
 
-def read_mapping_file(fname):
+def read_mapping_file(filename):
     """
         Uses a studys_to_google_access_groups.txt file to create a dictionary mapping study_accession_with_consent's 
         to their google group name.
@@ -76,7 +76,7 @@ def read_mapping_file(fname):
             files (OrderedDict): maps a sample_id to its properties
     """
     mapping = {}
-    with open(fname, "r") as fopen:
+    with open(filename, "r") as fopen:
         lines = fopen.readlines()
         for line in lines:
             words = line.split(":")
@@ -94,22 +94,22 @@ def sync_2_dicts(dict1, dict2):
     return dict2
 
 
-def create_or_update_file_with_guid(fname, indexable_data, fieldnames=None):
+def create_or_update_file_with_guid(filename, indexable_data, fieldnames=None):
     """
-    If the file fname does not exist, create a file with the indexable_data.
-    if the file fname does exist, merge the file with the indexable_data.
+    If the file filename does not exist, create a file with the indexable_data.
+    if the file filename does exist, merge the file with the indexable_data.
     
     Args:
-        fname (string): output path
+        filename (string): output path
         indexable_data (list of OrderedDicts): a list of dictionary
         fieldnames (list of strings): the file header
     Returns:
         None
     """
-    if not os.path.exists(fname):
+    if not os.path.exists(filename):
         for data in indexable_data:
             data["GUID"] = "None"
-        write_file(fname, indexable_data, fieldnames=fieldnames)
+        write_file(filename, indexable_data, fieldnames=fieldnames)
     else:
         dict1 = OrderedDict()
         dict2 = OrderedDict()
@@ -117,7 +117,7 @@ def create_or_update_file_with_guid(fname, indexable_data, fieldnames=None):
         for data in indexable_data:
             dict1[data["submitted_sample_id"] + "|" + data["md5"]] = data
 
-        with open(fname, "rt") as csvfile:
+        with open(filename, "rt") as csvfile:
             csvReader = csv.DictReader(csvfile, delimiter="\t")
             for row in csvReader:
                 row["file_size"] = int(row["file_size"])
@@ -126,4 +126,4 @@ def create_or_update_file_with_guid(fname, indexable_data, fieldnames=None):
         # merge dict1 to dict1
         dict2 = sync_2_dicts(dict1, dict2)
         L = [v for _, v in dict2.items()]
-        write_file(fname, L, fieldnames)
+        write_file(filename, L, fieldnames)
