@@ -6,7 +6,7 @@ The data-ingestion-pipeline is an automated tool that helps commons administrato
 The tool can retrieve and collate data from dbGaP and cloud storage buckets. It prepares the data for insertion into indexd.
 
 ## Details
-As input, the tool takes a file containing a list of study accession IDs. It hits dbGaP API for information related to these study accessions. It then performs a join with a genome file manifest (generated from an external bucket) against the submitted sample ID column (matching NWD IDs from dbGaP to file names in the external bucket).
+As input, the tool takes a file containing a list of study accession IDs. It hits the dbGaP API for information related to these study accessions. It then performs a join with a genome file manifest (generated from an external bucket) against the submitted sample ID column (matching NWD IDs from dbGaP to file names in the external bucket).
 
 As output, the tool makes a pull request to a [private GitHub repository](https://github.com/uc-cdis/dataSTAGE-data-ingestion-private) with the newly joined data, artifacts related to missing data, and logs from the operation.
 
