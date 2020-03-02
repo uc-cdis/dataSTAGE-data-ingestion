@@ -12,7 +12,7 @@ As output, the tool makes a pull request to a [private GitHub repository](https:
 
 The successful records ready to be indexed are written to a file called `release_manifest_r<release-number>.tsv`, where the `<release-number>` is incremented from the previous release. This "release manifest" can be used to insert records into indexd. 
 
-Sample IDs in the file manifest that had no corresponding pair in the study accessions provided are placed in a file called `data_requiring_manual_review.tsv`. A human user can later complete the missing fields in this file manually and optionally provide it to the tool on a future run for it to be included in the outputs.
+For the merging of IRC single sample CRAMs and VCFs between the external Google bucket and dbGaP: Sample IDs in the file manifest that had no corresponding pair in the study accessions provided are placed in a file called `data_requiring_manual_review.tsv`. A human user can later complete the missing fields in this file manually and optionally provide it to the tool on a future run for it to be included in the outputs.
 
 A genome file manifest can be optionally be provided as an input to the flow. If it is not provided, the tool will generate one using specific AWS and GS buckets containing data of interest. 
 
