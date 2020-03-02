@@ -66,7 +66,7 @@ def write_file(filename, rows, fieldnames=None):
 
 def read_mapping_file(filename):
     """
-        Uses a studys_to_google_access_groups.txt file to create a dictionary mapping study_accession_with_consent's 
+        Uses a studies_to_google_access_groups.txt file to create a dictionary mapping study_accession_with_consent's 
         to their google group name.
         
         Args:

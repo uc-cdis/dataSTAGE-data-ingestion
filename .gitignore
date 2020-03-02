@@ -5,4 +5,4 @@ scripts/output/*
 __pycache__/
 */.cache_/
 */google-groups.sh
-*/studys_to_google_access_groups.txt
+*/studies_to_google_access_groups.txt

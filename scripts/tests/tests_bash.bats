@@ -79,15 +79,15 @@ END
 }
 
 @test "manifestmerge script and generate_google_group_cmds.py work together locally as expected" {   
-    if [ -f "studys_to_google_access_groups.txt" ]; then
-        rm studys_to_google_access_groups.txt
+    if [ -f "studies_to_google_access_groups.txt" ]; then
+        rm studies_to_google_access_groups.txt
     fi
 
     python3 generate_google_group_cmds.py --dbgap_extract tests/test_data/test_extract.tsv
 
-    [ -f "studys_to_google_access_groups.txt" ]
-    actual_mapping=`cat studys_to_google_access_groups.txt`
-    expected_mapping=`cat tests/test_data/expected_output/studys_to_google_access_groups.txt`
+    [ -f "studies_to_google_access_groups.txt" ]
+    actual_mapping=`cat studies_to_google_access_groups.txt`
+    expected_mapping=`cat tests/test_data/expected_output/studies_to_google_access_groups.txt`
     [ "$actual_mapping" == "$expected_mapping" ]
 
     [ -f "google-groups.sh" ]
@@ -95,12 +95,13 @@ END
     expected_google_groups=`cat tests/test_data/expected_output/google-groups.sh`
     [ "$actual_google_groups" == "$expected_google_groups" ]
 
-    mv studys_to_google_access_groups.txt manifestmerge/
+    mv studies_to_google_access_groups.txt manifestmerge/
 
     cd manifestmerge/
 
     pipenv run python3 main.py --genome_manifest ../tests/test_data/test_genome_file_manifest.csv \
-    --dbgap_extract_file ../tests/test_data/test_extract.tsv --out output
+    --dbgap_extract_file ../tests/test_data/test_extract.tsv \
+    --studies_to_google_access_groups studies_to_google_access_groups.txt --out output
 
     # Should create 3 files
     number_of_files_created=`ls -1q output/ | wc -l`
@@ -122,5 +123,5 @@ END
     expected_data_requiring_manual_review=`cat ../tests/test_data/expected_output/data_requiring_manual_review.tsv`
     [ "$actual_data_requiring_manual_review" == "$expected_data_requiring_manual_review" ]
 
-    rm ../tests/manifestmerge-log*.log
+    rm -f ../tests/manifestmerge-log*.log
 }

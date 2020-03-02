@@ -5,9 +5,11 @@ verify_ssl = true
 
 [dev-packages]
 pytest = "*"
+pytest-cov = "*"
 
 [packages]
 mock = "*"
+coverage = "*"
 
 [requires]
 python_version = "3.6"

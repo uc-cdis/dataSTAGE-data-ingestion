@@ -6,7 +6,7 @@ import os
 from datetime import datetime
 
 GOOGLE_GROUPS_OUTFILE = "google-groups.sh"
-MAPPING_OUTFILE = "studys_to_google_access_groups.txt"
+MAPPING_OUTFILE = "studies_to_google_access_groups.txt"
 
 """
 Need a group all SAs will go in that will only have storage.objects.list iam permission on the bucket when using object-level ACL access.
@@ -49,11 +49,11 @@ def generate_cmd_sets(studies):
 
 def make_mapping_entries(study_accessions):
     """
-    Generate list of google group names that can be placed in a studys_to_google_access_groups.txt file for use with manifestmerge script.
+    Generate list of google group names that can be placed in a studies_to_google_access_groups.txt file for use with manifestmerge script.
     Args:
         study_accessions (array of strings): list of study_accession_with_consent strings
     Returns:
-        entries (array of strings): array of studys_to_google_access_groups.txt lines
+        entries (array of strings): array of studies_to_google_access_groups.txt lines
     """
     entries = []
     for study in study_accessions:

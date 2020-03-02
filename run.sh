@@ -67,14 +67,15 @@ if [ -f "google-groups.sh" ]; then
   chmod +x google-groups.sh
   mv google-groups.sh /dataSTAGE-data-ingestion/scripts/manifestmerge/output/google-groups.sh
 fi
-mv studys_to_google_access_groups.txt /dataSTAGE-data-ingestion/scripts/manifestmerge/studys_to_google_access_groups.txt
+mv studies_to_google_access_groups.txt /dataSTAGE-data-ingestion/scripts/manifestmerge/studies_to_google_access_groups.txt
 
 ###############################################################################
 # 5. Run manifestmerge script
 cd /dataSTAGE-data-ingestion/scripts/manifestmerge
 
 pipenv run python3 main.py --genome_manifest /dataSTAGE-data-ingestion/genome_file_manifest.csv \
-    --dbgap_extract_file /dbgap-extract/generated_extract.tsv --out output
+    --dbgap_extract_file /dbgap-extract/generated_extract.tsv \
+		----studies_to_google_access_groups studies_to_google_access_groups.txt --out output
 
 cp /dataSTAGE-data-ingestion/scripts/fence-image-commands.sh /dataSTAGE-data-ingestion/scripts/manifestmerge/output
 ls output

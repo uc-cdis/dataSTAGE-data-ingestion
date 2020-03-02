@@ -22,7 +22,7 @@ OUTPUT_FILES = (
     EXTRANEOUS_DATA_OUTPUT_FILENAME,
 )
 
-def merge(genome_manifest, dbgap_extract_file, output):
+def merge(genome_manifest, dbgap_extract_file, studies_to_google_access_groups, output):
     genome_files = get_sample_data_from_manifest(genome_manifest, dem=",")
     dbgap = get_sample_info_from_dbgap_extract_file(dbgap_extract_file)
 
@@ -63,7 +63,7 @@ def merge(genome_manifest, dbgap_extract_file, output):
         "permission",
         "g_access_group",
     ]
-    results = merge_manifest(genome_files, dbgap)
+    results = merge_manifest(genome_files, dbgap, studies_to_google_access_groups)
     indexable_data = []
     for element in results:
         if element["g_access_group"] != "None":
@@ -132,7 +132,7 @@ def merge(genome_manifest, dbgap_extract_file, output):
     )
 
 
-def merge_manifest(genome_files, dbgap):
+def merge_manifest(genome_files, dbgap, studies_to_google_access_groups):
     """
     Merges data from two files -- the genome_file_manifest and the dbgap_extract -- 
     into one file against the sample_id column.
@@ -143,7 +143,7 @@ def merge_manifest(genome_files, dbgap):
     Returns:
         result (list of OrderedDicts): list of items with attributes from both sources
     """
-    mapping = read_mapping_file("studys_to_google_access_groups.txt")
+    mapping = read_mapping_file(studies_to_google_access_groups)
 
     results = []
     accession_missing_google_grp = set()
