@@ -1,0 +1,5 @@
+[run]
+omit =
+    tests.py
+    test_data/test_data.py
+    test_data/__init__.py

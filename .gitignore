@@ -1,0 +1,8 @@
+.DS_Store
+scripts/output/*
+*.log
+*/__pycache__/
+__pycache__/
+*/.cache_/
+*/google-groups.sh
+*/studies_to_google_access_groups.txt
