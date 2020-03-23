@@ -5,6 +5,7 @@ sudo ./install.sh /usr/local
 cd ..
 bats *.bats
 
+pip install pipenv
 pipenv install --dev
 python -m pytest tests.py
 
