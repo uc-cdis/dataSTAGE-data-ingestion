@@ -48,7 +48,7 @@ cd / && git clone https://github.com/uc-cdis/dbgap-extract.git
 cd dbgap-extract
 git pull origin master
 pipenv install
-pipenv run python3 dbgap_extract.py --study_accession_list_filename $PHS_ID_LIST_PATH --output_filename generated_extract.tsv > /dev/null 2>&1
+pipenv run python3 dbgap_extract.py --study_accession_list_filename $PHS_ID_LIST_PATH --output_filename generated_extract.tsv
 
 # If the step is successful, don't print its output
 extract_step_failed=$?
