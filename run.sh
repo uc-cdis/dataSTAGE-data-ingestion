@@ -47,6 +47,12 @@ fi
 cd / && git clone https://github.com/uc-cdis/dbgap-extract.git
 cd dbgap-extract
 git pull origin master
+
+# get the latest release/tag
+git fetch --tags
+tag=$(git describe --tags `git rev-list --tags --max-count=1`)
+git checkout $tag -b latest
+
 pipenv install
 pipenv run python3 dbgap_extract.py --study_accession_list_filename $PHS_ID_LIST_PATH --output_filename generated_extract.tsv
 
