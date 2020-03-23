@@ -1,9 +1,12 @@
-brew install bats-core
+git clone https://github.com/bats-core/bats-core.git
+cd bats-core
+./install.sh /usr/local
 
 cd ..
 bats tests/*.bats
 
 cd tests
-pipenv shell python -m pytest tests.py
+pipenv install --dev
+python -m pytest tests.py
 
 exit
