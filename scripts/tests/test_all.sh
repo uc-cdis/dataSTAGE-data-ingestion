@@ -5,7 +5,7 @@ sudo ./install.sh /usr/local
 cd ..
 bats *.bats
 
-pip install --user pipenv
+curl https://raw.githubusercontent.com/kennethreitz/pipenv/master/get-pipenv.py | python || pip install pipenv
 pipenv install --dev
 pipenv run python -m pytest tests.py
 
