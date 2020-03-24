@@ -82,6 +82,15 @@ END
     if [ -f "studies_to_google_access_groups.txt" ]; then
         rm studies_to_google_access_groups.txt
     fi
+    if [ -f "manifestmerge/output/release_manifest.tsv" ]; then
+        rm manifestmerge/output/release_manifest.tsv
+    fi
+    if [ -f "manifestmerge/output/extraneous_dbgap_metadata.tsv" ]; then
+        rm manifestmerge/output/extraneous_dbgap_metadata.tsv
+    fi
+    if [ -f "manifestmerge/output/data_requiring_manual_review.tsv" ]; then
+        rm manifestmerge/output/data_requiring_manual_review.tsv
+    fi
 
     python3 generate_google_group_cmds.py --dbgap_extract tests/test_data/test_extract.tsv
 
@@ -111,13 +120,6 @@ END
     [ -f "output/extraneous_dbgap_metadata.tsv" ]
     [ -f "output/data_requiring_manual_review.tsv" ]
     
-    ls
-    pwd
-    ls ../manifestmerge/output/
-    ls ../tests/test_data/expected_output/
-    cat ../manifestmerge/output/release_manifest.tsv
-    cat ../tests/test_data/expected_output/release_manifest.tsv
-
     actual_release_manifest=`cat ../manifestmerge/output/release_manifest.tsv`
     expected_release_manifest=`cat ../tests/test_data/expected_output/release_manifest.tsv`
     [ "$actual_release_manifest" == "$expected_release_manifest" ]

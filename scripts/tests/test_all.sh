@@ -16,6 +16,7 @@ if [ $? != 0 ]; then
 fi
 pipenv install --dev
 pipenv run python -m pytest tests.py
+ls
 
 bats -v
 if [ $? != 0 ] && [ $machine != 'Mac' ]; then

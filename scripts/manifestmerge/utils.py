@@ -18,9 +18,16 @@ def get_sample_data_from_manifest(manifest_file, dem="\t"):
         csvReader = csv.DictReader(csvfile, delimiter=dem)
         for row in csvReader:
             # Remove whitespace from fieldnames
-            row_stripped = {k.strip(): v for k, v in row.items()}
+            row_stripped = OrderedDict()
+            for k, v in row.items():
+                row_stripped[k.strip()] = v 
             row_stripped["file_size"] = int(row_stripped["file_size"])
-            files.setdefault(row_stripped["submitted_sample_id"], []).append(row)
+            
+            print('row: ')
+            print(row)
+            print('row_stripped: ')
+            print(row_stripped)
+            files.setdefault(row_stripped["submitted_sample_id"], []).append(row_stripped)
     return files
 
 
