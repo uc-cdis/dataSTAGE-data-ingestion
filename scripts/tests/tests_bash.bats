@@ -83,7 +83,7 @@ END
         rm studies_to_google_access_groups.txt
     fi
 
-    python generate_google_group_cmds.py --dbgap_extract tests/test_data/test_extract.tsv
+    python3 generate_google_group_cmds.py --dbgap_extract tests/test_data/test_extract.tsv
 
     [ -f "studies_to_google_access_groups.txt" ]
     actual_mapping=`cat studies_to_google_access_groups.txt`
@@ -99,7 +99,7 @@ END
 
     cd manifestmerge/
 
-    pipenv run python main.py --genome_manifest ../tests/test_data/test_genome_file_manifest.csv \
+    pipenv run python3 main.py --genome_manifest ../tests/test_data/test_genome_file_manifest.csv \
     --dbgap_extract_file ../tests/test_data/test_extract.tsv \
     --studies_to_google_access_groups studies_to_google_access_groups.txt --out output
 
