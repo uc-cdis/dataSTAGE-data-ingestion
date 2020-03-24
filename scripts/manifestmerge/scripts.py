@@ -235,7 +235,6 @@ def merge_manifest(genome_files, dbgap, studies_to_google_access_groups):
             )
         )
         return []
-    print(results)
     return results
 
 

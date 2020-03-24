@@ -88,10 +88,6 @@ def test_merge():
 
     with open(actual_release_manifest_file) as actual_release_manifest_output:
         r = actual_release_manifest_output.readlines()
-        print('\n\nayeeeee\n\n\n')
-        print(expected_release_manifest_output)
-        print('-----')
-        print(r)
         assert expected_release_manifest_output == r
     with open(actual_data_requiring_manual_review_file) as actual_data_requiring_manual_review_output:
         r = actual_data_requiring_manual_review_output.readlines()

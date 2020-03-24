@@ -23,10 +23,6 @@ def get_sample_data_from_manifest(manifest_file, dem="\t"):
                 row_stripped[k.strip()] = v 
             row_stripped["file_size"] = int(row_stripped["file_size"])
             
-            print('row: ')
-            print(row)
-            print('row_stripped: ')
-            print(row_stripped)
             files.setdefault(row_stripped["submitted_sample_id"], []).append(row_stripped)
     return files
 
