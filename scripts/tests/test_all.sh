@@ -1,3 +1,5 @@
+# Run this file from within the scripts/tests/ directory with ./test_all.sh
+
 unameOut="$(uname -s)"
 case "${unameOut}" in
     Linux*)     machine=Linux;;
