@@ -110,6 +110,13 @@ END
     [ -f "output/release_manifest.tsv" ]
     [ -f "output/extraneous_dbgap_metadata.tsv" ]
     [ -f "output/data_requiring_manual_review.tsv" ]
+    
+    ls
+    pwd
+    ls ../manifestmerge/output/
+    ls ../tests/test_data/expected_output/
+    cat ../manifestmerge/output/release_manifest.tsv
+    cat ../tests/test_data/expected_output/release_manifest.tsv
 
     actual_release_manifest=`cat ../manifestmerge/output/release_manifest.tsv`
     expected_release_manifest=`cat ../tests/test_data/expected_output/release_manifest.tsv`
