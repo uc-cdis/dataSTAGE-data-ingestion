@@ -82,7 +82,7 @@ def test_merge():
         'studies_to_google_access_groups.txt',
         'test_data/test_output/')
     
-    expected_release_manifest_output = ['GUID\tsubmitted_sample_id\tdbgap_sample_id\tsra_sample_id\tbiosample_id\tsubmitted_subject_id\tdbgap_subject_id\tconsent_short_name\tstudy_accession_with_consent\tstudy_accession\tstudy_with_consent\tdatastage_subject_id\tconsent_code\tsex\tbody_site\tanalyte_type\tsample_use\trepository\tdbgap_status\tsra_data_details\tfile_size\tmd5\tmd5_hex\taws_uri\tgcp_uri\tpermission\tg_access_group\n', 'None\tNWD1\t1234\t\tSAMN1234\tBUR01234\t12340\tDS-AB-CD-EF-1\tphs000920.v3.p2.c1\tphs000920.v3.p2\tphs000920.c1\tphs000920.v3_BUR01234\t1\tfemale\tPeripheral Blood\tDNA\t\tAB4321\tLoaded\t(location:Greenland|time:evening)\t100\tfb23OXj8h9qX44uhlRei5A==\t7dbdb73978fc87da97e38ba19517a2e4\t\t\tREAD\tstagedcp_phs000920.c1_read_gbag@dcp.bionimbus.org\n', 'None\tNWD1\t1234\t\tSAMN1234\tBUR01234\t12340\tDS-AB-CD-EF-1\tphs000920.v3.p2.c1\tphs000920.v3.p2\tphs000920.c1\tphs000920.v3_BUR01234\t1\tfemale\tPeripheral Blood\tDNA\t\tAB4321\tLoaded\t(location:Greenland|time:evening)\t200\thb23OXj8h9qX44uhlRei6A==\t85bdb73978fc87da97e38ba19517a2e8\t\t\tREAD\tstagedcp_phs000920.c1_read_gbag@dcp.bionimbus.org\n', 'None\tNWD2\t4321\t\tSAMN4321\tBUR04321\t43210\tDS-AB-CD-EF-2\tphs000921.v3.p2.c2\tphs000921.v3.p2\tphs000921.c2\tphs000921.v3_BUR04321\t2\tother\tEyes\tDNA\t\tAB1234\tLoaded\t(location:Eritrea|time:morning)\t100\tib23OXj8h9qX44uhlRei7A==\t89bdb73978fc87da97e38ba19517a2ec\t\t\tREAD\tstagedcp_phs000921.c2_read_gbag@dcp.bionimbus.org\n', 'None\tNWD2\t4321\t\tSAMN4321\tBUR04321\t43210\tDS-AB-CD-EF-2\tphs000921.v3.p2.c2\tphs000921.v3.p2\tphs000921.c2\tphs000921.v3_BUR04321\t2\tother\tEyes\tDNA\t\tAB1234\tLoaded\t(location:Eritrea|time:morning)\t200\tjb23OXj8h9qX44uhlRei8A==\t8dbdb73978fc87da97e38ba19517a2f0\t\t\tREAD\tstagedcp_phs000921.c2_read_gbag@dcp.bionimbus.org\n']
+    expected_release_manifest_output = ['GUID\tsubmitted_sample_id\tdbgap_sample_id\tsra_sample_id\tbiosample_id\tsubmitted_subject_id\tdbgap_subject_id\tconsent_short_name\tstudy_accession_with_consent\tstudy_accession\tstudy_with_consent\tdatastage_subject_id\tconsent_code\tsex\tbody_site\tanalyte_type\tsample_use\trepository\tdbgap_status\tsra_data_details\tfile_size\tmd5\tmd5_hex\taws_uri\tgcp_uri\tpermission\tg_access_group\n', 'None\tNWD1\t1234\t\tSAMN1234\tBUR01234\t12340\tDS-AB-CD-EF-1\tphs000920.v3.p2.c1\tphs000920.v3.p2\tphs000920.c1\tphs000920.v3_BUR01234\t1\tfemale\tPeripheral Blood\tDNA\t\tAB4321\tLoaded\t(location:Greenland|time:evening)\t100\tfb23OXj8h9qX44uhlRei5A==\t7dbdb73978fc87da97e38ba19517a2e4\ts3://test-bucket/NWD1.b38.irc.v1.cram\tgs://test-bucket-2/genomes/NWD1.b38.irc.v1.cram\tREAD\tstagedcp_phs000920.c1_read_gbag@dcp.bionimbus.org\n', 'None\tNWD1\t1234\t\tSAMN1234\tBUR01234\t12340\tDS-AB-CD-EF-1\tphs000920.v3.p2.c1\tphs000920.v3.p2\tphs000920.c1\tphs000920.v3_BUR01234\t1\tfemale\tPeripheral Blood\tDNA\t\tAB4321\tLoaded\t(location:Greenland|time:evening)\t200\thb23OXj8h9qX44uhlRei6A==\t85bdb73978fc87da97e38ba19517a2e8\ts3://test-bucket/NWD1.b38.irc.v1.vcf\tgs://test-bucket-2/genomes/NWD1.b38.irc.v1.vcf\tREAD\tstagedcp_phs000920.c1_read_gbag@dcp.bionimbus.org\n', 'None\tNWD2\t4321\t\tSAMN4321\tBUR04321\t43210\tDS-AB-CD-EF-2\tphs000921.v3.p2.c2\tphs000921.v3.p2\tphs000921.c2\tphs000921.v3_BUR04321\t2\tother\tEyes\tDNA\t\tAB1234\tLoaded\t(location:Eritrea|time:morning)\t100\tib23OXj8h9qX44uhlRei7A==\t89bdb73978fc87da97e38ba19517a2ec\ts3://test-bucket/NWD2.b38.irc.v1.cram\tgs://test-bucket-2/genomes/NWD2.b38.irc.v1.cram\tREAD\tstagedcp_phs000921.c2_read_gbag@dcp.bionimbus.org\n', 'None\tNWD2\t4321\t\tSAMN4321\tBUR04321\t43210\tDS-AB-CD-EF-2\tphs000921.v3.p2.c2\tphs000921.v3.p2\tphs000921.c2\tphs000921.v3_BUR04321\t2\tother\tEyes\tDNA\t\tAB1234\tLoaded\t(location:Eritrea|time:morning)\t200\tjb23OXj8h9qX44uhlRei8A==\t8dbdb73978fc87da97e38ba19517a2f0\ts3://test-bucket/NWD2.b38.irc.v1.vcf\tgs://test-bucket-2/genomes/NWD2.b38.irc.v1.vcf\tREAD\tstagedcp_phs000921.c2_read_gbag@dcp.bionimbus.org\n']
     expected_data_requiring_manual_review_output = ['submitted_sample_id\tgcp_uri\taws_uri\tfile_size\tmd5\trow_num\tstudy_accession\tignore\n']
     expected_extraneous_data_output = ['sample_use\tdbgap_status\tsra_data_details\tdbgap_subject_id\trepository\tsubmitted_sample_id\tstudy_accession_with_consent\tstudy_accession\tstudy_with_consent\tdatastage_subject_id\tconsent_code\tsex\tbody_site\tanalyte_type\tsample_use\trepository\tdbgap_status\tsra_data_details\tsubmitted_subject_id\tconsent_short_name\tanalyte_type\tsra_sample_id\tsex\tbiosample_id\tdbgap_sample_id\tconsent_code\tstudy_accession\tbody_site\trow_num\n', '\tLoaded\t(location:Zaire|time:afternoon\t0\tAB0000\tNWD3\tphs000921.v3.p2.c2\t\tphs000921.c2\tphs000921.v3_BUR00000\t3\tnot specified\tMouth\tRNA\t\tAB0000\tLoaded\t(location:Zaire|time:afternoon\tBUR00000\tDS-AB-CD-EF-3\tRNA\t\tnot specified\tSAMN0000\t0\t3\t\tMouth\t3\n']
 
@@ -121,34 +121,33 @@ def test_sync_2_dicts():
 
 
 def test_get_sample_data_from_manifest():
-    expected_output = {}
+    expected_output = OrderedDict()
     expected_output['NWD1'] = [ 
         OrderedDict([('submitted_sample_id', 'NWD1'),
-                    (' aws_uri ', 's3://test-bucket/NWD1.b38.irc.v1.cram'),
-                    ('gcp_uri ', 'gs://test-bucket-2/genomes/NWD1.b38.irc.v1.cram'),
-                    ('file_size', '100'),
+                    ('aws_uri', 's3://test-bucket/NWD1.b38.irc.v1.cram'),
+                    ('gcp_uri', 'gs://test-bucket-2/genomes/NWD1.b38.irc.v1.cram'),
+                    ('file_size', 100),
                     ('md5', 'fb23OXj8h9qX44uhlRei5A==')]),
         OrderedDict([('submitted_sample_id', 'NWD1'),
-                    (' aws_uri ', 's3://test-bucket/NWD1.b38.irc.v1.vcf'),
-                    ('gcp_uri ', 'gs://test-bucket-2/genomes/NWD1.b38.irc.v1.vcf'),
-                    ('file_size', '200'),
+                    ('aws_uri', 's3://test-bucket/NWD1.b38.irc.v1.vcf'),
+                    ('gcp_uri', 'gs://test-bucket-2/genomes/NWD1.b38.irc.v1.vcf'),
+                    ('file_size', 200),
                     ('md5', 'hb23OXj8h9qX44uhlRei6A==')])
     ]
     expected_output['NWD2'] = [
         OrderedDict([('submitted_sample_id', 'NWD2'),
-            (' aws_uri ', 's3://test-bucket/NWD2.b38.irc.v1.cram'),
-            ('gcp_uri ', 'gs://test-bucket-2/genomes/NWD2.b38.irc.v1.cram'),
-            ('file_size', '100'),
+            ('aws_uri', 's3://test-bucket/NWD2.b38.irc.v1.cram'),
+            ('gcp_uri', 'gs://test-bucket-2/genomes/NWD2.b38.irc.v1.cram'),
+            ('file_size', 100),
             ('md5', 'ib23OXj8h9qX44uhlRei7A==')]),
         OrderedDict([('submitted_sample_id', 'NWD2'),
-                (' aws_uri ', 's3://test-bucket/NWD2.b38.irc.v1.vcf'),
-                ('gcp_uri ', 'gs://test-bucket-2/genomes/NWD2.b38.irc.v1.vcf'),
-                ('file_size', '200'),
+                ('aws_uri', 's3://test-bucket/NWD2.b38.irc.v1.vcf'),
+                ('gcp_uri', 'gs://test-bucket-2/genomes/NWD2.b38.irc.v1.vcf'),
+                ('file_size', 200),
                 ('md5', 'jb23OXj8h9qX44uhlRei8A==')])
     ]
 
     actual_output = manifestmerge.scripts.get_sample_data_from_manifest('test_data/test_genome_file_manifest.csv', dem=",")
-    print(actual_output)
     assert expected_output == actual_output
 
 

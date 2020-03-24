@@ -224,6 +224,8 @@ def merge_manifest(genome_files, dbgap, studies_to_google_access_groups):
                 row["datastage_subject_id"] = "None"
                 row["g_access_group"] = "None"
                 row["md5_hex"] = "None"
+                row["aws_uri"] = "None"
+                row["gcp_uri"] = "None"
                 results.append(row)
 
     if accession_missing_google_grp:
