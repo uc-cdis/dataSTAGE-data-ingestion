@@ -46,7 +46,7 @@ def merge(genome_manifest, dbgap_extract_file, studies_to_google_access_groups, 
         "study_accession_with_consent",
         "study_accession",
         "study_with_consent",
-        "datastage_subject_id",
+        "study_subject_id",
         "consent_code",
         "sex",
         "body_site",
@@ -89,7 +89,7 @@ def merge(genome_manifest, dbgap_extract_file, studies_to_google_access_groups, 
         "study_accession_with_consent",
         "study_accession",
         "study_with_consent",
-        "datastage_subject_id",
+        "study_subject_id",
         "consent_code",
         "sex",
         "body_site",
@@ -182,8 +182,8 @@ def merge_manifest(genome_files, dbgap, studies_to_google_access_groups):
                     row["study_with_consent"] = element.get(
                         "study_with_consent", "None"
                     )
-                    row["datastage_subject_id"] = element.get(
-                        "datastage_subject_id", "None"
+                    row["study_subject_id"] = element.get(
+                        "study_subject_id", "None"
                     )
                     row["consent_code"] = element.get("consent_code", "None")
                     row["sex"] = element.get("sex", "None")
@@ -221,7 +221,7 @@ def merge_manifest(genome_files, dbgap, studies_to_google_access_groups):
                 row["dbgap_subject_id"] = "None"
                 row["consent_short_name"] = "None"
                 row["study_with_consent"] = "None"
-                row["datastage_subject_id"] = "None"
+                row["study_subject_id"] = "None"
                 row["g_access_group"] = "None"
                 row["md5_hex"] = "None"
                 row["aws_uri"] = "None"
