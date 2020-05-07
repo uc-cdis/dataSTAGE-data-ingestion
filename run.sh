@@ -40,6 +40,8 @@ else
 	echo 'Skipping genome file manifest creation step...'
 	BUCKET_NAME=$(jq -r .local_data_aws_creds.bucket_name <<< $CREDS_JSON)
 	aws s3 cp "s3://$BUCKET_NAME/genome_file_manifest.csv" /dataSTAGE-data-ingestion/genome_file_manifest.csv
+	echo 'Some sample rows from genome file manifest:'
+	head -n 15 /dataSTAGE-data-ingestion/genome_file_manifest.csv
 fi
 
 ###############################################################################
@@ -71,6 +73,8 @@ fi
 python3 generate_google_group_cmds.py --dbgap_extract /dbgap-extract/generated_extract.tsv
 if [ -f "google-groups.sh" ]; then
   chmod +x google-groups.sh
+  echo "google group creation commands:"
+  cat google-groups.sh
   mv google-groups.sh /dataSTAGE-data-ingestion/scripts/manifestmerge/output/google-groups.sh
 fi
 mv studies_to_google_access_groups.txt /dataSTAGE-data-ingestion/scripts/manifestmerge/studies_to_google_access_groups.txt
