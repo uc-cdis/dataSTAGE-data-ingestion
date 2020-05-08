@@ -56,6 +56,7 @@ tag=$(git describe --tags `git rev-list --tags --max-count=1`)
 git checkout $tag -b latest
 
 pipenv install
+echo 'pipenv run python3 dbgap_extract.py --study_accession_list_filename $PHS_ID_LIST_PATH --output_filename generated_extract.tsv'
 pipenv run python3 dbgap_extract.py --study_accession_list_filename $PHS_ID_LIST_PATH --output_filename generated_extract.tsv
 
 # If the step is successful, don't print its output
