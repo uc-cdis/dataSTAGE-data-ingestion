@@ -64,7 +64,7 @@ if [ $extract_step_failed -eq 1 ]; then
     cat generated_extract.log
 fi
 echo 'Some sample rows from dbgap extract:'
-head -n 15 generated_extract.tsv
+head -n 15 /dbgap-extract/generated_extract.tsv
 
 ###############################################################################
 # 4. Generate a list of commands to create Google Groups and a mapping file for the manifestmerge script
