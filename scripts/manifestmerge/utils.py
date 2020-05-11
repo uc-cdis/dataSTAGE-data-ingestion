@@ -42,7 +42,8 @@ def get_sample_info_from_dbgap_extract_file(manifest_file, dem="\t"):
     with open(manifest_file, "rt") as csvfile:
         csvReader = csv.DictReader(csvfile, delimiter=dem)
         for row in csvReader:
-            files.setdefault(row["submitted_sample_id"], []).append(row)
+            if row.get("dbgap_status", "").strip() != "Deleted":
+                files.setdefault(row["submitted_sample_id"], []).append(row)
     return files
 
 
