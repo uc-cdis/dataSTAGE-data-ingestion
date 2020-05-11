@@ -48,30 +48,30 @@ fi
 # 3. Get dbgap extract file
 echo 'Attempting to find dbgap extract in s3...'
 echo "aws s3 cp s3://$BUCKET_NAME/generated_extract.tsv /dbgap-extract/generated_extract.tsv"
-aws s3 cp "s3://$BUCKET_NAME/generated_extract.tsv" /dbgap-extract/generated_extract.tsv &> /dev/null
-if [ $? -ne 0 ]; then
-	# error means that the file didn't exist in s3, so let's generate it
-	echo 'Could not find dbgap extract in s3, pulling extraction tool and running...'
+# aws s3 cp "s3://$BUCKET_NAME/generated_extract.tsv" /dbgap-extract/generated_extract.tsv &> /dev/null
+#if [ $? -ne 0 ]; then
+# error means that the file didn't exist in s3, so let's generate it
+echo 'Could not find dbgap extract in s3, pulling extraction tool and running...'
 
-	cd / && git clone https://github.com/uc-cdis/dbgap-extract.git
-	cd dbgap-extract
-	git pull origin master
+cd / && git clone https://github.com/uc-cdis/dbgap-extract.git
+cd dbgap-extract
+git pull origin master
 
-	# get the latest release/tag
-	git fetch --tags
-	tag=$(git describe --tags `git rev-list --tags --max-count=1`)
-	git checkout $tag -b latest
+# get the latest release/tag
+git fetch --tags
+tag=$(git describe --tags `git rev-list --tags --max-count=1`)
+git checkout $tag -b latest
 
-	pipenv install
-	echo 'pipenv run python3 dbgap_extract.py --study_accession_list_filename $PHS_ID_LIST_PATH --output_filename generated_extract.tsv'
-	pipenv run python3 dbgap_extract.py --study_accession_list_filename $PHS_ID_LIST_PATH --output_filename generated_extract.tsv
+pipenv install
+echo 'pipenv run python3 dbgap_extract.py --study_accession_list_filename $PHS_ID_LIST_PATH --output_filename generated_extract.tsv'
+pipenv run python3 dbgap_extract.py --study_accession_list_filename $PHS_ID_LIST_PATH --output_filename generated_extract.tsv
 
-	# If the step is successful, don't print its output
-	extract_step_failed=$?
-	if [ $extract_step_failed -eq 1 ]; then
-	    cat generated_extract.log
-	fi
+# If the step is successful, don't print its output
+extract_step_failed=$?
+if [ $extract_step_failed -eq 1 ]; then
+    cat generated_extract.log
 fi
+#fi
 
 echo 'Some sample rows from dbgap extract:'
 head -n 15 /dbgap-extract/generated_extract.tsv
