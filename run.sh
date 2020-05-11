@@ -48,7 +48,7 @@ fi
 # 3. Get dbgap extract file
 echo 'Attempting to find dbgap extract in s3...'
 echo "aws s3 cp s3://$BUCKET_NAME/generated_extract.tsv /dbgap-extract/generated_extract.tsv"
-aws s3 cp "s3://$BUCKET_NAME/generated_extract.tsv" /dbgap-extract/generated_extract.tsv
+aws s3 cp "s3://$BUCKET_NAME/generated_extract.tsv" /dbgap-extract/generated_extract.tsv &> /dev/null
 if [ $? -ne 0 ]; then
 	# error means that the file didn't exist in s3, so let's generate it
 	echo 'Could not find dbgap extract in s3, pulling extraction tool and running...'
